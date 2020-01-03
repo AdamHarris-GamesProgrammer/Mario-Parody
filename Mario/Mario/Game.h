@@ -5,9 +5,10 @@
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
 
-#include "Constants.h"
-
 #include <iostream>
+#include <unordered_map>
+#include <string>
+#include <vector>
 
 class Game
 {
@@ -20,8 +21,17 @@ public:
 	void Shutdown();
 
 	void RunLoop();
+
+	void AddActor(class Actor* actor);
+	void RemoveActor(class Actor* actor);
+
+	void AddSprite(class SpriteComponent* sprite);
+	void RemoveSprite(class SpriteComponent* sprite);
+
+	SDL_Texture* GetTexture(const std::string& fileName);
 private:
-	bool LoadContent();
+	void LoadContent();
+	void UnloadContent();
 
 	void PollInput();
 
@@ -29,12 +39,20 @@ private:
 
 	void Render();
 
-	bool bShouldQuit = false;
-
 
 	SDL_Renderer* mRenderer;
 	SDL_Window* mWindow;
 
-	
+	std::unordered_map<std::string, SDL_Texture*> mTextures;
+
+	std::vector<class Actor*> mActors;
+
+	std::vector<class Actor*>mPendingActors;
+
+	std::vector<class SpriteComponent*> mSprites;
+
+	Uint32 mTicksCount;
+	bool bShouldQuit;
+	bool mUpdatingActors;
 };
 
