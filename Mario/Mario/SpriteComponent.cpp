@@ -15,21 +15,43 @@ SpriteComponent::~SpriteComponent()
 void SpriteComponent::Draw(SDL_Renderer* renderer)
 {
 	if (mTexture) {
-		SDL_Rect r;
+		SDL_Rect destRect;
 
-		r.w = static_cast<int>(mTexWidth * mOwner->GetScale());
-		r.h = static_cast<int>(mTexHeight * mOwner->GetScale());
+		destRect.w = static_cast<int>(mTexWidth * mOwner->GetScale());
+		destRect.h = static_cast<int>(mTexHeight * mOwner->GetScale());
 
-		r.x = static_cast<int>(mOwner->GetPosition().x - r.w / 2);
-		r.y = static_cast<int>(mOwner->GetPosition().y - r.h / 2);
+		destRect.x = static_cast<int>(mOwner->GetPosition().x - destRect.w / 2);
+		destRect.y = static_cast<int>(mOwner->GetPosition().y - destRect.h / 2);
 
 		SDL_RenderCopyEx(renderer,
 			mTexture,
 			nullptr,
-			&r,
+			&destRect,
 			-Math::ToDegrees(mOwner->GetRotation()),
 			nullptr,
 			SDL_FLIP_NONE);
+	}
+}
+
+
+void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double rotation /*= 0.0f*/, SDL_Point* center /*= NULL*/, SDL_RendererFlip flip /*= SDL_FLIP_NONE*/)
+{
+	if (mTexture) {
+		SDL_Rect destRect;
+
+		destRect.w = static_cast<int>(mTexWidth * mOwner->GetScale());
+		destRect.h = static_cast<int>(mTexHeight * mOwner->GetScale());
+
+		destRect.x = static_cast<int>(mOwner->GetPosition().x - destRect.w / 2);
+		destRect.y = static_cast<int>(mOwner->GetPosition().y - destRect.h / 2);
+
+		SDL_RenderCopyEx(renderer,
+			mTexture,
+			sourceRect,
+			&destRect,
+			rotation,
+			center,
+			flip);
 	}
 }
 

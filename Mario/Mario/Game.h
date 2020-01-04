@@ -28,7 +28,7 @@ public:
 	void AddSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
 
-	SDL_Texture* GetTexture(const std::string& fileName);
+	SDL_Texture* GetTexture(const std::string& fileName, bool useColorKey = false);
 private:
 	void LoadContent();
 	void UnloadContent();
@@ -54,5 +54,7 @@ private:
 	Uint32 mTicksCount;
 	bool bShouldQuit;
 	bool mUpdatingActors;
+
+	class Mario* player;
 };
 

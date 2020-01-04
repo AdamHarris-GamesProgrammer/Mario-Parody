@@ -5,6 +5,7 @@
 #include "Actor.h"
 #include "BGSpriteComponent.h"
 #include "SpriteComponent.h"
+#include "Mario.h"
 
 bool Game::Initialize()
 {
@@ -55,9 +56,24 @@ void Game::LoadContent()
 	};
 
 	bg->SetBGTexture(bgtexs);
-	bg->SetScrollSpeed(-100.0f);
+	bg->SetScrollSpeed(-25.0f);
 
+	Actor* tempFG = new Actor(this);
+	tempFG->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
+	BGSpriteComponent* fg = new BGSpriteComponent(tempFG);
+	fg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
+	std::vector<SDL_Texture*> fgtexs = {
+		GetTexture("Assets/BGForeground1.png"),
+		GetTexture("Assets/BGForeground2.png"),
+		GetTexture("Assets/BGForeground3.png")
+	};
+
+	fg->SetBGTexture(fgtexs);
+	fg->SetScrollSpeed(-10.0f);
+
+	player = new Mario(this);
+	player->SetPosition(Vector2(100.0f, 100.0f));
 }
 
 
@@ -135,7 +151,7 @@ void Game::RemoveSprite(class SpriteComponent* sprite)
 	mSprites.erase(iter);
 }
 
-SDL_Texture* Game::GetTexture(const std::string& fileName)
+SDL_Texture* Game::GetTexture(const std::string& fileName, bool useColorKey)
 {
 	SDL_Texture* tex = nullptr;
 
@@ -154,6 +170,13 @@ SDL_Texture* Game::GetTexture(const std::string& fileName)
 		}
 
 		//Creates a texture from surface
+		if (useColorKey) {
+			SDL_SetColorKey(surf, useColorKey, SDL_MapRGB(surf->format, 0xFF, 0xFF, 0xFF));
+		}
+		else {
+			SDL_SetColorKey(surf, true, SDL_MapRGBA(surf->format, 0x00, 0x00, 0x00, 0x00));
+		}
+
 		tex = SDL_CreateTextureFromSurface(mRenderer, surf);
 		SDL_FreeSurface(surf);
 
@@ -183,7 +206,12 @@ void Game::PollInput()
 				break;
 			}
 		}
+
+		
 	}
+
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	player->HandleEvents(state);
 }
 
 void Game::Update()
