@@ -29,6 +29,8 @@ public:
 	void RemoveSprite(class SpriteComponent* sprite);
 
 	SDL_Texture* GetTexture(const std::string& fileName, bool useColorKey = false);
+
+	SDL_Renderer* GetRenderer() { return mRenderer; }
 private:
 	void LoadContent();
 	void UnloadContent();

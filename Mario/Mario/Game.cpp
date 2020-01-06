@@ -4,6 +4,7 @@
 #include "SpriteComponent.h"
 #include "Actor.h"
 #include "BGSpriteComponent.h"
+#include "AnimSpriteComponent.h"
 #include "SpriteComponent.h"
 #include "Mario.h"
 
@@ -58,6 +59,7 @@ void Game::LoadContent()
 	bg->SetBGTexture(bgtexs);
 	bg->SetScrollSpeed(-25.0f);
 
+	//foreground textures
 	Actor* tempFG = new Actor(this);
 	tempFG->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
@@ -72,6 +74,7 @@ void Game::LoadContent()
 	fg->SetBGTexture(fgtexs);
 	fg->SetScrollSpeed(-10.0f);
 
+	//Mario
 	player = new Mario(this);
 	player->SetPosition(Vector2(100.0f, 100.0f));
 }
@@ -258,7 +261,13 @@ void Game::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
-		sprite->Draw(mRenderer);
+
+		if (sprite->GetOwner() == player) {
+			player->Draw();
+		}
+		else {
+			sprite->Draw(mRenderer);
+		}
 	}
 
 	SDL_RenderPresent(mRenderer);

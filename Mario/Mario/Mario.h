@@ -10,7 +10,17 @@ public:
 	void HandleEvents(const uint8_t* state);
 	float GetMovementSpeed() const { return mMovementSpeed; }
 
+	void Draw();
+
+	SDL_Rect* GetSourceRect() { return mSrcRect; }
+	SDL_RendererFlip GetFlipState() { return mFlipState; }
+
 private:
 	float mMovementSpeed;
+
+	SDL_Rect* mSrcRect;
+	SDL_RendererFlip mFlipState;
+
+	class AnimSpriteComponent* asc;
 };
 
