@@ -77,10 +77,10 @@ void Game::LoadContent()
 
 	//Mario
 	player = new Mario(this);
-	player->SetPosition(Vector2(100.0f, 100.0f));
+	player->SetPosition(Vector2(100.0f, 392.0f));
 
-	Actor* tempMap = new Actor(this);
-	map = new TileMapComponent(tempMap);
+	mapActor = new Actor(this);
+	map = new TileMapComponent(mapActor);
 	map->LoadTileTextures(GetTexture("Assets/TileMap.png"));
 	map->LoadMap(testLevel);
 }
@@ -270,6 +270,9 @@ void Game::Render()
 
 		if (sprite->GetOwner() == player) {
 			player->Draw();
+		}
+		else if (sprite->GetOwner() == mapActor) {
+			
 		}
 		else {
 			sprite->Draw(mRenderer);

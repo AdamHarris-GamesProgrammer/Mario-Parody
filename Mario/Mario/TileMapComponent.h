@@ -21,7 +21,7 @@ public:
 
 	void LoadTileTextures(SDL_Texture* tileTexture);
 	void LoadMap(const std::string& fileName);
-	void LoadMap(int arr[32][20]);
+	void LoadMap(int arr[20][32]);
 	//void Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double rotation /* = 0.0f */, SDL_Point* center /* = NULL */, SDL_RendererFlip flip /* = SDL_FLIP_NONE */) override;
 	void Render(SDL_Renderer* renderer);
 
@@ -35,6 +35,6 @@ private:
 
 
 
-	int map[32][20];
+	int map[20][32];
 };
 

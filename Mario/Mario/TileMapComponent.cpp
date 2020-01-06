@@ -12,10 +12,10 @@ void TileMapComponent::LoadMap(const std::string& fileName)
 
 }
 
-void TileMapComponent::LoadMap(int arr[32][20])
+void TileMapComponent::LoadMap(int arr[20][32])
 {
-	for (int row = 0; row < mLevelWidth; row++) {
-		for (int column = 0; column < mLevelHeight; column++) {
+	for (int row = 0; row < mLevelHeight; row++) {
+		for (int column = 0; column < mLevelWidth; column++) {
 			map[row][column] = arr[row][column];
 		}
 	}
