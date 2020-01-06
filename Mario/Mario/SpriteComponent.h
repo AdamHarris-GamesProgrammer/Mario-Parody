@@ -11,6 +11,7 @@ public:
 
 	virtual void Draw(SDL_Renderer* renderer);
 	virtual void Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double rotation = 0.0f, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	virtual void Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, SDL_Rect* destRect);
 	virtual void SetTexture(SDL_Texture* texture);
 
 	int GetDrawOrder() const { return mDrawOrder; }

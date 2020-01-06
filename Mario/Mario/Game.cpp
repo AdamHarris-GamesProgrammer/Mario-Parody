@@ -6,6 +6,7 @@
 #include "BGSpriteComponent.h"
 #include "AnimSpriteComponent.h"
 #include "SpriteComponent.h"
+#include "TileMapComponent.h"
 #include "Mario.h"
 
 bool Game::Initialize()
@@ -77,6 +78,11 @@ void Game::LoadContent()
 	//Mario
 	player = new Mario(this);
 	player->SetPosition(Vector2(100.0f, 100.0f));
+
+	Actor* tempMap = new Actor(this);
+	map = new TileMapComponent(tempMap);
+	map->LoadTileTextures(GetTexture("Assets/TileMap.png"));
+	map->LoadMap(testLevel);
 }
 
 
@@ -269,6 +275,8 @@ void Game::Render()
 			sprite->Draw(mRenderer);
 		}
 	}
+
+	map->Render(mRenderer);
 
 	SDL_RenderPresent(mRenderer);
 }
