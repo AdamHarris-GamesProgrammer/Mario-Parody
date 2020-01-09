@@ -31,12 +31,11 @@ bool Game::Initialize()
 		printf("Failed to initialize TTF! TTF_Error: %s\n", TTF_GetError());
 		return false;
 	}
-
+	
 	if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, NULL, &mWindow, &mRenderer) != 0) {
 		printf("Failed to create window/renderer! SDL_Error: %s\n", SDL_GetError());
 		return false;
 	}
-
 	LoadContent();
 
 	mTicksCount = SDL_GetTicks();
@@ -81,8 +80,10 @@ void Game::LoadContent()
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
-	map->LoadTileTextures(GetTexture("Assets/TileMap.png"));
-	map->LoadMap(testLevel);
+	
+	SDL_Texture* tilesTexture = GetTexture("Assets/TileMap.png");
+	map->SetTexture(tilesTexture);
+	map->LoadMap("Assets/Mario_TestLevel.csv");
 }
 
 

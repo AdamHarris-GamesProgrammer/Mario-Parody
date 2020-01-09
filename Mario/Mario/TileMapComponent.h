@@ -2,28 +2,28 @@
 #include "SpriteComponent.h"
 #include "Constants.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+
 
 //32 x 20 tiles
 
 class TileMapComponent : public SpriteComponent
 {
 public:
-	TileMapComponent(class Actor* owner, int drawOrder = 100) : SpriteComponent(owner, drawOrder) {
-		srcRect = new SDL_Rect();
-		destRect = new SDL_Rect();
+	TileMapComponent(class Actor* owner, int drawOrder = 10);
 
-		srcRect->w = srcRect->h = TILE_HEIGHT;
-		destRect->w = destRect->h = TILE_HEIGHT;
-
-		mLevelWidth = 32;
-		mLevelHeight = 20;
-	}
-
-	void LoadTileTextures(SDL_Texture* tileTexture);
 	void LoadMap(const std::string& fileName);
-	void LoadMap(int arr[20][32]);
-	//void Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double rotation /* = 0.0f */, SDL_Point* center /* = NULL */, SDL_RendererFlip flip /* = SDL_FLIP_NONE */) override;
+
 	void Render(SDL_Renderer* renderer);
+
+	int GetValueAtTile(int row, int column)
+	{
+		if (row < mLevelHeight && column < mLevelWidth) {
+			return map[row][column];
+		}
+		return -1; //returns -1 if the tile is out of the map
+	}
 
 private:
 	int mLevelWidth;

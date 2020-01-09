@@ -1,27 +1,46 @@
 #include "TileMapComponent.h"
+#include <sstream>
+
+
+TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder) {
+	srcRect = new SDL_Rect();
+	destRect = new SDL_Rect();
+
+	srcRect->h = TILE_HEIGHT;
+	srcRect->w = TILE_WIDTH;
+
+	destRect->h = TILE_HEIGHT;
+	destRect->w = TILE_WIDTH;
+
+	mLevelWidth = 32;
+	mLevelHeight = 20;
+}
 
 //USE DYNAMIC memory to resize the array to the needed size
 
-void TileMapComponent::LoadTileTextures(SDL_Texture* tileTexture)
-{
-	SetTexture(tileTexture);
-}
-
 void TileMapComponent::LoadMap(const std::string& fileName)
 {
+	std::ifstream mapFile;
+	mapFile.open(fileName);
 
-}
+	int row = 0;
 
-void TileMapComponent::LoadMap(int arr[20][32])
-{
-	for (int row = 0; row < mLevelHeight; row++) {
-		for (int column = 0; column < mLevelWidth; column++) {
-			map[row][column] = arr[row][column];
+
+	while (mapFile.good()) {
+		int column = 0;
+
+		std::string line;
+		getline(mapFile, line, '\n');
+		std::istringstream iss(line);
+		std::string token;
+		while (std::getline(iss, token, ',')) {
+			map[row][column] = std::stoi(token);
+			column++;
 		}
+		row++;
+		
 	}
 }
-
-
 
 void TileMapComponent::Render(SDL_Renderer* renderer)
 {

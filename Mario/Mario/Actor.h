@@ -47,7 +47,10 @@ private:
 	float mRotation;
 
 	std::vector<class Component*> mComponents;
+
+protected:
 	class Game* mGame;
+
 
 };
 

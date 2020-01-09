@@ -30,23 +30,23 @@
     <ClCompile Include="Actor.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteComponent.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="BGSpriteComponent.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="AnimSpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AnimSpriteComponent.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="TileMapComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,23 +62,23 @@
     <ClInclude Include="Actor.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteComponent.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="BGSpriteComponent.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="AnimSpriteComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AnimSpriteComponent.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="TileMapComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
