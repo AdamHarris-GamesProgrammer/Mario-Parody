@@ -129,10 +129,13 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSpriteComponent.cpp" />
     <ClCompile Include="BGSpriteComponent.cpp" />
+    <ClCompile Include="CircleComponent.cpp" />
+    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TileMapComponent.cpp" />
@@ -141,11 +144,14 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSpriteComponent.h" />
     <ClInclude Include="BGSpriteComponent.h" />
+    <ClInclude Include="CircleComponent.h" />
+    <ClInclude Include="Coin.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TileMapComponent.h" />
   </ItemGroup>

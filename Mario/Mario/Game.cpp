@@ -8,6 +8,9 @@
 #include "SpriteComponent.h"
 #include "TileMapComponent.h"
 #include "Mario.h"
+#include "Coin.h"
+
+#include <typeinfo>
 
 bool Game::Initialize()
 {
@@ -46,10 +49,10 @@ bool Game::Initialize()
 void Game::LoadContent()
 {
 	//Background clouds
-	Actor* temp = new Actor(this);
-	temp->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+	bgActor = new Actor(this);
+	bgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
-	BGSpriteComponent* bg = new BGSpriteComponent(temp);
+	BGSpriteComponent* bg = new BGSpriteComponent(bgActor);
 	bg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
 	std::vector<SDL_Texture*> bgtexs = {
 		GetTexture("Assets/bgScrolling.png"),
@@ -60,10 +63,10 @@ void Game::LoadContent()
 	bg->SetScrollSpeed(-25.0f);
 
 	//foreground textures
-	Actor* tempFG = new Actor(this);
-	tempFG->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+	fgActor = new Actor(this);
+	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
 
-	BGSpriteComponent* fg = new BGSpriteComponent(tempFG);
+	BGSpriteComponent* fg = new BGSpriteComponent(fgActor);
 	fg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
 	std::vector<SDL_Texture*> fgtexs = {
 		GetTexture("Assets/BGForeground1.png"),
@@ -76,7 +79,7 @@ void Game::LoadContent()
 
 	//Mario
 	player = new Mario(this);
-	player->SetPosition(Vector2(100.0f, 392.0f));
+	player->SetPosition(Vector2(64.0f, 392.0f));
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
@@ -123,6 +126,8 @@ void Game::AddActor(Actor* actor)
 	}
 }
 
+
+
 void Game::RemoveActor(Actor* actor)
 {
 	//Is the actor in the pending actors vector
@@ -141,6 +146,7 @@ void Game::RemoveActor(Actor* actor)
 		mActors.pop_back();
 	}
 }
+
 
 void Game::AddSprite(class SpriteComponent* sprite)
 {
@@ -198,6 +204,20 @@ SDL_Texture* Game::GetTexture(const std::string& fileName, bool useColorKey)
 		mTextures.emplace(fileName.c_str(), tex);
 	}
 	return tex;
+}
+
+void Game::AddCoin(Coin* coin)
+{
+	mCoins.emplace_back(coin);
+}
+
+void Game::RemoveCoin(Coin* coin)
+{
+	auto iter = std::find(mCoins.begin(), mCoins.end(), coin);
+
+	if (iter != mCoins.end()) {
+		mCoins.erase(iter);
+	}
 }
 
 void Game::PollInput()
@@ -260,6 +280,8 @@ void Game::Update()
 	for (auto actor : deadActors) {
 		delete actor;
 	}
+
+
 }
 
 void Game::Render()
@@ -274,6 +296,9 @@ void Game::Render()
 		}
 		else if (sprite->GetOwner() == mapActor) {
 			
+		}
+		else if (sprite->GetOwner() == bgActor || sprite->GetOwner() == fgActor) {
+			sprite->Draw(mRenderer);
 		}
 		else {
 			sprite->Draw(mRenderer);

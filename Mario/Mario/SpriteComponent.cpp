@@ -5,6 +5,19 @@
 SpriteComponent::SpriteComponent(class Actor* owner, int drawOrder /*= 100*/) : Component(owner), mTexture(nullptr), mDrawOrder(drawOrder), mTexWidth(0), mTexHeight(0)
 {
 	mOwner->GetGame()->AddSprite(this);
+
+	mSrcRect = new SDL_Rect();
+	mDestRect = new SDL_Rect();
+
+	mSrcRect->x = 0;
+	mSrcRect->y = 0;
+	mSrcRect->w = mTexWidth;
+	mSrcRect->h = mTexHeight;
+
+	mDestRect->x = mOwner->GetPosition().x;
+	mDestRect->y = mOwner->GetPosition().y;
+	mDestRect->w = mTexWidth * mOwner->GetScale();
+	mDestRect->h = mTexHeight * mOwner->GetScale();
 }
 
 SpriteComponent::~SpriteComponent()
@@ -33,6 +46,19 @@ void SpriteComponent::Draw(SDL_Renderer* renderer)
 	}
 }
 
+void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* destRect)
+{
+	if (mTexture) {
+
+		SDL_RenderCopyEx(renderer,
+			mTexture,
+			nullptr,
+			destRect,
+			-Math::ToDegrees(mOwner->GetRotation()),
+			nullptr,
+			SDL_FLIP_NONE);
+	}
+}
 
 void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double rotation /*= 0.0f*/, SDL_Point* center /*= NULL*/, SDL_RendererFlip flip /*= SDL_FLIP_NONE*/)
 {

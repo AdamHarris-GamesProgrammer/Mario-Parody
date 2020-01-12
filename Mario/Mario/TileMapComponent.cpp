@@ -1,5 +1,8 @@
 #include "TileMapComponent.h"
 #include <sstream>
+#include "Actor.h"
+#include "Coin.h"
+#include "Game.h"
 
 
 TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder) {
@@ -38,14 +41,35 @@ void TileMapComponent::LoadMap(const std::string& fileName)
 			column++;
 		}
 		row++;
-		
+
+	}
+
+	GenerateObjects();
+}
+
+void TileMapComponent::GenerateObjects() {
+	int type = 0;
+
+	for (int row = 0; row < mLevelHeight; row++) {
+		for (int column = 0; column < mLevelWidth; column++) {
+			type = map[row][column];
+
+			if (type == 64) {
+				destRect->x = column * TILE_WIDTH;
+				destRect->y = row * TILE_HEIGHT;
+				Coin* coin = new Coin(mOwner->GetGame());
+				coin->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
+				mOwner->GetGame()->AddCoin(coin);
+			}
+
+		}
 	}
 }
 
 void TileMapComponent::Render(SDL_Renderer* renderer)
 {
 	int type = 0;
-
+	int coinNum = 0;
 	for (int row = 0; row < mLevelHeight; row++) {
 		for (int column = 0; column < mLevelWidth; column++) {
 			type = map[row][column];
@@ -70,9 +94,16 @@ void TileMapComponent::Render(SDL_Renderer* renderer)
 					srcRect->y = 32;
 					SpriteComponent::Draw(renderer, srcRect, destRect);
 					break;
+				case 64:
+					break;
 				}
 			}
 
 		}
 	}
+}
+
+void TileMapComponent::ChangeTileAt(int row, int column, int newValue)
+{
+	map[row][column] = newValue;
 }

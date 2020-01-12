@@ -1,9 +1,11 @@
 #include "Mario.h"
 #include "AnimSpriteComponent.h"
+#include "CircleComponent.h"
 #include "TileMapComponent.h"
 #include "Game.h"
+#include "Coin.h"
 
-Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f)
+Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.0f), mJumping(false)
 {
 	asc = new AnimSpriteComponent(this);
 
@@ -24,6 +26,15 @@ Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f)
 	mFlipState = SDL_FLIP_NONE;
 	mCanJump = true;
 	
+
+	mDestRect = new SDL_Rect();
+	mDestRect->h = asc->GetTexHeight();
+	mDestRect->w = asc->GetTexWidth();
+	mDestRect->x = GetPosition().x;
+	mDestRect->y = GetPosition().y;
+
+	mCircle = new CircleComponent(this);
+	mCircle->SetRadius(20.0f);
 }
 
 void Mario::UpdateActor(float deltaTime)
@@ -44,7 +55,9 @@ void Mario::UpdateActor(float deltaTime)
 	int centralXPosition = (int)(position.x) / TILE_WIDTH;
 	int footPosition = (int)(position.y + asc->GetTexHeight() * 0.5f) / TILE_HEIGHT;
 
-	if (GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition) == -1) {
+	int tileValue = GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition);
+
+	if (tileValue == -1) {
 		AddGravity(deltaTime);
 	}
 	else
@@ -54,7 +67,18 @@ void Mario::UpdateActor(float deltaTime)
 
 	position.x += mMovementSpeed * deltaTime;
 
+	
 	SetPosition(position);
+
+	//checks to see if a coin has been picked up
+	for (auto coin : GetGame()->GetCoins()) {
+		if (Intersect(*mCircle, *(coin->GetCircle()))) {
+			
+			GetGame()->GetMap()->ChangeTileAt((coin->GetPosition().y / TILE_HEIGHT), (coin->GetPosition().x / TILE_WIDTH), -1);
+			coin->SetState(EDead);
+		}
+	}
+
 }
 
 void Mario::HandleEvents(const uint8_t* state)

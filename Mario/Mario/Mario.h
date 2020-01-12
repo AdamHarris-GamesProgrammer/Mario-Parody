@@ -18,6 +18,7 @@ public:
 	Vector2 position;
 
 	SDL_Rect* GetSourceRect() { return mSrcRect; }
+	SDL_Rect* GetDestRect() { return mDestRect; }
 	SDL_RendererFlip GetFlipState() { return mFlipState; }
 
 	bool IsJumping() { return mJumping; }
@@ -32,9 +33,12 @@ private:
 	float mMovementSpeed;
 
 	SDL_Rect* mSrcRect;
+	SDL_Rect* mDestRect;
 	SDL_RendererFlip mFlipState;
 
 	class AnimSpriteComponent* asc;
+
+	class CircleComponent* mCircle;
 
 	bool mJumping;
 	bool mCanJump;

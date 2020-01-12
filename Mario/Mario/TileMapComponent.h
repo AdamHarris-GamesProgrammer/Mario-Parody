@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 
 //32 x 20 tiles
@@ -15,6 +16,8 @@ public:
 
 	void LoadMap(const std::string& fileName);
 
+	void GenerateObjects();
+
 	void Render(SDL_Renderer* renderer);
 
 	int GetValueAtTile(int row, int column)
@@ -25,6 +28,8 @@ public:
 		return -1; //returns -1 if the tile is out of the map
 	}
 
+	void ChangeTileAt(int row, int column, int newValue);
+
 private:
 	int mLevelWidth;
 	int mLevelHeight;
@@ -33,6 +38,7 @@ private:
 	SDL_Rect* destRect;
 	SDL_Rect* srcRect;
 
+	std::vector<class Coin*> mCoins;
 
 
 	int map[20][32];

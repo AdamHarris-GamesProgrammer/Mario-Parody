@@ -33,6 +33,8 @@ public:
 	State GetState() const { return mState; }
 	void SetState(State newState) { mState = newState; }
 
+	Vector2 GetForward() const { return Vector2(Math::Cos(mRotation), -Math::Sin(mRotation)); }
+
 	class Game* GetGame() { return mGame; }
 
 

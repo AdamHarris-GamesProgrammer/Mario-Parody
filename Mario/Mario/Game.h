@@ -32,7 +32,16 @@ public:
 
 	SDL_Renderer* GetRenderer() { return mRenderer; }
 
+
+	//game specific code
+	class Mario* GetPlayer() { return player; }
+
 	class TileMapComponent* GetMap() { return map; }
+
+	void AddCoin(class Coin* coin);
+	void RemoveCoin(class Coin* coin);
+	std::vector<class Coin*>& GetCoins() { return mCoins; }
+
 private:
 	void LoadContent();
 	void UnloadContent();
@@ -59,9 +68,15 @@ private:
 	bool bShouldQuit;
 	bool mUpdatingActors;
 
+
+	//Game specific code
 	class Mario* player;
 	class Actor* mapActor;
 	class TileMapComponent* map;
 
+	class Actor* bgActor;
+	class Actor* fgActor;
+
+	std::vector<class Coin*> mCoins;
 };
 
