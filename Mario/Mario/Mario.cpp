@@ -52,7 +52,7 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
-	int centralXPosition = (int)(position.x) / TILE_WIDTH;
+	int centralXPosition = (int)((position.x) / TILE_WIDTH);
 	int footPosition = (int)(position.y + asc->GetTexHeight() * 0.5f) / TILE_HEIGHT;
 
 	int tileValue = GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition);

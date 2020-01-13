@@ -34,7 +34,7 @@ bool Game::Initialize()
 		printf("Failed to initialize TTF! TTF_Error: %s\n", TTF_GetError());
 		return false;
 	}
-	
+
 	if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, NULL, &mWindow, &mRenderer) != 0) {
 		printf("Failed to create window/renderer! SDL_Error: %s\n", SDL_GetError());
 		return false;
@@ -83,10 +83,14 @@ void Game::LoadContent()
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
-	
+
 	SDL_Texture* tilesTexture = GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
+
+	SDL_Color textColor = { 0,0,0 };
+	scoreText = GetTextureFont("Assets/Fonts/Free Shaped Corner/Shaped Corner-Basic.ttf", "Score", 72, textColor);
+
 }
 
 
@@ -152,7 +156,7 @@ void Game::AddSprite(class SpriteComponent* sprite)
 {
 	int myDrawOrder = sprite->GetDrawOrder();
 	auto iter = mSprites.begin();
-	for(; iter != mSprites.end(); ++iter) {
+	for (; iter != mSprites.end(); ++iter) {
 		if (myDrawOrder < (*iter)->GetDrawOrder()) {
 			break;
 		}
@@ -206,6 +210,43 @@ SDL_Texture* Game::GetTexture(const std::string& fileName, bool useColorKey)
 	return tex;
 }
 
+SDL_Texture* Game::GetTextureFont(const std::string& fileName, const std::string& text, int pointSize, SDL_Color textColor)
+{
+	SDL_Texture* tex = nullptr;
+	TTF_Font* font = nullptr;
+
+	auto iter = mFontTextures.find(fileName);
+
+	if (iter != mFontTextures.end()) {
+		font = iter->second;
+	}
+	else {
+		font = TTF_OpenFont(fileName.c_str(), pointSize);
+		mFontTextures.emplace(fileName.c_str(), font);
+
+	}
+
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+	if (!textSurface) {
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else {
+		tex = SDL_CreateTextureFromSurface(mRenderer, textSurface);
+		if (!tex) {
+			printf("Unable to create texture from rendered text! SDL_Error: %s\n", SDL_GetError());
+		}
+		else {
+			/*tex->width = textSurface->w;
+			tex->height = textSurface->h;*/
+			mTextures.emplace(fileName.c_str(), tex);
+		}
+
+		SDL_FreeSurface(textSurface);
+	}
+
+	return tex;
+}
+
 void Game::AddCoin(Coin* coin)
 {
 	mCoins.emplace_back(coin);
@@ -237,7 +278,7 @@ void Game::PollInput()
 			}
 		}
 
-		
+
 	}
 
 	const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -295,7 +336,7 @@ void Game::Render()
 			player->Draw();
 		}
 		else if (sprite->GetOwner() == mapActor) {
-			
+
 		}
 		else if (sprite->GetOwner() == bgActor || sprite->GetOwner() == fgActor) {
 			sprite->Draw(mRenderer);
@@ -306,6 +347,12 @@ void Game::Render()
 	}
 
 	map->Render(mRenderer);
+	SDL_Rect scorePosition;
+	scorePosition.x = SCREEN_WIDTH / 2;
+	scorePosition.y = 0;
+	scorePosition.w = 300;
+	scorePosition.h = 100;
+	SDL_RenderCopy(mRenderer, scoreText, NULL, &scorePosition);
 
 	SDL_RenderPresent(mRenderer);
 }

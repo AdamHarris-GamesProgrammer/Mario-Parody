@@ -29,6 +29,7 @@ public:
 	void RemoveSprite(class SpriteComponent* sprite);
 
 	SDL_Texture* GetTexture(const std::string& fileName, bool useColorKey = false);
+	SDL_Texture* GetTextureFont(const std::string& fileName, const std::string& text, int pointSize, SDL_Color textColor);
 
 	SDL_Renderer* GetRenderer() { return mRenderer; }
 
@@ -57,6 +58,7 @@ private:
 	SDL_Window* mWindow;
 
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
+	std::unordered_map<std::string, TTF_Font*> mFontTextures;
 
 	std::vector<class Actor*> mActors;
 
@@ -76,6 +78,9 @@ private:
 
 	class Actor* bgActor;
 	class Actor* fgActor;
+
+	TTF_Font* scoreFont;
+	SDL_Texture* scoreText;
 
 	std::vector<class Coin*> mCoins;
 };
