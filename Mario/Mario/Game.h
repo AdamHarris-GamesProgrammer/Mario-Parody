@@ -29,7 +29,9 @@ public:
 	void RemoveSprite(class SpriteComponent* sprite);
 
 	SDL_Texture* GetTexture(const std::string& fileName, bool useColorKey = false);
-	SDL_Texture* GetTextureFont(const std::string& fileName, const std::string& text, int pointSize, SDL_Color textColor);
+
+	TTF_Font* GetFont(const std::string& fileName, int pointSize);
+	SDL_Texture* GetTextureFromFont(TTF_Font* font, const std::string& text, SDL_Color textColor);
 
 	SDL_Renderer* GetRenderer() { return mRenderer; }
 

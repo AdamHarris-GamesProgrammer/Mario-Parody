@@ -89,7 +89,13 @@ void Game::LoadContent()
 	map->LoadMap("Assets/Mario_TestLevel.csv");
 
 	SDL_Color textColor = { 0,0,0 };
-	scoreText = GetTextureFont("Assets/Fonts/Free Shaped Corner/Shaped Corner-Basic.ttf", "Score", 72, textColor);
+	scoreFont = GetFont("Assets/Fonts/Free Shaped Corner/Shaped Corner-Basic.ttf", 120);
+	scoreText = GetTextureFromFont(scoreFont, "Score: ", textColor);
+
+	Actor* temp = new Actor(this);
+	temp->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
+	SpriteComponent* sc = new SpriteComponent(temp);
+	sc->SetTexture(scoreText);
 
 }
 
@@ -210,9 +216,9 @@ SDL_Texture* Game::GetTexture(const std::string& fileName, bool useColorKey)
 	return tex;
 }
 
-SDL_Texture* Game::GetTextureFont(const std::string& fileName, const std::string& text, int pointSize, SDL_Color textColor)
+
+TTF_Font* Game::GetFont(const std::string& fileName, int pointSize)
 {
-	SDL_Texture* tex = nullptr;
 	TTF_Font* font = nullptr;
 
 	auto iter = mFontTextures.find(fileName);
@@ -223,8 +229,14 @@ SDL_Texture* Game::GetTextureFont(const std::string& fileName, const std::string
 	else {
 		font = TTF_OpenFont(fileName.c_str(), pointSize);
 		mFontTextures.emplace(fileName.c_str(), font);
-
 	}
+
+	return font;
+}
+
+SDL_Texture* Game::GetTextureFromFont(TTF_Font* font, const std::string& text, SDL_Color textColor)
+{
+	SDL_Texture* tex = nullptr;
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
 	if (!textSurface) {
@@ -235,12 +247,6 @@ SDL_Texture* Game::GetTextureFont(const std::string& fileName, const std::string
 		if (!tex) {
 			printf("Unable to create texture from rendered text! SDL_Error: %s\n", SDL_GetError());
 		}
-		else {
-			/*tex->width = textSurface->w;
-			tex->height = textSurface->h;*/
-			mTextures.emplace(fileName.c_str(), tex);
-		}
-
 		SDL_FreeSurface(textSurface);
 	}
 
@@ -347,12 +353,6 @@ void Game::Render()
 	}
 
 	map->Render(mRenderer);
-	SDL_Rect scorePosition;
-	scorePosition.x = SCREEN_WIDTH / 2;
-	scorePosition.y = 0;
-	scorePosition.w = 300;
-	scorePosition.h = 100;
-	SDL_RenderCopy(mRenderer, scoreText, NULL, &scorePosition);
 
 	SDL_RenderPresent(mRenderer);
 }

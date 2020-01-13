@@ -31,3 +31,28 @@ scoring system
 leader board system (fileIO)
 
 */
+
+/* TEXT SYSTEM
+Create a text class that inherits from Actor, and has a TextComponent object attached to it
+
+Text class
++SetText(string text)
++SetTextColor(SDL_Color color)
++GetText()
++GetTextColor()
++SetFont()
++GetFont()
+ 
+ -mColor : SDL_Color
+ -mText : std::string
+ -mFont : TTF_Font
+
++LoadTextFromFont(font, string text, ) 
+
+-SDL_Texture text
+
+TextComponent Class inherits from sprite component class 
++SetFont(font)
++LoadFont(const std::string& filename, int pointSize = 24)
+
+*/
