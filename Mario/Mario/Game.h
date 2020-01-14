@@ -30,8 +30,7 @@ public:
 
 	SDL_Texture* GetTexture(const std::string& fileName, bool useColorKey = false);
 
-	TTF_Font* GetFont(const std::string& fileName, int pointSize);
-	SDL_Texture* GetTextureFromFont(TTF_Font* font, const std::string& text, SDL_Color textColor);
+	SDL_Texture* GetTextureFromFont(std::string fileName, int pointSize, const std::string& text, SDL_Color textColor);
 
 	SDL_Renderer* GetRenderer() { return mRenderer; }
 
@@ -81,9 +80,11 @@ private:
 	class Actor* bgActor;
 	class Actor* fgActor;
 
-	TTF_Font* scoreFont;
-	SDL_Texture* scoreText;
-
 	std::vector<class Coin*> mCoins;
+
+	Actor* scoreText;
+	class TextSpriteComponent* scoreTsc;
+
+	int score = 0;
 };
 

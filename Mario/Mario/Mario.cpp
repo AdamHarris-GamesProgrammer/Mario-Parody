@@ -76,6 +76,7 @@ void Mario::UpdateActor(float deltaTime)
 			
 			GetGame()->GetMap()->ChangeTileAt((coin->GetPosition().y / TILE_HEIGHT), (coin->GetPosition().x / TILE_WIDTH), -1);
 			coin->SetState(EDead);
+
 		}
 	}
 

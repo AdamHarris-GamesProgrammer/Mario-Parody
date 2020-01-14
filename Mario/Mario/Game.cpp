@@ -7,6 +7,7 @@
 #include "AnimSpriteComponent.h"
 #include "SpriteComponent.h"
 #include "TileMapComponent.h"
+#include "TextSpriteComponent.h"
 #include "Mario.h"
 #include "Coin.h"
 
@@ -88,14 +89,12 @@ void Game::LoadContent()
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
 
-	SDL_Color textColor = { 0,0,0 };
-	scoreFont = GetFont("Assets/Fonts/Free Shaped Corner/Shaped Corner-Basic.ttf", 120);
-	scoreText = GetTextureFromFont(scoreFont, "Score: ", textColor);
-
-	Actor* temp = new Actor(this);
-	temp->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
-	SpriteComponent* sc = new SpriteComponent(temp);
-	sc->SetTexture(scoreText);
+	scoreText = new Actor(this);
+	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
+	scoreTsc = new TextSpriteComponent(scoreText);
+	scoreTsc->SetText("Score: 0");
+	scoreTsc->SetTextSize(300);
+	
 
 }
 
@@ -216,27 +215,11 @@ SDL_Texture* Game::GetTexture(const std::string& fileName, bool useColorKey)
 	return tex;
 }
 
-
-TTF_Font* Game::GetFont(const std::string& fileName, int pointSize)
-{
-	TTF_Font* font = nullptr;
-
-	auto iter = mFontTextures.find(fileName);
-
-	if (iter != mFontTextures.end()) {
-		font = iter->second;
-	}
-	else {
-		font = TTF_OpenFont(fileName.c_str(), pointSize);
-		mFontTextures.emplace(fileName.c_str(), font);
-	}
-
-	return font;
-}
-
-SDL_Texture* Game::GetTextureFromFont(TTF_Font* font, const std::string& text, SDL_Color textColor)
+SDL_Texture* Game::GetTextureFromFont(std::string fileName, int pointSize, const std::string& text, SDL_Color textColor)
 {
 	SDL_Texture* tex = nullptr;
+	TTF_Font* font = nullptr;
+	font = TTF_OpenFont(fileName.c_str(), pointSize);
 
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
 	if (!textSurface) {
@@ -264,6 +247,9 @@ void Game::RemoveCoin(Coin* coin)
 
 	if (iter != mCoins.end()) {
 		mCoins.erase(iter);
+		score++;
+		std::string text = "Score: " + std::to_string(score);
+		scoreTsc->SetText(text);
 	}
 }
 
