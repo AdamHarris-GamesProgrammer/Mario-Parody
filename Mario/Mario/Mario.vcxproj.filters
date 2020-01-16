@@ -58,7 +58,10 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="TextSpriteComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +105,10 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="TextSpriteComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,32 +28,10 @@ SpriteComponent::~SpriteComponent()
 void SpriteComponent::Draw(SDL_Renderer* renderer)
 {
 	if (mTexture) {
-		SDL_Rect destRect;
-
-		destRect.w = static_cast<int>(mTexWidth * mOwner->GetScale());
-		destRect.h = static_cast<int>(mTexHeight * mOwner->GetScale());
-
-		destRect.x = static_cast<int>(mOwner->GetPosition().x - destRect.w / 2);
-		destRect.y = static_cast<int>(mOwner->GetPosition().y - destRect.h / 2);
-
 		SDL_RenderCopyEx(renderer,
 			mTexture,
-			nullptr,
-			&destRect,
-			-Math::ToDegrees(mOwner->GetRotation()),
-			nullptr,
-			SDL_FLIP_NONE);
-	}
-}
-
-void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* destRect)
-{
-	if (mTexture) {
-
-		SDL_RenderCopyEx(renderer,
-			mTexture,
-			nullptr,
-			destRect,
+			mSrcRect,
+			mDestRect,
 			-Math::ToDegrees(mOwner->GetRotation()),
 			nullptr,
 			SDL_FLIP_NONE);
@@ -81,18 +59,6 @@ void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double 
 	}
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, SDL_Rect* destRect)
-{
-	if (mTexture) {
-		SDL_RenderCopyEx(renderer,
-			mTexture,
-			sourceRect,
-			destRect,
-			0.0f,
-			nullptr,
-			SDL_FLIP_NONE);
-	}
-}
 
 void SpriteComponent::SetTexture(SDL_Texture* texture)
 {

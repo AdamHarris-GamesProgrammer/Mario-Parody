@@ -13,6 +13,15 @@ TextSpriteComponent::TextSpriteComponent(class Actor* owner, int updateOrder /*=
 	defaultColor = { 255,255,255,255 };
 	mTextColor = defaultColor;
 
+	SDL_Rect* testDest;
+	testDest = new SDL_Rect();
+
+	testDest->w = GetTexWidth() * mOwner->GetScale();
+	testDest->h = GetTexHeight() * mOwner->GetScale();
+
+	testDest->x = mOwner->GetPosition().x;
+	testDest->y = mOwner->GetPosition().y;
+
 	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
 	SpriteComponent::SetTexture(mTexture);
 }
@@ -20,6 +29,27 @@ TextSpriteComponent::TextSpriteComponent(class Actor* owner, int updateOrder /*=
 TextSpriteComponent::~TextSpriteComponent()
 {
 
+}
+
+void TextSpriteComponent::Draw(SDL_Renderer* renderer)
+{
+	SDL_Rect destRect;
+
+	destRect.w = static_cast<int>(mTexWidth * mOwner->GetScale());
+	destRect.h = static_cast<int>(mTexHeight * mOwner->GetScale());
+
+	destRect.x = static_cast<int>(mOwner->GetPosition().x - destRect.w / 2);
+	destRect.y = static_cast<int>(mOwner->GetPosition().y - destRect.h / 2);
+
+	if (mTexture) {
+		SDL_RenderCopyEx(renderer,
+			mTexture,
+			nullptr,
+			&destRect,
+			-Math::ToDegrees(mOwner->GetRotation()),
+			nullptr,
+			SDL_FLIP_NONE);
+	}
 }
 
 void TextSpriteComponent::SetTextSize(int newSize)
@@ -32,6 +62,6 @@ void TextSpriteComponent::SetTextSize(int newSize)
 void TextSpriteComponent::SetText(std::string newText)
 {
 	mText = newText;
-	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, newText, mTextColor);
+	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
 	SpriteComponent::SetTexture(mTexture);
 }

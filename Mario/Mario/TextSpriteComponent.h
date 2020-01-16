@@ -14,6 +14,8 @@ public:
 	int GetTextSize() const { return mPointSize; }
 	std::string GetText() const { return mText; }
 	
+	void Draw(SDL_Renderer* renderer) override;
+
 	void SetFont(TTF_Font* newFont) { mFont = newFont; }
 	void SetTextColor(SDL_Color newColor) { mTextColor = newColor; }
 	void SetTextSize(int newSize);

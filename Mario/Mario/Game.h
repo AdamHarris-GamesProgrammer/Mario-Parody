@@ -36,7 +36,7 @@ public:
 
 
 	//game specific code
-	class Mario* GetPlayer() { return player; }
+	class Mario* GetPlayer() { return mPlayer; }
 
 	class TileMapComponent* GetMap() { return map; }
 
@@ -68,22 +68,22 @@ private:
 	std::vector<class SpriteComponent*> mSprites;
 
 	Uint32 mTicksCount;
-	bool bShouldQuit;
+	bool bShouldQuit = false;
 	bool mUpdatingActors;
 
 
 	//Game specific code
-	class Mario* player;
-	class Actor* mapActor;
-	class TileMapComponent* map;
+	class Mario* mPlayer = nullptr;
+	class Actor* mapActor = nullptr;
+	class TileMapComponent* map = nullptr;
 
-	class Actor* bgActor;
-	class Actor* fgActor;
+	class Actor* bgActor = nullptr;
+	class Actor* fgActor = nullptr;
 
 	std::vector<class Coin*> mCoins;
 
-	Actor* scoreText;
-	class TextSpriteComponent* scoreTsc;
+	Actor* scoreText = nullptr;
+	class TextSpriteComponent* scoreTsc = nullptr;
 
 	int score = 0;
 };

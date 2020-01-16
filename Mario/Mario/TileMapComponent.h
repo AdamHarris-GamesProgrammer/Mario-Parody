@@ -1,13 +1,13 @@
 #pragma once
 #include "SpriteComponent.h"
 #include "Constants.h"
+
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
-
-
-//32 x 20 tiles
+#include "Tile.h"
 
 class TileMapComponent : public SpriteComponent
 {
@@ -17,8 +17,6 @@ public:
 	void LoadMap(const std::string& fileName);
 
 	void GenerateObjects();
-
-	void Render(SDL_Renderer* renderer);
 
 	int GetValueAtTile(int row, int column)
 	{
@@ -30,17 +28,14 @@ public:
 
 	void ChangeTileAt(int row, int column, int newValue);
 
+
 private:
 	int mLevelWidth;
 	int mLevelHeight;
 
-	SDL_Texture* mTexture;
-	SDL_Rect* destRect;
-	SDL_Rect* srcRect;
-
 	std::vector<class Coin*> mCoins;
 
-
 	int map[20][32];
+	Tile* tileMap[20][32];
 };
 

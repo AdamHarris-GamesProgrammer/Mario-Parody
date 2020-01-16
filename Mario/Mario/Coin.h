@@ -1,11 +1,12 @@
 #pragma once
-#include "Actor.h"
+#include "Tile.h"
 #include "SDL.h"
+#include "CircleComponent.h"
 
-class Coin : public Actor
+class Coin : public Tile
 {
 public:
-	Coin(class Game* game);
+	Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect);
 	~Coin();
 
 	class CircleComponent* GetCircle() { return mCircle; }

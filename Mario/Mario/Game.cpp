@@ -79,9 +79,15 @@ void Game::LoadContent()
 	fg->SetScrollSpeed(-10.0f);
 
 	//Mario
-	player = new Mario(this);
-	player->SetPosition(Vector2(64.0f, 392.0f));
+	mPlayer = new Mario(this);
+	mPlayer->SetPosition(Vector2(64.0f, 392.0f));
 
+	scoreText = new Actor(this);
+	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
+	scoreTsc = new TextSpriteComponent(scoreText);
+	scoreTsc->SetText("Score: 0");
+	scoreTsc->SetTextSize(80);
+	
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
 
@@ -89,11 +95,7 @@ void Game::LoadContent()
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
 
-	scoreText = new Actor(this);
-	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
-	scoreTsc = new TextSpriteComponent(scoreText);
-	scoreTsc->SetText("Score: 0");
-	scoreTsc->SetTextSize(300);
+
 	
 
 }
@@ -270,11 +272,9 @@ void Game::PollInput()
 			}
 		}
 
-
 	}
-
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	player->HandleEvents(state);
+	mPlayer->HandleEvents(state);
 }
 
 void Game::Update()
@@ -313,8 +313,6 @@ void Game::Update()
 	for (auto actor : deadActors) {
 		delete actor;
 	}
-
-
 }
 
 void Game::Render()
@@ -324,21 +322,13 @@ void Game::Render()
 
 	for (auto sprite : mSprites) {
 
-		if (sprite->GetOwner() == player) {
-			player->Draw();
-		}
-		else if (sprite->GetOwner() == mapActor) {
-
-		}
-		else if (sprite->GetOwner() == bgActor || sprite->GetOwner() == fgActor) {
-			sprite->Draw(mRenderer);
+		if (sprite->GetOwner() == mPlayer) {
+			mPlayer->Draw();
 		}
 		else {
 			sprite->Draw(mRenderer);
 		}
 	}
-
-	map->Render(mRenderer);
 
 	SDL_RenderPresent(mRenderer);
 }
