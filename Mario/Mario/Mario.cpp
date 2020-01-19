@@ -67,8 +67,21 @@ void Mario::UpdateActor(float deltaTime)
 
 	position.x += mMovementSpeed * deltaTime;
 
+	//32 = player width, 1024 = level width
+	if ((position.x < 0) || (position.x + 32 > 1024)) {
+		position.x -= mMovementSpeed * deltaTime;
+	}
+	//48 = player height, 640 = level height
+	if ((position.y < 0) || (position.y + 48 > 640)) {
+		position.y -= mMovementSpeed * deltaTime;
+	}
+	
+	std::cout << position.x << std::endl;
 	
 	SetPosition(position);
+
+	mDestRect->x = position.x;
+	mDestRect->y = position.y;
 
 	//checks to see if a coin has been picked up
 	for (auto coin : GetGame()->GetCoins()) {
@@ -106,7 +119,7 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::Draw()
 {
-	asc->Draw(GetGame()->GetRenderer(), mSrcRect, 0.0f, NULL, mFlipState);
+	asc->Draw(GetGame()->GetRenderer(), mSrcRect, mDestRect, 0.0f, NULL, mFlipState);
 }
 
 void Mario::CancelJump()

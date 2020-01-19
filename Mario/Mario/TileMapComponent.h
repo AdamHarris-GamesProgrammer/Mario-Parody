@@ -36,6 +36,5 @@ private:
 	std::vector<class Coin*> mCoins;
 
 	int map[20][32];
-	Tile* tileMap[20][32];
 };
 

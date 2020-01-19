@@ -5,7 +5,6 @@
 #include "Game.h"
 #include "Tile.h"
 
-
 TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder)
 {
 	mLevelWidth = 32;
@@ -20,7 +19,6 @@ void TileMapComponent::LoadMap(const std::string& fileName)
 	mapFile.open(fileName);
 
 	int row = 0;
-
 
 	while (mapFile.good()) {
 		int column = 0;
@@ -78,7 +76,6 @@ void TileMapComponent::GenerateObjects() {
 		}
 	}
 }
-
 
 void TileMapComponent::ChangeTileAt(int row, int column, int newValue)
 {

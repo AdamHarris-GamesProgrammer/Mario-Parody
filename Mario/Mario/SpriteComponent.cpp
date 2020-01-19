@@ -60,6 +60,19 @@ void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, double 
 }
 
 
+void SpriteComponent::Draw(SDL_Renderer* renderer, SDL_Rect* sourceRect, SDL_Rect* destRect, double rotation, SDL_Point* center, SDL_RendererFlip flip)
+{
+	if (mTexture) {
+		SDL_RenderCopyEx(renderer,
+			mTexture,
+			sourceRect,
+			destRect,
+			rotation,
+			center,
+			flip);
+	}
+}
+
 void SpriteComponent::SetTexture(SDL_Texture* texture)
 {
 	mTexture = texture;

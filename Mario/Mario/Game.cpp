@@ -10,6 +10,7 @@
 #include "TextSpriteComponent.h"
 #include "Mario.h"
 #include "Coin.h"
+#include "Tile.h"
 
 #include <typeinfo>
 
@@ -94,12 +95,7 @@ void Game::LoadContent()
 	SDL_Texture* tilesTexture = GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
-
-
-	
-
 }
-
 
 void Game::UnloadContent()
 {
@@ -125,7 +121,6 @@ void Game::RunLoop()
 	}
 }
 
-
 void Game::AddActor(Actor* actor)
 {
 	//if in the process of updating actors then the new actor needs to be added to pending
@@ -136,8 +131,6 @@ void Game::AddActor(Actor* actor)
 		mActors.emplace_back(actor);
 	}
 }
-
-
 
 void Game::RemoveActor(Actor* actor)
 {
@@ -157,7 +150,6 @@ void Game::RemoveActor(Actor* actor)
 		mActors.pop_back();
 	}
 }
-
 
 void Game::AddSprite(class SpriteComponent* sprite)
 {
@@ -255,6 +247,20 @@ void Game::RemoveCoin(Coin* coin)
 	}
 }
 
+void Game::AddTile(Tile* tile)
+{
+	mTiles.emplace_back(tile);
+}
+
+void Game::RemoveTile(Tile* tile)
+{
+	auto iter = std::find(mTiles.begin(), mTiles.end(), tile);
+
+	if (iter != mTiles.end()) {
+		mTiles.erase(iter);
+	}
+}
+
 void Game::PollInput()
 {
 	SDL_Event e;
@@ -279,7 +285,7 @@ void Game::PollInput()
 
 void Game::Update()
 {
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16)); //delays the game 16ms, creating (roughly) 60fps gameplay
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16)); //delays the game 16ms, creating (roughly) 60fps game play
 
 	//calculates delta time
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
@@ -291,7 +297,13 @@ void Game::Update()
 	//update all actors
 	mUpdatingActors = true;
 	for (auto actor : mActors) {
-		actor->Update(deltaTime);
+		if (actor == mPlayer) {
+			actor->Update(deltaTime);
+		}
+		else
+		{
+			actor->Update(deltaTime);
+		}
 	}
 	mUpdatingActors = false;
 
@@ -313,6 +325,7 @@ void Game::Update()
 	for (auto actor : deadActors) {
 		delete actor;
 	}
+
 }
 
 void Game::Render()
@@ -321,7 +334,6 @@ void Game::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
-
 		if (sprite->GetOwner() == mPlayer) {
 			mPlayer->Draw();
 		}
@@ -332,7 +344,6 @@ void Game::Render()
 
 	SDL_RenderPresent(mRenderer);
 }
-
 
 void Game::Shutdown()
 {
@@ -345,4 +356,3 @@ void Game::Shutdown()
 	IMG_Quit();
 	SDL_Quit();
 }
-

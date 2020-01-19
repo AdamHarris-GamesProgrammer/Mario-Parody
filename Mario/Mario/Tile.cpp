@@ -2,11 +2,16 @@
 #include "SpriteComponent.h"
 #include "Game.h"
 
-Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest):  Actor(game), mSrcRect(src), mDestRect(dest)
+Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest):  Actor(game), SpriteComponent(this)
+{	
+	mSrcRect = src;
+	mDestRect = dest;
+	SetTexture(game->GetTexture("Assets/TileMap.png"));
+	SetPosition(Vector2(mDestRect->x, mDestRect->y));
+	mGame->AddTile(this);
+}
+
+Tile::~Tile()
 {
-	sc = new SpriteComponent(this);
-	sc->SetSrcRect(mSrcRect);
-	sc->SetDestRect(mDestRect);
-	sc->SetTexture(game->GetTexture("Assets/TileMap.png"));
-	sc->GetOwner()->SetPosition(Vector2(mDestRect->x, mDestRect->y));
+	mGame->RemoveTile(this);
 }

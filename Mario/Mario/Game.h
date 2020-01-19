@@ -5,6 +5,8 @@
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
 
+#include "Constants.h"
+
 #include <iostream>
 #include <unordered_map>
 #include <string>
@@ -44,6 +46,10 @@ public:
 	void RemoveCoin(class Coin* coin);
 	std::vector<class Coin*>& GetCoins() { return mCoins; }
 
+	void AddTile(class Tile* tile);
+	void RemoveTile(class Tile* tile);
+	std::vector<class Tile*>& GetTiles() { return mTiles; }
+
 private:
 	void LoadContent();
 	void UnloadContent();
@@ -59,7 +65,6 @@ private:
 	SDL_Window* mWindow;
 
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
-	std::unordered_map<std::string, TTF_Font*> mFontTextures;
 
 	std::vector<class Actor*> mActors;
 
@@ -81,6 +86,10 @@ private:
 	class Actor* fgActor = nullptr;
 
 	std::vector<class Coin*> mCoins;
+
+
+	std::vector<class Tile*> mTiles;
+	
 
 	Actor* scoreText = nullptr;
 	class TextSpriteComponent* scoreTsc = nullptr;
