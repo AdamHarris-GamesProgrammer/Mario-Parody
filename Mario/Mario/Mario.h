@@ -13,11 +13,8 @@ public:
 
 	void Draw();
 
-	Vector2 gravity = Vector2(0.0f, -8.0f);
-	Vector2 velocity = Vector2(15.0f, 15.0f);
 	Vector2 position;
 
-	SDL_Rect* GetSourceRect() { return mSrcRect; }
 	SDL_Rect* GetDestRect() { return mDestRect; }
 	SDL_RendererFlip GetFlipState() { return mFlipState; }
 
@@ -32,7 +29,6 @@ public:
 private:
 	float mMovementSpeed;
 
-	SDL_Rect* mSrcRect;
 	SDL_Rect* mDestRect;
 	SDL_RendererFlip mFlipState;
 
@@ -44,8 +40,5 @@ private:
 	bool mCanJump;
 	float mJumpForce;
 
-	SDL_Rect* mGameCamera = nullptr;
-
-	void SetCamera();
 };
 

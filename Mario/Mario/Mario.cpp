@@ -8,7 +8,6 @@
 Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.0f), mJumping(false)
 {
 	asc = new AnimSpriteComponent(this);
-	mGameCamera = mGame->GetCamera();
 
 	std::vector<SDL_Texture*> anims = {
 		game->GetTexture("Assets/Characters/Mario/Mario01.png", true),
@@ -17,12 +16,6 @@ Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.
 	};
 	asc->SetAnimTextures(anims);
 	asc->SetAnimFPS(3);
-
-	mSrcRect = new SDL_Rect();
-	mSrcRect->x = 0;
-	mSrcRect->y = 0;
-	mSrcRect->w = asc->GetTexWidth();
-	mSrcRect->h = asc->GetTexHeight();
 
 	mFlipState = SDL_FLIP_NONE;
 	mCanJump = true;
@@ -41,7 +34,6 @@ void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
 
-	mGameCamera = mGame->GetCamera();
 
 	position = GetPosition();
 
@@ -55,19 +47,6 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
-	int centralXPosition = (int)((position.x) / TILE_WIDTH);
-	int footPosition = (int)(position.y + asc->GetTexHeight() * 0.5f) / TILE_HEIGHT;
-
-	int tileValue = GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition);
-
-	if (tileValue == -1) {
-		AddGravity(deltaTime);
-	}
-	else
-	{
-		mCanJump = true;
-	}
-
 	position.x += mMovementSpeed * deltaTime;
 
 	//32 = player width, 1024 = level width
@@ -79,12 +58,28 @@ void Mario::UpdateActor(float deltaTime)
 		position.y -= mMovementSpeed * deltaTime;
 	}
 	
-	std::cout << position.x << std::endl;
-	
 	SetPosition(position);
 
 	mDestRect->x = position.x;
 	mDestRect->y = position.y;
+
+	int centralXPosition = (int)((position.x + asc->GetTexWidth()) / TILE_WIDTH);
+
+	int footPosition = (int)(position.y + asc->GetTexHeight()) / TILE_HEIGHT;
+
+
+	std::cout << "X Position: " << position.x << " Central X Position: " << centralXPosition << std::endl;
+	std::cout << "Y Position: " << position.y <<  std::endl;
+
+	int tileValue = GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition);
+
+	if (tileValue == -1 || tileValue == 1) {
+		AddGravity(deltaTime);
+	}
+	else
+	{
+		mCanJump = true;
+	}
 
 	//checks to see if a coin has been picked up
 	for (auto coin : GetGame()->GetCoins()) {
@@ -95,8 +90,6 @@ void Mario::UpdateActor(float deltaTime)
 
 		}
 	}
-
-	SetCamera();
 
 }
 
@@ -124,11 +117,7 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::Draw()
 {
-	SDL_Rect* dest = mDestRect;
-
-	dest->x -= mGameCamera->x;
-	dest->y -= mGameCamera->y;
-	asc->Draw(GetGame()->GetRenderer(), mSrcRect, dest, 0.0f, NULL, mFlipState);
+	asc->Draw(GetGame()->GetRenderer(), nullptr, mDestRect, 0.0f, NULL, mFlipState);
 }
 
 void Mario::CancelJump()
@@ -152,22 +141,3 @@ void Mario::AddGravity(float deltaTime)
 	mCanJump = false;
 }
 
-void Mario::SetCamera()
-{
-	mGameCamera->x = (GetPosition().x + 16) - SCREEN_WIDTH / 2;
-	mGameCamera->y = (GetPosition().y + 24) - SCREEN_HEIGHT / 2;
-
-	if (mGameCamera->x < 0) {
-		mGameCamera->x = 0;
-	}
-	if (mGameCamera->y < 0) {
-		mGameCamera->y = 0;
-	}
-	//1024 level width, 640 level height
-	if (mGameCamera->x > 1024 - mGameCamera->w) {
-		mGameCamera->x = 1024 - mGameCamera->w;
-	}
-	if (mGameCamera->y > 640 - mGameCamera->h) {
-		mGameCamera->y = 640 - mGameCamera->h;
-	}
-}

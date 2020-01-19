@@ -6,6 +6,10 @@ Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest):  Actor(game), Sprit
 {	
 	mSrcRect = src;
 	mDestRect = dest;
+
+	position.x = dest->x;
+	position.y = dest->y;
+
 	SetTexture(game->GetTexture("Assets/TileMap.png"));
 	SetPosition(Vector2(mDestRect->x, mDestRect->y));
 	mGame->AddTile(this);
@@ -19,20 +23,21 @@ Tile::~Tile()
 void Tile::Draw(SDL_Renderer* renderer)
 {
 	if (mTexture) {
-		SDL_Rect* camera = mGame->GetCamera();
 
-		SDL_Rect* dest = mDestRect;
-
-		dest->x -= camera->x;
-		dest->y -= camera->y;
 
 		SDL_RenderCopyEx(renderer,
 			mTexture,
 			mSrcRect,
-			dest,
+			mDestRect,
 			-Math::ToDegrees(mOwner->GetRotation()),
 			nullptr,
 			SDL_FLIP_NONE);
 	}
 	//TODO: Check camera collision with tile
+}
+
+void Tile::Update(float deltaTime)
+{
+	mDestRect->x = position.x - mGame->mCamera.x;
+	mDestRect->y = position.y - mGame->mCamera.y;
 }

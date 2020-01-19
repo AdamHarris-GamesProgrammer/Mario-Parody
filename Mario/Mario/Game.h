@@ -50,7 +50,7 @@ public:
 	void RemoveTile(class Tile* tile);
 	std::vector<class Tile*>& GetTiles() { return mTiles; }
 
-	SDL_Rect* GetCamera() { return mCamera; }
+	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
 private:
 	void LoadContent();
@@ -89,7 +89,7 @@ private:
 
 	std::vector<class Coin*> mCoins;
 
-	SDL_Rect* mCamera = nullptr;
+	
 
 
 	std::vector<class Tile*> mTiles;

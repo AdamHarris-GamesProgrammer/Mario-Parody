@@ -81,7 +81,7 @@ void Game::LoadContent()
 
 	//Mario
 	mPlayer = new Mario(this);
-	mPlayer->SetPosition(Vector2(64.0f, 392.0f));
+	mPlayer->SetPosition(Vector2(0.0f, 392.0f));
 
 	scoreText = new Actor(this);
 	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
@@ -96,11 +96,7 @@ void Game::LoadContent()
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
 
-	mCamera = new SDL_Rect();
-	mCamera->x = 0;
-	mCamera->y = 0;
-	mCamera->w = SCREEN_WIDTH;
-	mCamera->h = SCREEN_HEIGHT;
+
 }
 
 void Game::UnloadContent()
@@ -331,6 +327,18 @@ void Game::Update()
 	for (auto actor : deadActors) {
 		delete actor;
 	}
+
+	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
+	
+
+	if (mCamera.x < 0)
+		mCamera.x = 0;
+	if (mCamera.x > mCamera.w)
+		mCamera.x = mCamera.w;
+	if (mCamera.y < 0)
+		mCamera.y = 0;
+	if (mCamera.y > mCamera.h)
+		mCamera.y = mCamera.h;
 
 }
 

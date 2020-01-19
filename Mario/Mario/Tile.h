@@ -13,8 +13,11 @@ public:
 
 	int GetTileType() const { return mTileType; }
 
+	void Update(float deltaTime) override;
+
 private:
 	int mTileType;
+	Vector2 position;
 
 };
 
