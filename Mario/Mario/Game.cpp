@@ -88,13 +88,19 @@ void Game::LoadContent()
 	scoreTsc = new TextSpriteComponent(scoreText);
 	scoreTsc->SetText("Score: 0");
 	scoreTsc->SetTextSize(80);
-	
+
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
 
 	SDL_Texture* tilesTexture = GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap("Assets/Mario_TestLevel.csv");
+
+	mCamera = new SDL_Rect();
+	mCamera->x = 0;
+	mCamera->y = 0;
+	mCamera->w = SCREEN_WIDTH;
+	mCamera->h = SCREEN_HEIGHT;
 }
 
 void Game::UnloadContent()
@@ -334,8 +340,13 @@ void Game::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
+		const std::type_info& type_Info = typeid(*sprite);
+
 		if (sprite->GetOwner() == mPlayer) {
 			mPlayer->Draw();
+		}
+		else if (type_Info == typeid(Tile)) {
+			sprite->Draw(mRenderer);
 		}
 		else {
 			sprite->Draw(mRenderer);

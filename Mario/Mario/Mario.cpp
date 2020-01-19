@@ -8,6 +8,7 @@
 Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.0f), mJumping(false)
 {
 	asc = new AnimSpriteComponent(this);
+	mGameCamera = mGame->GetCamera();
 
 	std::vector<SDL_Texture*> anims = {
 		game->GetTexture("Assets/Characters/Mario/Mario01.png", true),
@@ -25,7 +26,6 @@ Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.
 
 	mFlipState = SDL_FLIP_NONE;
 	mCanJump = true;
-	
 
 	mDestRect = new SDL_Rect();
 	mDestRect->h = asc->GetTexHeight();
@@ -40,6 +40,9 @@ Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.
 void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
+
+	mGameCamera = mGame->GetCamera();
+
 	position = GetPosition();
 
 	if (mJumping) {
@@ -93,6 +96,8 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
+	SetCamera();
+
 }
 
 void Mario::HandleEvents(const uint8_t* state)
@@ -119,7 +124,11 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::Draw()
 {
-	asc->Draw(GetGame()->GetRenderer(), mSrcRect, mDestRect, 0.0f, NULL, mFlipState);
+	SDL_Rect* dest = mDestRect;
+
+	dest->x -= mGameCamera->x;
+	dest->y -= mGameCamera->y;
+	asc->Draw(GetGame()->GetRenderer(), mSrcRect, dest, 0.0f, NULL, mFlipState);
 }
 
 void Mario::CancelJump()
@@ -141,4 +150,24 @@ void Mario::AddGravity(float deltaTime)
 	SetPosition(Vector2(position.x, position.y += GRAVITY * deltaTime));
 
 	mCanJump = false;
+}
+
+void Mario::SetCamera()
+{
+	mGameCamera->x = (GetPosition().x + 16) - SCREEN_WIDTH / 2;
+	mGameCamera->y = (GetPosition().y + 24) - SCREEN_HEIGHT / 2;
+
+	if (mGameCamera->x < 0) {
+		mGameCamera->x = 0;
+	}
+	if (mGameCamera->y < 0) {
+		mGameCamera->y = 0;
+	}
+	//1024 level width, 640 level height
+	if (mGameCamera->x > 1024 - mGameCamera->w) {
+		mGameCamera->x = 1024 - mGameCamera->w;
+	}
+	if (mGameCamera->y > 640 - mGameCamera->h) {
+		mGameCamera->y = 640 - mGameCamera->h;
+	}
 }

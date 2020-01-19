@@ -44,5 +44,8 @@ private:
 	bool mCanJump;
 	float mJumpForce;
 
+	SDL_Rect* mGameCamera = nullptr;
+
+	void SetCamera();
 };
 

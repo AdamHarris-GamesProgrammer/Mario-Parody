@@ -50,6 +50,8 @@ public:
 	void RemoveTile(class Tile* tile);
 	std::vector<class Tile*>& GetTiles() { return mTiles; }
 
+	SDL_Rect* GetCamera() { return mCamera; }
+
 private:
 	void LoadContent();
 	void UnloadContent();
@@ -86,6 +88,8 @@ private:
 	class Actor* fgActor = nullptr;
 
 	std::vector<class Coin*> mCoins;
+
+	SDL_Rect* mCamera = nullptr;
 
 
 	std::vector<class Tile*> mTiles;

@@ -15,3 +15,24 @@ Tile::~Tile()
 {
 	mGame->RemoveTile(this);
 }
+
+void Tile::Draw(SDL_Renderer* renderer)
+{
+	if (mTexture) {
+		SDL_Rect* camera = mGame->GetCamera();
+
+		SDL_Rect* dest = mDestRect;
+
+		dest->x -= camera->x;
+		dest->y -= camera->y;
+
+		SDL_RenderCopyEx(renderer,
+			mTexture,
+			mSrcRect,
+			dest,
+			-Math::ToDegrees(mOwner->GetRotation()),
+			nullptr,
+			SDL_FLIP_NONE);
+	}
+	//TODO: Check camera collision with tile
+}
