@@ -12,8 +12,6 @@
 #include "Coin.h"
 #include "Tile.h"
 
-#include <typeinfo>
-
 bool Game::Initialize()
 {
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO != 0)) {
@@ -66,7 +64,7 @@ void Game::LoadContent()
 
 	//foreground textures
 	fgActor = new Actor(this);
-	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 32.0f));
 
 	BGSpriteComponent* fg = new BGSpriteComponent(fgActor);
 	fg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -329,7 +327,7 @@ void Game::Update()
 	}
 
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
-	
+		
 
 	if (mCamera.x < 0)
 		mCamera.x = 0;
@@ -348,13 +346,8 @@ void Game::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
-		const std::type_info& type_Info = typeid(*sprite);
-
 		if (sprite->GetOwner() == mPlayer) {
 			mPlayer->Draw();
-		}
-		else if (type_Info == typeid(Tile)) {
-			sprite->Draw(mRenderer);
 		}
 		else {
 			sprite->Draw(mRenderer);

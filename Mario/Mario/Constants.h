@@ -18,7 +18,8 @@
 /*TODO
 dynamically sizing a map based on the width of the map loaded
 level completion/ failure
-camera follow system
+camera component class
+CharacterSpriteComponent - takes a lot out of marios code
 enemies
 pow blocks
 collider system

@@ -60,7 +60,8 @@ void Mario::UpdateActor(float deltaTime)
 	
 	SetPosition(position);
 
-	mDestRect->x = position.x;
+	mDestRect->x = position.x - GetGame()->mCamera.x;
+
 	mDestRect->y = position.y;
 
 	int centralXPosition = (int)((position.x + asc->GetTexWidth()) / TILE_WIDTH);
