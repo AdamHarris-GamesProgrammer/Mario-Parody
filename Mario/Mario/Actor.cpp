@@ -6,12 +6,12 @@
 
 Actor::Actor(class Game* game) : mState(EActive), mPosition(Vector2::Zero), mScale(1.0f), mRotation(0.0f), mGame(game)
 {
-	mGame->AddActor(this);
+	mGame->GetEngine()->AddActor(this);
 }
 
 Actor::~Actor()
 {
-	mGame->RemoveActor(this);
+	mGame->GetEngine()->RemoveActor(this);
 
 	//need to delete components
 	while (!mComponents.empty()) {

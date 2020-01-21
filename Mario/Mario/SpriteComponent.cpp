@@ -4,7 +4,7 @@
 
 SpriteComponent::SpriteComponent(class Actor* owner, int drawOrder /*= 100*/) : Component(owner), mTexture(nullptr), mDrawOrder(drawOrder), mTexWidth(0), mTexHeight(0)
 {
-	mOwner->GetGame()->AddSprite(this);
+	mOwner->GetGame()->GetEngine()->AddSprite(this);
 
 	mSrcRect = new SDL_Rect();
 	mDestRect = new SDL_Rect();
@@ -22,7 +22,7 @@ SpriteComponent::SpriteComponent(class Actor* owner, int drawOrder /*= 100*/) : 
 
 SpriteComponent::~SpriteComponent()
 {
-	mOwner->GetGame()->RemoveSprite(this);
+	mOwner->GetGame()->GetEngine()->RemoveSprite(this);
 }
 
 void SpriteComponent::Draw(SDL_Renderer* renderer)

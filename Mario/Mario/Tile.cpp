@@ -10,7 +10,7 @@ Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest):  Actor(game), Sprit
 	position.x = dest->x;
 	position.y = dest->y;
 
-	SetTexture(game->GetTexture("Assets/TileMap.png"));
+	SetTexture(game->GetEngine()->GetTexture("Assets/TileMap.png"));
 	SetPosition(Vector2(mDestRect->x, mDestRect->y));
 	mGame->AddTile(this);
 }

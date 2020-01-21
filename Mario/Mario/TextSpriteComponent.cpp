@@ -22,7 +22,7 @@ TextSpriteComponent::TextSpriteComponent(class Actor* owner, int updateOrder /*=
 	testDest->x = mOwner->GetPosition().x;
 	testDest->y = mOwner->GetPosition().y;
 
-	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
+	mTexture = mOwner->GetGame()->GetEngine()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
 	SpriteComponent::SetTexture(mTexture);
 }
 
@@ -55,13 +55,13 @@ void TextSpriteComponent::Draw(SDL_Renderer* renderer)
 void TextSpriteComponent::SetTextSize(int newSize)
 {
 	mPointSize = newSize;
-	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
+	mTexture = mOwner->GetGame()->GetEngine()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
 	SpriteComponent::SetTexture(mTexture);
 }
 
 void TextSpriteComponent::SetText(std::string newText)
 {
 	mText = newText;
-	mTexture = mOwner->GetGame()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
+	mTexture = mOwner->GetGame()->GetEngine()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
 	SpriteComponent::SetTexture(mTexture);
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-
 //Sprite Based Components
 #include "SpriteComponent.h"
 #include "BGSpriteComponent.h"

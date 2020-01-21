@@ -10,9 +10,9 @@ Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.
 	csc = new CharacterSpriteComponent(this);
 
 	std::vector<SDL_Texture*> anims = {
-		game->GetTexture("Assets/Characters/Mario/Mario01.png", true),
-		game->GetTexture("Assets/Characters/Mario/Mario02.png", true),
-		game->GetTexture("Assets/Characters/Mario/Mario03.png", true)
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario01.png", true),
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario02.png", true),
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario03.png", true)
 	};
 	csc->SetAnimTextures(anims);
 	csc->SetAnimFPS(3);
