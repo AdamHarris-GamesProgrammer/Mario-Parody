@@ -1,18 +1,20 @@
 #pragma once
 
+#include "BlueSky.h"
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
 
 #include "Constants.h"
+#include "BlueSky.h"
 
 #include <iostream>
 #include <unordered_map>
 #include <string>
 #include <vector>
 
-class Game
+class Game : public BlueSky
 {
 public:
 	Game() {}
@@ -63,8 +65,8 @@ private:
 	void Render();
 
 
-	SDL_Renderer* mRenderer;
-	SDL_Window* mWindow;
+	//SDL_Renderer* mRenderer;
+	//SDL_Window* mWindow;
 
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
 
@@ -99,5 +101,7 @@ private:
 	class TextSpriteComponent* scoreTsc = nullptr;
 
 	int score = 0;
+
+	BlueSky* engine;
 };
 

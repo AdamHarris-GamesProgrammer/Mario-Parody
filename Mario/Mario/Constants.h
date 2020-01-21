@@ -19,7 +19,6 @@
 dynamically sizing a map based on the width of the map loaded
 level completion/ failure
 camera component class
-CharacterSpriteComponent - takes a lot out of marios code
 enemies
 pow blocks
 collider system

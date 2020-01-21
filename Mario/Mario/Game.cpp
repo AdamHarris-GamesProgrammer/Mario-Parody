@@ -1,49 +1,29 @@
 #include "Game.h"
 
+#include "ComponentsList.h"
 #include "Constants.h"
-#include "SpriteComponent.h"
+
 #include "Actor.h"
-#include "BGSpriteComponent.h"
-#include "AnimSpriteComponent.h"
-#include "SpriteComponent.h"
-#include "TileMapComponent.h"
-#include "TextSpriteComponent.h"
+
 #include "Mario.h"
 #include "Coin.h"
 #include "Tile.h"
 
 bool Game::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO != 0)) {
-		printf("Failed to initialize SDL! SDL_Error: %s\n", SDL_GetError());
+	engine = new BlueSky();
+	if (engine->Initialize())
+	{
+		LoadContent();
+
+		mTicksCount = SDL_GetTicks();
+
+		return true;
+	}
+	else
+	{
 		return false;
 	}
-
-	int imgFlags = IMG_INIT_PNG;
-	if ((IMG_Init(imgFlags) & imgFlags) != imgFlags) {
-		printf("Failed to initialize IMG! IMG_Error: %s\n", IMG_GetError());
-		return false;
-	}
-
-	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) != 0) {
-		printf("Failed to initialize Mixer! Mixer_Error: %s\n", Mix_GetError());
-		return false;
-	}
-
-	if (TTF_Init() != 0) {
-		printf("Failed to initialize TTF! TTF_Error: %s\n", TTF_GetError());
-		return false;
-	}
-
-	if (SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, NULL, &mWindow, &mRenderer) != 0) {
-		printf("Failed to create window/renderer! SDL_Error: %s\n", SDL_GetError());
-		return false;
-	}
-	LoadContent();
-
-	mTicksCount = SDL_GetTicks();
-
-	return true;
 }
 
 void Game::LoadContent()
@@ -346,12 +326,7 @@ void Game::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
-		if (sprite->GetOwner() == mPlayer) {
-			mPlayer->Draw();
-		}
-		else {
 			sprite->Draw(mRenderer);
-		}
 	}
 
 	SDL_RenderPresent(mRenderer);

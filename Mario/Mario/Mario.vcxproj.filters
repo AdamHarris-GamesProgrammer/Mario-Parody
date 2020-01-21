@@ -63,6 +63,12 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSpriteComponent.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueSky.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -109,6 +115,15 @@
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSpriteComponent.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentsList.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BlueSky.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

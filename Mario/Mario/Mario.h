@@ -11,12 +11,7 @@ public:
 	void HandleEvents(const uint8_t* state);
 	float GetMovementSpeed() const { return mMovementSpeed; }
 
-	void Draw();
-
 	Vector2 position;
-
-	SDL_Rect* GetDestRect() { return mDestRect; }
-	SDL_RendererFlip GetFlipState() { return mFlipState; }
 
 	bool IsJumping() { return mJumping; }
 
@@ -29,10 +24,7 @@ public:
 private:
 	float mMovementSpeed;
 
-	SDL_Rect* mDestRect;
-	SDL_RendererFlip mFlipState;
-
-	class AnimSpriteComponent* asc;
+	class CharacterSpriteComponent* csc;
 
 	class CircleComponent* mCircle;
 

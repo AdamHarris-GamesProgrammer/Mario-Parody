@@ -129,6 +129,8 @@
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="AnimSpriteComponent.cpp" />
     <ClCompile Include="BGSpriteComponent.cpp" />
+    <ClCompile Include="BlueSky.cpp" />
+    <ClCompile Include="CharacterSpriteComponent.cpp" />
     <ClCompile Include="CircleComponent.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Component.cpp" />
@@ -146,9 +148,12 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="AnimSpriteComponent.h" />
     <ClInclude Include="BGSpriteComponent.h" />
+    <ClInclude Include="BlueSky.h" />
+    <ClInclude Include="CharacterSpriteComponent.h" />
     <ClInclude Include="CircleComponent.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentsList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Mario.h" />

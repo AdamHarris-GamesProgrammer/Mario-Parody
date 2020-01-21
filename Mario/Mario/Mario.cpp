@@ -1,30 +1,23 @@
 #include "Mario.h"
-#include "AnimSpriteComponent.h"
 #include "CircleComponent.h"
 #include "TileMapComponent.h"
+#include "CharacterSpriteComponent.h"
 #include "Game.h"
 #include "Coin.h"
 
 Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.0f), mJumping(false)
 {
-	asc = new AnimSpriteComponent(this);
+	csc = new CharacterSpriteComponent(this);
 
 	std::vector<SDL_Texture*> anims = {
 		game->GetTexture("Assets/Characters/Mario/Mario01.png", true),
 		game->GetTexture("Assets/Characters/Mario/Mario02.png", true),
 		game->GetTexture("Assets/Characters/Mario/Mario03.png", true)
 	};
-	asc->SetAnimTextures(anims);
-	asc->SetAnimFPS(3);
+	csc->SetAnimTextures(anims);
+	csc->SetAnimFPS(3);
 
-	mFlipState = SDL_FLIP_NONE;
 	mCanJump = true;
-
-	mDestRect = new SDL_Rect();
-	mDestRect->h = asc->GetTexHeight();
-	mDestRect->w = asc->GetTexWidth();
-	mDestRect->x = GetPosition().x;
-	mDestRect->y = GetPosition().y;
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
@@ -50,24 +43,22 @@ void Mario::UpdateActor(float deltaTime)
 	position.x += mMovementSpeed * deltaTime;
 
 	//32 = player width, 1024 = level width
-	if ((position.x < 0) || (position.x + 32 > 1024)) {
+	if ((position.x < 0) || (position.x + csc->GetTexWidth() > 1024)) {
 		position.x -= mMovementSpeed * deltaTime;
 	}
 	//48 = player height, 640 = level height
-	if ((position.y < 0) || (position.y + 48 > 640)) {
+	if ((position.y < 0) || (position.y + csc->GetTexHeight() > 640)) {
 		position.y -= mMovementSpeed * deltaTime;
 	}
 	
 	SetPosition(position);
 
-	mDestRect->x = position.x - GetGame()->mCamera.x;
+	csc->GetDestRect()->x = position.x - GetGame()->mCamera.x;
+	csc->GetDestRect()->y = position.y;
 
-	mDestRect->y = position.y;
+	int centralXPosition = (int)((position.x + csc->GetTexWidth()) / TILE_WIDTH);
 
-	int centralXPosition = (int)((position.x + asc->GetTexWidth()) / TILE_WIDTH);
-
-	int footPosition = (int)(position.y + asc->GetTexHeight()) / TILE_HEIGHT;
-
+	int footPosition = (int)(position.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
 	std::cout << "X Position: " << position.x << " Central X Position: " << centralXPosition << std::endl;
 	std::cout << "Y Position: " << position.y <<  std::endl;
@@ -88,10 +79,8 @@ void Mario::UpdateActor(float deltaTime)
 			std::cout << "Collision" << std::endl;
 			GetGame()->GetMap()->ChangeTileAt((coin->GetPosition().y / TILE_HEIGHT), (coin->GetPosition().x / TILE_WIDTH), -1);
 			coin->SetState(EDead);
-
 		}
 	}
-
 }
 
 void Mario::HandleEvents(const uint8_t* state)
@@ -100,13 +89,11 @@ void Mario::HandleEvents(const uint8_t* state)
 
 	if (state[SDL_SCANCODE_A]) {
 		mMovementSpeed -= 100.0f;
-		mFlipState = SDL_FLIP_HORIZONTAL;
-		
+		csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
 	}
 	else if (state[SDL_SCANCODE_D]) {
 		mMovementSpeed += 100.0f;
-		mFlipState = SDL_FLIP_NONE;
-		
+		csc->SetRendererFlip(SDL_FLIP_NONE);
 	}
 
 	if (state[SDL_SCANCODE_SPACE]) {
@@ -114,11 +101,6 @@ void Mario::HandleEvents(const uint8_t* state)
 			Jump();
 		}
 	}
-}
-
-void Mario::Draw()
-{
-	asc->Draw(GetGame()->GetRenderer(), nullptr, mDestRect, 0.0f, NULL, mFlipState);
 }
 
 void Mario::CancelJump()
