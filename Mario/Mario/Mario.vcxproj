@@ -133,8 +133,10 @@
     <ClCompile Include="CharacterSpriteComponent.cpp" />
     <ClCompile Include="CircleComponent.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="LevelGoal.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
@@ -152,10 +154,12 @@
     <ClInclude Include="CharacterSpriteComponent.h" />
     <ClInclude Include="CircleComponent.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentsList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="LevelGoal.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MovementComponent.h" />

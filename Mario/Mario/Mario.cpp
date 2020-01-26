@@ -1,126 +1,136 @@
 #include "Mario.h"
 #include "CircleComponent.h"
+#include "CollisionComponent.h"
 #include "TileMapComponent.h"
 #include "CharacterSpriteComponent.h"
 #include "Game.h"
 #include "Coin.h"
+#include "Tile.h"
 
-Mario::Mario(class Game* game): Actor(game), mMovementSpeed(0.0f), mJumpForce(0.0f), mJumping(false)
+Mario::Mario(class Game* game) : Actor(game)
 {
 	csc = new CharacterSpriteComponent(this);
 
 	std::vector<SDL_Texture*> anims = {
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario01.png", true),
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario02.png", true),
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/Mario03.png", true)
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioTest.png", true)
 	};
 	csc->SetAnimTextures(anims);
 	csc->SetAnimFPS(3);
 
-	mCanJump = true;
-
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
+
+	mPlayerVelX = 0.0f;
+	mPlayerVelY = 0.0f;
 }
 
 void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
 
+	float newXPos = 0.0f;
+	float newYPos = 0.0f;
 
-	position = GetPosition();
+	//GRAVITY
+	mPlayerVelY += GRAVITY * deltaTime;
 
-	if (mJumping) {
-		position.y -= mJumpForce * deltaTime;
+	if (mPlayerVelX > 10.0f) {
+		mPlayerVelX = 10.0f;
+	}
+	if (mPlayerVelX < -10.0f) {
+		mPlayerVelX = -10.0f;
+	}
+	if (mPlayerVelY > 100.0f) {
+		mPlayerVelY = 100.0f;
+	}
+	if (mPlayerVelY < -500.0f) {
+		mPlayerVelY = -500.0f;
+	}
+	
 
-		mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
+	 newXPos = GetPosition().x + mPlayerVelX * deltaTime;
+	 newYPos = GetPosition().y + mPlayerVelY * deltaTime;
 
-		if (mJumpForce <= 0.0f) {
-			mJumping = false;
+	 if ((newXPos + csc->GetTexWidth() > 1024)) {
+		 std::cout << newXPos + csc->GetTexWidth() << std::endl;
+		 newXPos = 1024 - csc->GetTexWidth();
+	 }
+	 else if(newXPos < 0) {
+		 newXPos = 0;
+	 }
+
+	if (mPlayerVelX < 0) { //move left
+		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
+			newXPos = (int)newXPos - 1;
+			mPlayerVelX = 0.0f;
+		}
+	}
+	else if(mPlayerVelX > 0){ //move right
+		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, (newXPos) / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
+			newXPos = (int)newXPos + 1;
+			mPlayerVelX = 0.0f;
+		}
+	}
+	bGrounded = false;
+	if (mPlayerVelY <= 0) { //moving up
+		if (GetGame()->GetMap()->GetValueAtTile(newYPos + 32/ TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
+			newYPos = (int)newYPos + 1;
+			mPlayerVelY = 0.0f;
+		}
+	}
+	else { //moving down
+		if (GetGame()->GetMap()->GetValueAtTile((newYPos + 32) / TILE_HEIGHT, newXPos / TILE_WIDTH) == 0) {
+			newYPos = (int)newYPos;
+			mPlayerVelY = 0.0f;
+			bGrounded = true;
 		}
 	}
 
-	position.x += mMovementSpeed * deltaTime;
+	printf("X Position: %f, Y Position: %f\t", GetPosition().x, GetPosition().y);
+	printf("X Velocity: %f, Y Velocity: %f\n", mPlayerVelX, mPlayerVelY);
 
-	//32 = player width, 1024 = level width
-	if ((position.x < 0) || (position.x + csc->GetTexWidth() > 1024)) {
-		position.x -= mMovementSpeed * deltaTime;
-	}
-	//48 = player height, 640 = level height
-	if ((position.y < 0) || (position.y + csc->GetTexHeight() > 640)) {
-		position.y -= mMovementSpeed * deltaTime;
-	}
-	
-	SetPosition(position);
+	SetPosition(Vector2(newXPos, newYPos));
 
-	csc->GetDestRect()->x = position.x - GetGame()->mCamera.x;
-	csc->GetDestRect()->y = position.y;
-
-	int centralXPosition = (int)((position.x + csc->GetTexWidth()) / TILE_WIDTH);
-
-	int footPosition = (int)(position.y + csc->GetTexHeight()) / TILE_HEIGHT;
-
-	std::cout << "X Position: " << position.x << " Central X Position: " << centralXPosition << std::endl;
-	std::cout << "Y Position: " << position.y <<  std::endl;
-
-	int tileValue = GetGame()->GetMap()->GetValueAtTile(footPosition, centralXPosition);
-
-	if (tileValue == -1 || tileValue == 1) {
-		AddGravity(deltaTime);
-	}
-	else
-	{
-		mCanJump = true;
-	}
+	csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
+	csc->GetDestRect()->y = GetPosition().y;
 
 	//checks to see if a coin has been picked up
 	for (auto coin : GetGame()->GetCoins()) {
 		if (Intersect(*mCircle, *(coin->GetCircle()))) {
-			std::cout << "Collision" << std::endl;
 			GetGame()->GetMap()->ChangeTileAt((coin->GetPosition().y / TILE_HEIGHT), (coin->GetPosition().x / TILE_WIDTH), -1);
 			coin->SetState(EDead);
+			mGame->IncrementScore();
 		}
 	}
+
+	for (auto goal : GetGame()->GetLevelGoal()) {
+		if (Intersect(*csc->GetDestRect(), *goal->GetDestRect())) {
+			//TODO: Implement next level logic 
+		}
+	}
+
 }
 
 void Mario::HandleEvents(const uint8_t* state)
 {
-	mMovementSpeed = 0.0f;
+	mPlayerVelX = 0.0f;
 
 	if (state[SDL_SCANCODE_A]) {
-		mMovementSpeed -= 100.0f;
 		csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
+		mPlayerVelX += -25.0f;
 	}
 	else if (state[SDL_SCANCODE_D]) {
-		mMovementSpeed += 100.0f;
 		csc->SetRendererFlip(SDL_FLIP_NONE);
+		mPlayerVelX += 25.0f;
 	}
 
 	if (state[SDL_SCANCODE_SPACE]) {
-		if (mCanJump) {
-			Jump();
+		if (bGrounded) {
+			if (mPlayerVelY == 0.0f) {
+				mPlayerVelY = -5000.0f;
+			}
 		}
+
 	}
-}
-
-void Mario::CancelJump()
-{
-	mJumpForce = 0;
-}
-
-void Mario::Jump()
-{
-	if (!mJumping) {
-		mJumpForce = INITIAL_JUMP_FORCE;
-		mJumping = true;
-		mCanJump = false;
-	}
-}
-
-void Mario::AddGravity(float deltaTime)
-{
-	SetPosition(Vector2(position.x, position.y += GRAVITY * deltaTime));
-
-	mCanJump = false;
 }
 

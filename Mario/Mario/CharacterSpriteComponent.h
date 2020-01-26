@@ -4,7 +4,7 @@
 class CharacterSpriteComponent : public AnimSpriteComponent
 {
 public:
-	CharacterSpriteComponent(class Actor* owner, int drawOrder = 100, int texWidth = 32, int texHeight = 48);
+	CharacterSpriteComponent(class Actor* owner, int drawOrder = 100, int texWidth = 32, int texHeight = 32);
 
 	SDL_RendererFlip GetFlipState() const { return mFlipState; }
 	void SetRendererFlip(SDL_RendererFlip newValue) { mFlipState = newValue; }

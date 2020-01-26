@@ -5,8 +5,11 @@
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
 
+#include "Math.h"
+
 #include "Constants.h"
 #include "BlueSky.h"
+#include "LevelGoal.h"
 
 #include <vector>
 class Game
@@ -26,18 +29,25 @@ public:
 	void Render();
 
 
-	//game specific code
+
 	class Mario* GetPlayer() { return mPlayer; }
+	void SetPlayerSpawnPoint(Vector2 position);
 
 	class TileMapComponent* GetMap() { return map; }
 
 	void AddCoin(class Coin* coin);
 	void RemoveCoin(class Coin* coin);
+	void IncrementScore();
 	std::vector<class Coin*>& GetCoins() { return mCoins; }
 
 	void AddTile(class Tile* tile);
 	void RemoveTile(class Tile* tile);
+	void EmptyMap();
 	std::vector<class Tile*>& GetTiles() { return mTiles; }
+
+	std::vector<class LevelGoal*>& GetLevelGoal() { return mLevelGoal; }
+	void AddLevelGoal(class LevelGoal* goal);
+	void RemoveLevelGoal(class LevelGoal* goal);
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -46,7 +56,6 @@ public:
 private:
 	void LoadContent();
 
-	//Game specific code
 	class Mario* mPlayer = nullptr;
 	class Actor* mapActor = nullptr;
 	class TileMapComponent* map = nullptr;
@@ -57,7 +66,8 @@ private:
 	std::vector<class Coin*> mCoins;
 
 	std::vector<class Tile*> mTiles;
-	
+
+	std::vector<class LevelGoal*> mLevelGoal;
 
 	Actor* scoreText = nullptr;
 	class TextSpriteComponent* scoreTsc = nullptr;

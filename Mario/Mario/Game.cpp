@@ -8,6 +8,7 @@
 #include "Mario.h"
 #include "Coin.h"
 #include "Tile.h"
+#include "LevelGoal.h"
 
 bool Game::Initialize()
 {
@@ -58,7 +59,6 @@ void Game::LoadContent()
 
 	//Mario
 	mPlayer = new Mario(this);
-	mPlayer->SetPosition(Vector2(0.0f, 392.0f));
 
 	scoreText = new Actor(this);
 	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
@@ -85,10 +85,13 @@ void Game::RemoveCoin(Coin* coin)
 
 	if (iter != mCoins.end()) {
 		mCoins.erase(iter);
-		score++;
-		std::string text = "Score: " + std::to_string(score);
-		scoreTsc->SetText(text);
 	}
+}
+
+void Game::IncrementScore() {
+	score++;
+	std::string text = "Score: " + std::to_string(score);
+	scoreTsc->SetText(text);
 }
 
 void Game::AddTile(Tile* tile)
@@ -105,11 +108,45 @@ void Game::RemoveTile(Tile* tile)
 	}
 }
 
+void Game::SetPlayerSpawnPoint(Vector2 position) {
+	mPlayer->SetPosition(position);
+}
+
+void Game::EmptyMap() {
+	while (!mTiles.empty()) {
+		delete mTiles.back();
+	}
+}
+
+void Game::AddLevelGoal(LevelGoal* goal)
+{
+	mLevelGoal.emplace_back(goal);
+}
+
+void Game::RemoveLevelGoal(LevelGoal* goal)
+{
+	auto iter = std::find(mLevelGoal.begin(), mLevelGoal.end(), goal);
+
+	if (iter != mLevelGoal.end()) {
+		mLevelGoal.erase(iter);
+	}
+}
+
 void Game::PollInput()
 {
 	mEngine->PollInput();
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	mPlayer->HandleEvents(state);
+
+	if (state[SDL_SCANCODE_1]) {
+		EmptyMap();
+		map->LoadMap("Assets/Mario_TestLevel.csv");
+	}
+	if (state[SDL_SCANCODE_2]) {
+		EmptyMap();
+		map->LoadMap("Assets/Mario_TestLevel2.csv");
+	}
+
 }
 
 void Game::Update()

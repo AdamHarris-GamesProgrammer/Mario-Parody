@@ -2,7 +2,7 @@
 #include "SpriteComponent.h"
 #include "Game.h"
 
-Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest):  Actor(game), SpriteComponent(this)
+Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType):  Actor(game), SpriteComponent(this), mTileType(tileType)
 {	
 	mSrcRect = src;
 	mDestRect = dest;

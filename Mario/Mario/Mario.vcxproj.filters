@@ -67,6 +67,12 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="BlueSky.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelGoal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,6 +129,12 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="BlueSky.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelGoal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

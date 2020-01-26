@@ -21,11 +21,17 @@ level completion/ failure
 camera component class
 enemies
 pow blocks
-collider system
+collier system
 main menu
 how to play
-various levels
-screen manager
-scoring system
+scoring system (highscore for each level, leader boards etc player can input there name as well)
 leader board system (fileIO)
+FIX JUMPING AND COLLISION
 */
+
+/* Collision values
+-1 = air
+0 = bricks
+1 = coins
+2 = gold bricks
+3 = level goal*/
