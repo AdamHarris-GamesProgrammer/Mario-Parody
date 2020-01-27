@@ -17,6 +17,10 @@ private:
 	class CircleComponent* mCircle;
 
 	bool bGrounded;
+	bool bCanJump;
+	bool bJumping;
+
+	float mJumpForce;
 
 	float mPlayerVelY;
 	float mPlayerVelX;
