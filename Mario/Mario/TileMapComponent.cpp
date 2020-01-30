@@ -73,6 +73,7 @@ void TileMapComponent::GenerateObjects() {
 				SDL_Rect* goalDest = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
 
 				LevelGoal* goal = new LevelGoal(mOwner->GetGame(), goalSrc, goalDest);
+				mOwner->GetGame()->AddLevelGoal(goal);
 			}
 			else if (type == 32) {
 				SDL_Rect* goldBrickSrc = new SDL_Rect{ 0,32,TILE_WIDTH,TILE_HEIGHT };

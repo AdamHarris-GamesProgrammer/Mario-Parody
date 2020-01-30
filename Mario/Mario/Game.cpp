@@ -66,12 +66,18 @@ void Game::LoadContent()
 	scoreTsc->SetText("Score: 0");
 	scoreTsc->SetTextSize(80);
 
+	levels[0] = "Assets/Mario_TestLevel.csv";
+	levels[1] = "Assets/Mario_TestLevel2.csv";
+	levels[2] = "Assets/Mario_TestLevel2.csv";
+	levels[3] = "Assets/Mario_TestLevel2.csv";
+	levels[4] = "Assets/Mario_TestLevel2.csv";
+
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
 
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
-	map->LoadMap("Assets/Mario_TestLevel.csv");
+	map->LoadMap(levels[currentLevel]);
 }
 
 void Game::AddCoin(Coin* coin)
@@ -113,23 +119,26 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 }
 
 void Game::EmptyMap() {
-	while (!mTiles.empty()) {
-		delete mTiles.back();
+	for(auto & tile : mTiles) {
+		tile->SetState(Actor::EDead);
 	}
 }
 
 void Game::AddLevelGoal(LevelGoal* goal)
 {
-	mLevelGoal.emplace_back(goal);
+	mLevelGoal = goal;
 }
 
 void Game::RemoveLevelGoal(LevelGoal* goal)
 {
-	auto iter = std::find(mLevelGoal.begin(), mLevelGoal.end(), goal);
+	mLevelGoal = nullptr;
+}
 
-	if (iter != mLevelGoal.end()) {
-		mLevelGoal.erase(iter);
-	}
+void Game::NextLevel()
+{
+	currentLevel++; 
+	EmptyMap();
+	map->LoadMap(levels[currentLevel]);
 }
 
 void Game::PollInput()
@@ -151,8 +160,6 @@ void Game::PollInput()
 
 void Game::Update()
 {
-	mEngine->Update();
-
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
 
 	if (mCamera.x < 0)
@@ -164,6 +171,8 @@ void Game::Update()
 	if (mCamera.y > mCamera.h)
 		mCamera.y = mCamera.h;
 
+
+	mEngine->Update();
 }
 
 void Game::Render()

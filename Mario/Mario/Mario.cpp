@@ -49,28 +49,28 @@ void Mario::UpdateActor(float deltaTime)
 	if (mPlayerVelY < -500.0f) {
 		mPlayerVelY = -500.0f;
 	}
-	
-	 newXPos = GetPosition().x + mPlayerVelX * deltaTime;
-	 newYPos = GetPosition().y + mPlayerVelY * deltaTime;
 
-	 if (bJumping) {
-		 newYPos -= mJumpForce * deltaTime;
+	newXPos = GetPosition().x + mPlayerVelX * deltaTime;
+	newYPos = GetPosition().y + mPlayerVelY * deltaTime;
 
-		 mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
+	if (bJumping) {
+		newYPos -= mJumpForce * deltaTime;
 
-		 if (mJumpForce < 0.0f) {
-			 bJumping = false;
-		 }
+		mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
 
-	 }
+		if (mJumpForce < 0.0f) {
+			bJumping = false;
+		}
 
-	 if ((newXPos + csc->GetTexWidth() > 1024)) {
-		 std::cout << newXPos + csc->GetTexWidth() << std::endl;
-		 newXPos = 1024 - csc->GetTexWidth();
-	 }
-	 else if(newXPos < 0) {
-		 newXPos = 0;
-	 }
+	}
+
+	if ((newXPos + csc->GetTexWidth() > 1024)) {
+		std::cout << newXPos + csc->GetTexWidth() << std::endl;
+		newXPos = 1024 - csc->GetTexWidth();
+	}
+	else if (newXPos < 0) {
+		newXPos = 0;
+	}
 
 	if (mPlayerVelX < 0) { //move left
 		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
@@ -78,7 +78,7 @@ void Mario::UpdateActor(float deltaTime)
 			mPlayerVelX = 0.0f;
 		}
 	}
-	else if(mPlayerVelX > 0){ //move right
+	else if (mPlayerVelX > 0) { //move right
 		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, (newXPos) / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
 			newXPos = (int)newXPos + 2;
 			mPlayerVelX = 0.0f;
@@ -87,7 +87,7 @@ void Mario::UpdateActor(float deltaTime)
 	bGrounded = false;
 	if (mJumpForce > 0) { //moving up
 		std::cout << "Moving up" << std::endl;
-		if (GetGame()->GetMap()->GetValueAtTile((newYPos + 32)/ TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
+		if (GetGame()->GetMap()->GetValueAtTile((newYPos + 32) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
 			std::cout << "BOOP" << std::endl;
 			newYPos = (int)newYPos + 1;
 			mPlayerVelY = 0.0f;
@@ -132,9 +132,10 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
-	for (auto goal : GetGame()->GetLevelGoal()) {
-		if (Intersect(*csc->GetDestRect(), *goal->GetDestRect())) {
-			//TODO: Implement next level logic 
+	if (GetGame()->GetLevelGoal() != nullptr) {
+		if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
+			GetGame()->RemoveLevelGoal(GetGame()->GetLevelGoal());
+			GetGame()->NextLevel();
 		}
 	}
 
@@ -158,7 +159,7 @@ void Mario::HandleEvents(const uint8_t* state)
 			if (!bJumping) {
 				mJumpForce = INITIAL_JUMP_FORCE;
 				bJumping = true;
-				bCanJump= false;
+				bCanJump = false;
 				mPlayerVelY = -25.0f;
 			}
 		}

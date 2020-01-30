@@ -45,9 +45,11 @@ public:
 	void EmptyMap();
 	std::vector<class Tile*>& GetTiles() { return mTiles; }
 
-	std::vector<class LevelGoal*>& GetLevelGoal() { return mLevelGoal; }
+	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
 	void AddLevelGoal(class LevelGoal* goal);
 	void RemoveLevelGoal(class LevelGoal* goal);
+
+	void NextLevel();
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -67,10 +69,13 @@ private:
 
 	std::vector<class Tile*> mTiles;
 
-	std::vector<class LevelGoal*> mLevelGoal;
+	class LevelGoal* mLevelGoal = nullptr;
 
 	Actor* scoreText = nullptr;
 	class TextSpriteComponent* scoreTsc = nullptr;
+
+	int currentLevel = 0;
+	std::string levels[5];
 
 	int score = 0;
 
