@@ -47,7 +47,6 @@ public:
 
 	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
 	void AddLevelGoal(class LevelGoal* goal);
-	void RemoveLevelGoal(class LevelGoal* goal);
 
 	void NextLevel();
 

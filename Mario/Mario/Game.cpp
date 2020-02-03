@@ -129,13 +129,10 @@ void Game::AddLevelGoal(LevelGoal* goal)
 	mLevelGoal = goal;
 }
 
-void Game::RemoveLevelGoal(LevelGoal* goal)
-{
-	mLevelGoal = nullptr;
-}
-
 void Game::NextLevel()
 {
+	score = 0;
+	scoreTsc->SetText("Score: " + score);
 	currentLevel++; 
 	EmptyMap();
 	map->LoadMap(levels[currentLevel]);

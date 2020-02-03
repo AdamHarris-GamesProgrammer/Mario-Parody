@@ -11,5 +11,5 @@ LevelGoal::LevelGoal(Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) :Tile(ga
 
 LevelGoal::~LevelGoal()
 {
-	mGame->RemoveLevelGoal(this);
+
 }

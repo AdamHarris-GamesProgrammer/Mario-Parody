@@ -134,7 +134,6 @@ void Mario::UpdateActor(float deltaTime)
 
 	if (GetGame()->GetLevelGoal() != nullptr) {
 		if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
-			GetGame()->RemoveLevelGoal(GetGame()->GetLevelGoal());
 			GetGame()->NextLevel();
 		}
 	}
