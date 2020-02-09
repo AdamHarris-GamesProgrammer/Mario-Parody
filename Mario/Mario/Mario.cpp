@@ -23,7 +23,6 @@ Mario::Mario(class Game* game) : Actor(game)
 	mPlayerVelX = 0.0f;
 	mPlayerVelY = 0.0f;
 
-	//mJumpForce = INITIAL_JUMP_FORCE;
 	bCanJump = true;
 }
 
@@ -35,7 +34,10 @@ void Mario::UpdateActor(float deltaTime)
 	float newYPos = 0.0f;
 
 	//GRAVITY
-	mPlayerVelY += GRAVITY * deltaTime;
+	if (!bGrounded) {
+		mPlayerVelY += GRAVITY * deltaTime;
+
+	}
 
 	if (mPlayerVelX > 10.0f) {
 		mPlayerVelX = 10.0f;
@@ -64,9 +66,9 @@ void Mario::UpdateActor(float deltaTime)
 
 	}
 
-	if ((newXPos + csc->GetTexWidth() > 1024)) {
+	if ((newXPos + csc->GetTexWidth() > GetGame()->GetMap()->GetCalculatedLevelWidth())) {
 		std::cout << newXPos + csc->GetTexWidth() << std::endl;
-		newXPos = 1024 - csc->GetTexWidth();
+		newXPos = GetGame()->GetMap()->GetCalculatedLevelWidth() - csc->GetTexWidth();
 	}
 	else if (newXPos < 0) {
 		newXPos = 0;
@@ -84,6 +86,16 @@ void Mario::UpdateActor(float deltaTime)
 			mPlayerVelX = 0.0f;
 		}
 	}
+
+	if (GetGame()->GetMap()->GetValueAtTile((newYPos / TILE_HEIGHT - 1), (newXPos / TILE_WIDTH - 1)) == 0) {
+		
+	}
+	else
+	{
+		SetPosition(Vector2(newXPos, newYPos));
+	}
+
+
 	bGrounded = false;
 	if (mJumpForce > 0) { //moving up
 		std::cout << "Moving up" << std::endl;
@@ -92,13 +104,6 @@ void Mario::UpdateActor(float deltaTime)
 			newYPos = (int)newYPos + 1;
 			mPlayerVelY = 0.0f;
 		}
-		//else if (GetGame()->GetMap()->GetValueAtTile((newYPos - 32) / TILE_HEIGHT, newXPos / TILE_WIDTH) == 0) { TODO: Allows jump through one block behaviour
-		//	std::cout << "Collided with brick on top" << std::endl;
-		//	mJumpForce = 0.0f;
-		//	newYPos = (int)newYPos + 1;
-		//	bJumping = false;
-		//	mPlayerVelY = 0.0f;
-		//}
 		else if (GetGame()->GetMap()->GetValueAtTile((newYPos - 64) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
 			std::cout << "Collided with brick on top" << std::endl;
 			mJumpForce = 0.0f;

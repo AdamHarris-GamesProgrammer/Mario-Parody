@@ -16,7 +16,7 @@ private:
 
 	class CircleComponent* mCircle;
 
-	bool bGrounded;
+	bool bGrounded = true;
 	bool bCanJump;
 	bool bJumping;
 

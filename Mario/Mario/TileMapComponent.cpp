@@ -9,35 +9,42 @@
 
 TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder)
 {
-	mLevelWidth = 32;
-	mLevelHeight = 20;
 }
 
-//TODO USE DYNAMIC memory to resize the array to the needed size
-
-void TileMapComponent::LoadMap(const std::string& fileName)
+bool TileMapComponent::LoadMap(const std::string& fileName)
 {
 	std::ifstream mapFile;
 	mapFile.open(fileName);
+	if (mapFile.good()) {
+		mLevelWidth = 0;
+		mLevelHeight = 0;
 
-	int row = 0;
+		while (mapFile.good()) {
+			std::string line;
+			getline(mapFile, line, '\n');
+			std::istringstream iss(line);
+			std::string token;
+			std::vector<int> row;
+			while (std::getline(iss, token, ',')) {
+				row.push_back(std::stoi(token));
+			}
 
-	while (mapFile.good()) {
-		int column = 0;
+			mMap.push_back(row);
+			row.clear();
 
-		std::string line;
-		getline(mapFile, line, '\n');
-		std::istringstream iss(line);
-		std::string token;
-		while (std::getline(iss, token, ',')) {
-			map[row][column] = std::stoi(token);
-			column++;
 		}
-		row++;
+		mLevelHeight = mMap.size() - 1;
+		mLevelWidth = mMap[mLevelHeight - 1].size();
 
+		GenerateObjects();
+		return true;
+	}
+	else
+	{
+		std::cout << "Map: " << fileName << " could not be loaded" << std::endl;
+		return false;
 	}
 
-	GenerateObjects();
 }
 
 void TileMapComponent::GenerateObjects() {
@@ -45,8 +52,8 @@ void TileMapComponent::GenerateObjects() {
 
 	for (int row = 0; row < mLevelHeight; row++) {
 		for (int column = 0; column < mLevelWidth; column++) {
-			type = map[row][column];
-
+			type = mMap.at(row).at(column);
+			std::cout << "Tile Type: " << type << std::endl;
 			if (type == 0) {
 				SDL_Rect* brickSrc = new SDL_Rect { 0,0,TILE_WIDTH,TILE_HEIGHT };
 				SDL_Rect* brickDest = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
@@ -98,7 +105,12 @@ void TileMapComponent::GenerateObjects() {
 	}
 }
 
+void TileMapComponent::ClearMap()
+{
+	mMap.clear();
+}
+
 void TileMapComponent::ChangeTileAt(int row, int column, int newValue)
 {
-	map[row][column] = newValue;
+	mMap.at(row).at(column) = newValue;
 }

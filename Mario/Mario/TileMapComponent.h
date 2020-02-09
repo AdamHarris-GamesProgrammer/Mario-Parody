@@ -14,7 +14,7 @@ class TileMapComponent : public SpriteComponent
 public:
 	TileMapComponent(class Actor* owner, int drawOrder = 10);
 
-	void LoadMap(const std::string& fileName);
+	bool LoadMap(const std::string& fileName);
 
 	void GenerateObjects();
 
@@ -22,14 +22,19 @@ public:
 
 	int GetValueAtTile(int row, int column)
 	{
-		if (row < mLevelHeight && column < mLevelWidth) {
-			return map[row][column];
+		if (row < mLevelHeight && column < mLevelWidth && row >= 0 && column >= 0) {
+			return mMap.at(row).at(column);
 		}
-		return -1; //returns -1 if the tile is out of the map
+		else
+		{
+			return -1;
+		}
 	}
 
 	void ChangeTileAt(int row, int column, int newValue);
 
+	int GetCalculatedLevelWidth() { return mLevelWidth * TILE_WIDTH; }
+	int GetCalculatedLevelHeight() { return mLevelHeight * TILE_HEIGHT; }
 
 private:
 	int mLevelWidth;
@@ -37,6 +42,6 @@ private:
 
 	std::vector<class Coin*> mCoins;
 
-	int map[20][32];
+	std::vector<std::vector<int>> mMap;
 };
 

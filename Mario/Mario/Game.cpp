@@ -68,9 +68,8 @@ void Game::LoadContent()
 
 	levels[0] = "Assets/Mario_TestLevel.csv";
 	levels[1] = "Assets/Mario_TestLevel2.csv";
-	levels[2] = "Assets/Mario_TestLevel2.csv";
-	levels[3] = "Assets/Mario_TestLevel2.csv";
-	levels[4] = "Assets/Mario_TestLevel2.csv";
+	levels[2] = "Assets/MarioBigTest.csv";
+	levels[3] = "Assets/MarioSmallTest.csv";
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
@@ -121,7 +120,9 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 void Game::EmptyMap() {
 	for(auto & tile : mTiles) {
 		tile->SetState(Actor::EDead);
+		
 	}
+	map->ClearMap();
 }
 
 void Game::AddLevelGoal(LevelGoal* goal)
@@ -145,13 +146,30 @@ void Game::PollInput()
 	mPlayer->HandleEvents(state);
 
 	if (state[SDL_SCANCODE_1]) {
+		score = 0;
+		scoreTsc->SetText("Score: " + score);
 		EmptyMap();
-		map->LoadMap("Assets/Mario_TestLevel.csv");
+		map->LoadMap(levels[0]);
 	}
-	if (state[SDL_SCANCODE_2]) {
+	else if (state[SDL_SCANCODE_2]) {
+		score = 0;
+		scoreTsc->SetText("Score: " + score);
 		EmptyMap();
-		map->LoadMap("Assets/Mario_TestLevel2.csv");
+		map->LoadMap(levels[1]);
 	}
+	else if (state[SDL_SCANCODE_3]) {
+		score = 0;
+		scoreTsc->SetText("Score: " + score);
+		EmptyMap();
+		map->LoadMap(levels[2]);
+	}
+	else if (state[SDL_SCANCODE_4]) {
+		score = 0;
+		scoreTsc->SetText("Score: " + score);
+		EmptyMap();
+		map->LoadMap(levels[3]);
+	}
+	
 
 }
 

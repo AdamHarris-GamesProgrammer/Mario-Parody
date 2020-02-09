@@ -74,7 +74,7 @@ private:
 	class TextSpriteComponent* scoreTsc = nullptr;
 
 	int currentLevel = 0;
-	std::string levels[5];
+	std::string levels[4];
 
 	int score = 0;
 

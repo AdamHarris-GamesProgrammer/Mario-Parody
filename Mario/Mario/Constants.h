@@ -16,7 +16,6 @@
 
 
 /*TODO
-dynamically sizing a map based on the width of the map loaded
 level completion/ failure
 camera component class
 enemies
