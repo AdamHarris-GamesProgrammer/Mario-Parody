@@ -30,98 +30,80 @@ void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
 
-	float newXPos = 0.0f;
-	float newYPos = 0.0f;
+	//Vertical Movements
+	float newYPos = GetPosition().y;
+	float newXPos = GetPosition().x;
 
-	//GRAVITY
-	if (!bGrounded) {
-		mPlayerVelY += GRAVITY * deltaTime;
-
+	if (!bCanJump && newYPos <= 416.0f) {
+		newYPos += GRAVITY * deltaTime;
 	}
-
-	if (mPlayerVelX > 10.0f) {
-		mPlayerVelX = 10.0f;
-	}
-	if (mPlayerVelX < -10.0f) {
-		mPlayerVelX = -10.0f;
-	}
-	if (mPlayerVelY > 100.0f) {
-		mPlayerVelY = 100.0f;
-	}
-	if (mPlayerVelY < -500.0f) {
-		mPlayerVelY = -500.0f;
-	}
-
-	newXPos = GetPosition().x + mPlayerVelX * deltaTime;
-	newYPos = GetPosition().y + mPlayerVelY * deltaTime;
 
 	if (bJumping) {
 		newYPos -= mJumpForce * deltaTime;
 
 		mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
 
-		if (mJumpForce < 0.0f) {
+		if (mJumpForce <= 0.0f) {
 			bJumping = false;
 		}
-
 	}
 
-	if ((newXPos + csc->GetTexWidth() > GetGame()->GetMap()->GetCalculatedLevelWidth())) {
-		std::cout << newXPos + csc->GetTexWidth() << std::endl;
-		newXPos = GetGame()->GetMap()->GetCalculatedLevelWidth() - csc->GetTexWidth();
-	}
-	else if (newXPos < 0) {
-		newXPos = 0;
-	}
-
-	if (mPlayerVelX < 0) { //move left
-		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
-			newXPos = (int)newXPos - 1;
-			mPlayerVelX = 0.0f;
+	//moving up
+	if (mPlayerVelY < 0) {
+		Tile* upTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT - 1), (newXPos / TILE_WIDTH));
+		if (upTile != nullptr) {
+			std::cout << "Up Tile X: " << upTile->GetPosition().x << " Y: " << upTile->GetPosition().y << std::endl;
+			if (upTile->GetTileType() != -1) {
+				if (Intersect(csc->GetDestRect(), upTile->GetDestRect())) {
+					newYPos = GetPosition().y;
+				}
+			}
 		}
 	}
-	else if (mPlayerVelX > 0) { //move right
-		if (GetGame()->GetMap()->GetValueAtTile(newYPos / TILE_HEIGHT, (newXPos) / TILE_WIDTH) != 0 || GetGame()->GetMap()->GetValueAtTile((newYPos + 28) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
-			newXPos = (int)newXPos + 2;
-			mPlayerVelX = 0.0f;
+	//moving down
+	else if (mPlayerVelY > 0) {
+		Tile* downTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT + 1), (newXPos / TILE_WIDTH));
+		if (downTile != nullptr) {
+			std::cout << "Down Tile X: " << downTile->GetPosition().x << " Y: " << downTile->GetPosition().y << std::endl;
+			if (downTile->GetTileType() != -1) {
+				if (Intersect(csc->GetDestRect(), downTile->GetDestRect())) {
+					newYPos = GetPosition().y;
+				}
+			}
 		}
 	}
 
-	if (GetGame()->GetMap()->GetValueAtTile((newYPos / TILE_HEIGHT - 1), (newXPos / TILE_WIDTH - 1)) == 0) {
-		
-	}
-	else
+	//Horizontal Movements
+	if (mPlayerVelX != 0)
 	{
-		SetPosition(Vector2(newXPos, newYPos));
+		newXPos += mPlayerVelX * mMovementSpeed * deltaTime;
 	}
 
-
-	bGrounded = false;
-	if (mJumpForce > 0) { //moving up
-		std::cout << "Moving up" << std::endl;
-		if (GetGame()->GetMap()->GetValueAtTile((newYPos + 32) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
-			std::cout << "BOOP" << std::endl;
-			newYPos = (int)newYPos + 1;
-			mPlayerVelY = 0.0f;
+	//moving left
+	if (mPlayerVelX < 0) {
+		Tile* leftTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT), (newXPos / TILE_WIDTH));
+		if (leftTile != nullptr) {
+			std::cout << "Left Tile X: " << leftTile->GetPosition().x << " Y: " << leftTile->GetPosition().y << std::endl;
+			if (leftTile->GetTileType() != -1) {
+				if (Intersect(csc->GetDestRect(), leftTile->GetDestRect())) {
+					newXPos = GetPosition().x;
+				}
+			}
 		}
-		else if (GetGame()->GetMap()->GetValueAtTile((newYPos - 64) / TILE_HEIGHT, newXPos / TILE_WIDTH) != 0) {
-			std::cout << "Collided with brick on top" << std::endl;
-			mJumpForce = 0.0f;
-			newYPos = (int)newYPos + 32;
-			bJumping = false;
-			mPlayerVelY = 0.0f;
+
+	}
+	//moving right
+	else if (mPlayerVelX > 0) {
+		Tile* rightTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT), (newXPos / TILE_WIDTH + 1));
+		if (rightTile != nullptr) {
+			std::cout << "Right Tile X: " << rightTile->GetPosition().x << " Y: " << rightTile->GetPosition().y << std::endl;
+			if (rightTile->GetTileType() != -1) {
+				if (Intersect(csc->GetDestRect(), rightTile->GetDestRect())) {
+					newXPos = GetPosition().x;
+				}
+			}
 		}
 	}
-	else { //moving down
-		if (GetGame()->GetMap()->GetValueAtTile((newYPos + 32) / TILE_HEIGHT, newXPos / TILE_WIDTH) == 0) {
-			newYPos = (int)newYPos;
-			mPlayerVelY = 0.0f;
-			bGrounded = true;
-		}
-	}
-
-	//printf("X Position: %f, Y Position: %f\t", GetPosition().x, GetPosition().y);
-	//printf("X Velocity: %f, Y Velocity: %f\n", mPlayerVelX, mPlayerVelY);
 
 	SetPosition(Vector2(newXPos, newYPos));
 
@@ -142,7 +124,6 @@ void Mario::UpdateActor(float deltaTime)
 			GetGame()->NextLevel();
 		}
 	}
-
 }
 
 void Mario::HandleEvents(const uint8_t* state)
@@ -164,10 +145,9 @@ void Mario::HandleEvents(const uint8_t* state)
 				mJumpForce = INITIAL_JUMP_FORCE;
 				bJumping = true;
 				bCanJump = false;
-				mPlayerVelY = -25.0f;
+				mPlayerVelY = -1.0f;
 			}
 		}
-
 	}
 }
 

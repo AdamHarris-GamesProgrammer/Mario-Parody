@@ -169,8 +169,6 @@ void Game::PollInput()
 		EmptyMap();
 		map->LoadMap(levels[3]);
 	}
-	
-
 }
 
 void Game::Update()
