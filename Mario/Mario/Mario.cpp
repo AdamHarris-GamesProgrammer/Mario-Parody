@@ -34,7 +34,7 @@ void Mario::UpdateActor(float deltaTime)
 	float newYPos = GetPosition().y;
 	float newXPos = GetPosition().x;
 
-	if (!bCanJump && newYPos <= 416.0f) {
+	if (!bGrounded) {
 		newYPos += GRAVITY * deltaTime;
 	}
 
@@ -48,30 +48,81 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
-	//moving up
-	if (mPlayerVelY < 0) {
-		Tile* upTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT - 1), (newXPos / TILE_WIDTH));
-		if (upTile != nullptr) {
-			std::cout << "Up Tile X: " << upTile->GetPosition().x << " Y: " << upTile->GetPosition().y << std::endl;
-			if (upTile->GetTileType() != -1) {
-				if (Intersect(csc->GetDestRect(), upTile->GetDestRect())) {
-					newYPos = GetPosition().y;
-				}
+	////moving up
+	//if (newYPos < GetPosition().y) {
+	//	Tile* upTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT - 1), (newXPos / TILE_WIDTH));
+	//	if (upTile != nullptr) {
+	//		//std::cout << "Up Tile X: " << upTile->GetPosition().x << " Y: " << upTile->GetPosition().y << std::endl;
+	//		if (upTile->GetTileType() == 0) {
+	//			if (Intersect(csc->GetDestRect(), upTile->GetDestRect())) {
+	//				newYPos = GetPosition().y;
+	//				//bCanJump = true;
+	//				bGrounded = false;
+	//				std::cout << "Up tile Collision" << std::endl;
+	//			}
+	//		}
+	//	}
+	//}
+	////moving down
+	//else if (newYPos > GetPosition().y) {
+	//	Tile* downTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT + 1), (newXPos / TILE_WIDTH));
+	//	if (downTile != nullptr) {
+	//		//std::cout << "Down Tile X: " << downTile->GetPosition().x << " Y: " << downTile->GetPosition().y << std::endl;
+	//		if (downTile->GetTileType() == 0) {
+	//			if (Intersect(csc->GetDestRect(), downTile->GetDestRect())) {
+	//				newYPos = GetPosition().y;
+	//				bCanJump = true;
+	//				bJumping = false;
+	//				bGrounded = true;
+	//				std::cout << "Down tile collision" << std::endl;
+	//			}
+	//		}
+	//	}
+	//}
+
+	Tile* upTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT), (newXPos / TILE_WIDTH));
+	if (upTile != nullptr) {
+		std::cout << "Up Tile X: " << upTile->GetPosition().x << " Y: " << upTile->GetPosition().y << upTile->GetTileType() << std::endl;
+		if (upTile->GetTileType() == 0) {
+			if (Intersect(csc->GetDestRect(), upTile->GetDestRect())) {
+				newYPos = GetPosition().y;
+				//bCanJump = true;
+				bGrounded = false;
+
+				std::cout << "Up tile Collision" << std::endl;
 			}
 		}
 	}
-	//moving down
-	else if (mPlayerVelY > 0) {
-		Tile* downTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT + 1), (newXPos / TILE_WIDTH));
-		if (downTile != nullptr) {
-			std::cout << "Down Tile X: " << downTile->GetPosition().x << " Y: " << downTile->GetPosition().y << std::endl;
-			if (downTile->GetTileType() != -1) {
-				if (Intersect(csc->GetDestRect(), downTile->GetDestRect())) {
-					newYPos = GetPosition().y;
-				}
+	Tile* downTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT + 1), (newXPos / TILE_WIDTH));
+	if (downTile != nullptr) {
+		std::cout << "Down Tile X: " << downTile->GetPosition().x << " Y: " << downTile->GetPosition().y << downTile->GetTileType() << std::endl;
+		if (downTile->GetTileType() == 0) {
+			if (Intersect(csc->GetDestRect(), downTile->GetDestRect())) {
+				newYPos = GetPosition().y;
+				bJumping = false;
+
+				std::cout << "Down tile collision" << std::endl;
 			}
 		}
 	}
+
+	if (downTile->GetTileType() == 0) {
+		if (Intersect(csc->GetDestRect(), downTile->GetDestRect())) {
+			newYPos = GetPosition().y;
+			bGrounded = true;
+			std::cout << "Down tile collision" << std::endl;
+		}
+	}
+
+	if (!bJumping) {
+		bCanJump = true;
+		bGrounded = true;
+	}
+	if (bJumping) {
+		bGrounded = false;
+	}
+
+	std::cout << "bCanJump: " << bCanJump << std::endl << "bJumping: " << bJumping << std::endl << "bGrounded: " << bGrounded << std::endl;
 
 	//Horizontal Movements
 	if (mPlayerVelX != 0)
@@ -83,10 +134,11 @@ void Mario::UpdateActor(float deltaTime)
 	if (mPlayerVelX < 0) {
 		Tile* leftTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT), (newXPos / TILE_WIDTH));
 		if (leftTile != nullptr) {
-			std::cout << "Left Tile X: " << leftTile->GetPosition().x << " Y: " << leftTile->GetPosition().y << std::endl;
-			if (leftTile->GetTileType() != -1) {
+			if (leftTile->GetTileType() == 0) {
 				if (Intersect(csc->GetDestRect(), leftTile->GetDestRect())) {
 					newXPos = GetPosition().x;
+
+					std::cout << "Left tile collision" << std::endl;
 				}
 			}
 		}
@@ -96,10 +148,11 @@ void Mario::UpdateActor(float deltaTime)
 	else if (mPlayerVelX > 0) {
 		Tile* rightTile = GetGame()->GetMap()->GetTile((newYPos / TILE_HEIGHT), (newXPos / TILE_WIDTH + 1));
 		if (rightTile != nullptr) {
-			std::cout << "Right Tile X: " << rightTile->GetPosition().x << " Y: " << rightTile->GetPosition().y << std::endl;
-			if (rightTile->GetTileType() != -1) {
+			if (rightTile->GetTileType() == 0) {
 				if (Intersect(csc->GetDestRect(), rightTile->GetDestRect())) {
 					newXPos = GetPosition().x;
+
+					std::cout << "Right tile collision" << std::endl;
 				}
 			}
 		}
@@ -141,7 +194,7 @@ void Mario::HandleEvents(const uint8_t* state)
 
 	if (state[SDL_SCANCODE_SPACE]) {
 		if (bGrounded) {
-			if (!bJumping) {
+			if (!bJumping && bCanJump) {
 				mJumpForce = INITIAL_JUMP_FORCE;
 				bJumping = true;
 				bCanJump = false;
