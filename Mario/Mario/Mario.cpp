@@ -58,26 +58,37 @@ void Mario::UpdateActor(float deltaTime)
 	int topTile = newYPos / TILE_HEIGHT;
 	int bottomTile = (newYPos + csc->GetTexHeight() - 2) / TILE_HEIGHT;
 
-	for (int y = topTile; y <= bottomTile; ++y) {
-		for (int x = leftTile; x <= rightTile; ++x) {
-			int tileCollisionType = GetGame()->GetMap()->GetValueAtTile(y, x);
-			if (!bJumping) {
+	std::cout << "Left Tile: " << leftTile << " Right Tile: " << rightTile << " Top Tile: " << topTile << " Bottom Tile: " << bottomTile << std::endl;
+
+	if (!bJumping) {
+		for (int y = topTile; y <= bottomTile; ++y) {
+			for (int x = leftTile; x <= rightTile; ++x) {
+				std::cout << "X: " << x << " Y: " << y << std::endl;
+				int tileCollisionType = GetGame()->GetMap()->GetValueAtTile(y, x);
 				if (tileCollisionType == 0) {
 					std::cout << "Collision" << std::endl;
 					newXPos = GetPosition().x;
 					newYPos = GetPosition().y;
-				}
-			}
-			else
-			{
-
+				}	
 			}
 		}
 	}
+	else
+	{
 
+	}
 
-	int playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile +1, leftTile);
-	if (playerFootTile != 0) {
+	int playerFootTile = 0;
+	if (bJumping) {
+		std::cout << "Jumping" << std::endl;
+		playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile + 1, leftTile);
+	}
+	else
+	{
+		playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+	}
+	
+	if (playerFootTile != 0 && playerFootTile != 32) {
 		bGrounded = false;
 	}
 	else
