@@ -41,6 +41,18 @@ void Mario::UpdateActor(float deltaTime)
 		newYPos += GRAVITY * deltaTime;
 	}
 
+	if (bJumping) {
+		newYPos -= mJumpForce * deltaTime;
+
+		mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
+
+		if (mJumpForce <= 0.0f) {
+			bJumping = false;
+			bCanJump = true;
+			mJumpForce = 0.0f;
+		}
+	}
+
 	int leftTile = newXPos / TILE_WIDTH;
 	int rightTile = (newXPos + csc->GetTexWidth() - 2) / TILE_WIDTH;
 	int topTile = newYPos / TILE_HEIGHT;
@@ -49,12 +61,21 @@ void Mario::UpdateActor(float deltaTime)
 	for (int y = topTile; y <= bottomTile; ++y) {
 		for (int x = leftTile; x <= rightTile; ++x) {
 			int tileCollisionType = GetGame()->GetMap()->GetValueAtTile(y, x);
-			if (tileCollisionType == 0) {
-				newXPos = GetPosition().x;
-				newYPos = GetPosition().y;
+			if (!bJumping) {
+				if (tileCollisionType == 0) {
+					std::cout << "Collision" << std::endl;
+					newXPos = GetPosition().x;
+					newYPos = GetPosition().y;
+				}
+			}
+			else
+			{
+
 			}
 		}
 	}
+
+
 	int playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile +1, leftTile);
 	if (playerFootTile != 0) {
 		bGrounded = false;
@@ -63,6 +84,11 @@ void Mario::UpdateActor(float deltaTime)
 	{
 		bGrounded = true;
 	}
+
+	if (newXPos < 0.0f || (newXPos + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+		newXPos = GetPosition().x;
+	}
+
 
 	SetPosition(Vector2(newXPos, newYPos));
 
@@ -103,6 +129,7 @@ void Mario::HandleEvents(const uint8_t* state)
 		if (bGrounded) {
 			if (!bJumping && bCanJump) {
 				mJumpForce = INITIAL_JUMP_FORCE;
+				bGrounded = false;
 				bJumping = true;
 				bCanJump = false;
 				mPlayerVelY = -1.0f;
