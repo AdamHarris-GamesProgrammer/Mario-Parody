@@ -55,7 +55,7 @@ void TileMapComponent::GenerateObjects() {
 		for (int column = 0; column < mLevelWidth; column++) {
 			type = mMap.at(row).at(column);
 			if (type == -1) {
-				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
+				SDL_Rect* blankSrc = new SDL_Rect{ 160,0,TILE_WIDTH,TILE_HEIGHT };
 				SDL_Rect* blankDest = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
 
 				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, blankDest, -1);
@@ -82,8 +82,18 @@ void TileMapComponent::GenerateObjects() {
 				brick->SetSrcRect(brickSrc);
 				tileRow.push_back(brick);
 			}
+			else if (type == 2) {
+				SDL_Rect* brickSrc = new SDL_Rect{ 0,0,TILE_WIDTH,TILE_HEIGHT };
+				SDL_Rect* brickDest = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, brickDest, 0);
+				brick->SetPosition(Vector2(brickDest->x + 16.0f, brickDest->y + 16.0f));
+				brick->SetDestRect(brickDest);
+				brick->SetSrcRect(brickSrc);
+				tileRow.push_back(brick);
+			}
 			else if (type == 3) {
-				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
+				SDL_Rect* blankSrc = new SDL_Rect{ 160,0,TILE_WIDTH,TILE_HEIGHT };
 				SDL_Rect* blankDest = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
 
 				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, blankDest, -1);
@@ -112,7 +122,7 @@ void TileMapComponent::GenerateObjects() {
 			}
 			else if (type == 64) {
 				SDL_Rect* coinSrc = new SDL_Rect{ 0,64,TILE_WIDTH,TILE_HEIGHT };
-				SDL_Rect* coinDest = new SDL_Rect{ column * TILE_WIDTH, (row * TILE_HEIGHT) + (int)16.0f, TILE_WIDTH, TILE_HEIGHT };
+				SDL_Rect* coinDest = new SDL_Rect{ column * TILE_WIDTH, (row * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT };
 
 				Coin* coin = new Coin(mOwner->GetGame(), coinSrc, coinDest);
 				mOwner->GetGame()->AddCoin(coin);

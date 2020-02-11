@@ -9,7 +9,7 @@
 #define TILE_HEIGHT 32
 
 #define JUMP_FORCE_DECREMENT	400.0f
-#define INITIAL_JUMP_FORCE		300.0f
+#define INITIAL_JUMP_FORCE		500.0f
 #define INITIAL_JUMP_FORCE_SMALL 100.0f
 
 #define GRAVITY 96.0f
@@ -30,7 +30,8 @@ FIX JUMPING AND COLLISION
 
 /* Collision values
 -1 = air
-0 = bricks
-1 = coins
-2 = gold bricks
-3 = level goal*/
+0 = ground
+1 = floating bricks
+2 = coins
+3 = gold bricks
+4 = level goal*/

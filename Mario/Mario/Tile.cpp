@@ -13,6 +13,17 @@ Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType):  Acto
 	SetTexture(game->GetEngine()->GetTexture("Assets/TileMap.png"));
 	SetPosition(Vector2(mDestRect->x, mDestRect->y));
 	mGame->AddTile(this);
+
+	switch (mTileType) {
+	case -1:
+		mCollisionType = -1;
+	case 0:
+		mCollisionType = 0;
+	case 1:
+		mCollisionType = 1;
+	case 2:
+		mCollisionType = 2;
+	}
 }
 
 Tile::~Tile()
@@ -23,8 +34,6 @@ Tile::~Tile()
 void Tile::Draw(SDL_Renderer* renderer)
 {
 	if (mTexture) {
-
-
 		SDL_RenderCopyEx(renderer,
 			mTexture,
 			mSrcRect,

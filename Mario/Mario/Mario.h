@@ -10,6 +10,7 @@ public:
 	void UpdateActor(float deltaTime) override;
 	void HandleEvents(const uint8_t* state);
 
+	void ChangePlayerTile(Vector2 position);
 
 private:
 	class CharacterSpriteComponent* csc;

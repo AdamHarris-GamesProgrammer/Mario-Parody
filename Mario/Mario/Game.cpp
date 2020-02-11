@@ -66,7 +66,7 @@ void Game::LoadContent()
 	scoreTsc->SetText("Score: 0");
 	scoreTsc->SetTextSize(80);
 
-	levels[0] = "Assets/Mario_TestLevel.csv";
+	levels[0] = "Assets/Maps/Mario01.csv";
 	levels[1] = "Assets/Mario_TestLevel2.csv";
 	levels[2] = "Assets/MarioBigTest.csv";
 	levels[3] = "Assets/MarioSmallTest.csv";
@@ -115,6 +115,7 @@ void Game::RemoveTile(Tile* tile)
 
 void Game::SetPlayerSpawnPoint(Vector2 position) {
 	mPlayer->SetPosition(position);
+	mPlayer->ChangePlayerTile(position);
 }
 
 void Game::EmptyMap() {
@@ -150,6 +151,7 @@ void Game::PollInput()
 		scoreTsc->SetText("Score: " + score);
 		EmptyMap();
 		map->LoadMap(levels[0]);
+		
 	}
 	else if (state[SDL_SCANCODE_2]) {
 		score = 0;
