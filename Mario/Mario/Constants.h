@@ -12,7 +12,7 @@
 #define INITIAL_JUMP_FORCE		500.0f
 #define INITIAL_JUMP_FORCE_SMALL 100.0f
 
-#define GRAVITY 96.0f
+#define GRAVITY 192.0f
 
 
 /*TODO

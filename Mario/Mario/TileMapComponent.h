@@ -19,7 +19,7 @@ public:
 	void GenerateObjects();
 
 	void ClearMap();
-
+	
 	int GetValueAtTile(int row, int column)
 	{
 		if (row < mLevelHeight && column < mLevelWidth && row >= 0 && column >= 0) {
