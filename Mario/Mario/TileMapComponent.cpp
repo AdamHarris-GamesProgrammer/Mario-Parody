@@ -8,9 +8,7 @@
 #include "Mario.h"
 #include "TileValues.h"
 
-TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder)
-{
-}
+TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder) {}
 
 bool TileMapComponent::LoadMap(const std::string& fileName)
 {
@@ -69,8 +67,6 @@ void TileMapComponent::GenerateObjects() {
 
 				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, 0);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
-				brick->SetDestRect(destRect);
-				brick->SetSrcRect(brickSrc);
 				tileRow.push_back(brick);
 			}
 			else if (type == DROPBRICK) {
@@ -78,8 +74,6 @@ void TileMapComponent::GenerateObjects() {
 
 				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, -1);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
-				brick->SetDestRect(destRect);
-				brick->SetSrcRect(brickSrc);
 				tileRow.push_back(brick);
 			}
 			else if (type == PLAYERSPAWN) {
@@ -103,8 +97,6 @@ void TileMapComponent::GenerateObjects() {
 
 				Tile* brick = new Tile(mOwner->GetGame(), goldBrickSrc, destRect, 2);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
-				brick->SetDestRect(destRect);
-				brick->SetSrcRect(goldBrickSrc);
 				tileRow.push_back(brick);
 			}
 			else if (type == COIN) {

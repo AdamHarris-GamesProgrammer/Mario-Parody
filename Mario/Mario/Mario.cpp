@@ -94,6 +94,7 @@ void Mario::UpdateActor(float deltaTime)
 
 	SetPosition(Vector2(newXPos, newYPos));
 
+	//controls the players screen position related to the camera position
 	csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
 	csc->GetDestRect()->y = GetPosition().y;
 
@@ -106,6 +107,7 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
+	//checks to see if the player is colliding with the level goal
 	if (GetGame()->GetLevelGoal() != nullptr) {
 		if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
 			GetGame()->NextLevel();
