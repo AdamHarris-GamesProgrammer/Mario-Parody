@@ -23,7 +23,6 @@ private:
 
 	float mJumpForce;
 
-	float mPlayerVelY;
 	float mPlayerVelX;
 	
 	float mMovementSpeed = 5.0f;

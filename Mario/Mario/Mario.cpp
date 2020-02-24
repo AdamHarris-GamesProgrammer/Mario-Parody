@@ -6,6 +6,9 @@
 #include "Game.h"
 #include "Coin.h"
 #include "Tile.h"
+#include "TileValues.h"
+
+
 
 Mario::Mario(class Game* game) : Actor(game)
 {
@@ -21,7 +24,6 @@ Mario::Mario(class Game* game) : Actor(game)
 	mCircle->SetRadius(20.0f);
 
 	mPlayerVelX = 0.0f;
-	mPlayerVelY = 0.0f;
 
 	bCanJump = true;
 }
@@ -37,10 +39,6 @@ void Mario::UpdateActor(float deltaTime)
 		newXPos += mPlayerVelX * mMovementSpeed * deltaTime;
 	}
 
-	if (!bGrounded) {
-		newYPos += GRAVITY * deltaTime;
-	}
-
 	if (bJumping) {
 		newYPos -= mJumpForce * deltaTime;
 
@@ -53,67 +51,38 @@ void Mario::UpdateActor(float deltaTime)
 		}
 	}
 
-
-
 	int leftTile = newXPos / TILE_WIDTH;
-	int rightTile = (newXPos + csc->GetTexWidth() - 2) / TILE_WIDTH;
+	int rightTile = (newXPos + csc->GetTexWidth()) / TILE_WIDTH;
 	int topTile = newYPos / TILE_HEIGHT;
-	int bottomTile = (newYPos + csc->GetTexHeight() - 2) / TILE_HEIGHT;
-	std::cout << "NewYPos: " << newYPos << " Tex Height: " << csc->GetTexHeight() << " TILE_HEIGHT: " << TILE_HEIGHT << std::endl;
-	int playerFootTile = 0;
+	int bottomTile = (newYPos + csc->GetTexHeight()) / TILE_HEIGHT;
+	
 
-	std::cout << "Left Tile: " << leftTile << " Right Tile: " << rightTile << " Top Tile: " << topTile << " Bottom Tile: " << bottomTile << std::endl;
+	int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
+	int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
+	int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+	int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+	int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+	int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
-	if (!bJumping) {
-		if (GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile) == 0) {
-			std::cout << "Bottom" << std::endl;
-			newYPos = GetPosition().y;
-		}
-
-		//if (mPlayerVelX < 0.0f) {
-		//	playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
-		//}
-		//else
-		//{
-		//	playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
-		//}
-	}
-	else
-	{
-		//top
-		if (GetGame()->GetMap()->GetValueAtTile(topTile, leftTile) == 0) {
-			std::cout << "Top" << std::endl;
-			newYPos = GetPosition().y;
-			mJumpForce = 0.0f;
-			
-		}
-		//if (mPlayerVelX < 0.0f) {
-		//	playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile + 1, leftTile);
-		//}
-		//else
-		//{
-		//	playerFootTile = GetGame()->GetMap()->GetValueAtTile(bottomTile + 1, rightTile);
-		//}
+	//Top Collisions
+	if ((topLeftTile != AIR && topLeftTile != COIN) || (topRightTile != AIR && topRightTile != COIN)) {
+		newYPos = GetPosition().y;
+		mJumpForce = 0.0f;
 	}
 
-	if ((GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile) == 0)) {
-		std::cout << "Left" << std::endl;
+	//Mid Collisions
+	if (midLeftTile == BRICK || midRightTile == BRICK) {
 		newXPos = GetPosition().x;
 	}
-	else if (GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile) == 0) {
-		std::cout << "Right" << std::endl;
-		newXPos = GetPosition().x;
-	}
-
-	//std::cout << "Left Tile: " << leftTile << " Right Tile: " << rightTile << std::endl;
-	//std::cout << "Player Foot Tile: " << playerFootTile << " bGrounded: " << bGrounded << " bJumping: " << bJumping << std::endl;
-
-
-	if (playerFootTile != 0 && playerFootTile != 32) {
+	
+	//Bottom collisions
+	if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)) {
 		bGrounded = false;
+		newYPos += GRAVITY * deltaTime;
 	}
 	else
 	{
+		bCanJump = true;
 		bGrounded = true;
 	}
 
@@ -147,7 +116,6 @@ void Mario::UpdateActor(float deltaTime)
 void Mario::HandleEvents(const uint8_t* state)
 {
 	mPlayerVelX = 0.0f;
-	mPlayerVelY = 0.0f;
 
 	if (state[SDL_SCANCODE_A]) {
 		csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
@@ -165,7 +133,6 @@ void Mario::HandleEvents(const uint8_t* state)
 				bGrounded = false;
 				bJumping = true;
 				bCanJump = false;
-				mPlayerVelY = -1.0f;
 			}
 		}
 	}

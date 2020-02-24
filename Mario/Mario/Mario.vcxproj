@@ -167,6 +167,7 @@
     <ClInclude Include="TextSpriteComponent.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMapComponent.h" />
+    <ClInclude Include="TileValues.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
