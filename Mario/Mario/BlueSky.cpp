@@ -135,14 +135,7 @@ SDL_Texture* BlueSky::GetTexture(const std::string& fileName, bool useColorKey /
 			return nullptr;
 		}
 
-		//Creates a texture from surface
-		if (useColorKey) {
-			SDL_SetColorKey(surf, useColorKey, SDL_MapRGB(surf->format, 0xFF, 0xFF, 0xFF));
-		}
-		else {
-			SDL_SetColorKey(surf, true, SDL_MapRGBA(surf->format, 0x00, 0x00, 0x00, 0x00));
-		}
-
+		SDL_SetColorKey(surf, useColorKey, SDL_MapRGB(surf->format, 0xFF, 0xFf, 0xFF));
 		tex = SDL_CreateTextureFromSurface(mRenderer, surf);
 		SDL_FreeSurface(surf);
 

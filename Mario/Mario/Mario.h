@@ -12,6 +12,8 @@ public:
 
 	void ChangePlayerTile(Vector2 position);
 
+
+
 private:
 	class CharacterSpriteComponent* csc;
 

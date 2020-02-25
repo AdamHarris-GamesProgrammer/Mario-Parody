@@ -7,6 +7,7 @@
 #include "LevelGoal.h"
 #include "Mario.h"
 #include "TileValues.h"
+#include "Koopa.h"
 
 TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder) {}
 
@@ -56,7 +57,7 @@ void TileMapComponent::GenerateObjects() {
 
 			SDL_Rect* destRect = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
 			if (type == AIR) {
-				SDL_Rect* blankSrc = new SDL_Rect{ 160,0,TILE_WIDTH,TILE_HEIGHT };
+				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
 				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
@@ -77,7 +78,7 @@ void TileMapComponent::GenerateObjects() {
 				tileRow.push_back(brick);
 			}
 			else if (type == PLAYERSPAWN) {
-				SDL_Rect* blankSrc = new SDL_Rect{ 160,0,TILE_WIDTH,TILE_HEIGHT };
+				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
 				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
@@ -91,6 +92,26 @@ void TileMapComponent::GenerateObjects() {
 				LevelGoal* goal = new LevelGoal(mOwner->GetGame(), goalSrc, destRect);
 				mOwner->GetGame()->AddLevelGoal(goal);
 				tileRow.push_back(goal);
+			}
+			else if (type == KOOPA) {
+				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
+
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+
+				tileRow.push_back(blankTile);
+
+				Koopa* koopa = new Koopa(mOwner->GetGame());
+				koopa->SetPosition(Vector2(destRect->x, destRect->y + 2.0f));
+				mOwner->GetGame()->AddKoopa(koopa);
+				
+				
+			}
+			else if (type == KOOPATURN) {
+				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
+
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+
+				tileRow.push_back(blankTile);
 			}
 			else if (type == GOLDBRICK) {
 				SDL_Rect* goldBrickSrc = new SDL_Rect{ 0,32,TILE_WIDTH,TILE_HEIGHT };

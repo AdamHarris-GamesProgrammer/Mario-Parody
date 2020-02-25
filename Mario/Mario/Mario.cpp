@@ -65,7 +65,7 @@ void Mario::UpdateActor(float deltaTime)
 	int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 	//Top Collisions
-	if ((topLeftTile != AIR && topLeftTile != COIN) || (topRightTile != AIR && topRightTile != COIN)) {
+	if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN) ) {
 		newYPos = GetPosition().y;
 		mJumpForce = 0.0f;
 	}
@@ -76,7 +76,7 @@ void Mario::UpdateActor(float deltaTime)
 	}
 	
 	//Bottom collisions
-	if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)) {
+	if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN && bottomLeftTile == KOOPATURN)) {
 		bGrounded = false;
 		newYPos += GRAVITY * deltaTime;
 	}

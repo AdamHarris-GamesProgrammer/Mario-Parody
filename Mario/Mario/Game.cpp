@@ -9,6 +9,7 @@
 #include "Coin.h"
 #include "Tile.h"
 #include "LevelGoal.h"
+#include "Koopa.h"
 
 bool Game::Initialize()
 {
@@ -124,6 +125,20 @@ void Game::EmptyMap() {
 		
 	}
 	map->ClearMap();
+}
+
+void Game::AddKoopa(Koopa* koopa)
+{
+	mKoopas.emplace_back(koopa);
+}
+
+void Game::RemoveKoopa(Koopa* koopa)
+{
+	auto iter = std::find(mKoopas.begin(), mKoopas.end(), koopa);
+
+	if (iter != mKoopas.end()) {
+		mKoopas.erase(iter);
+	}
 }
 
 void Game::AddLevelGoal(LevelGoal* goal)

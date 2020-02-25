@@ -136,6 +136,7 @@
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="LevelGoal.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="ComponentsList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Koopa.h" />
     <ClInclude Include="LevelGoal.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />

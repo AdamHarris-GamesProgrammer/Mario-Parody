@@ -45,6 +45,10 @@ public:
 	void EmptyMap();
 	std::vector<class Tile*>& GetTiles() { return mTiles; }
 
+	void AddKoopa(class Koopa* koopa);
+	void RemoveKoopa(class Koopa* koopa);
+	std::vector<class Koopa*>& GetKoopas() { return mKoopas;	}
+
 	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
 	void AddLevelGoal(class LevelGoal* goal);
 
@@ -67,6 +71,7 @@ private:
 	std::vector<class Coin*> mCoins;
 
 	std::vector<class Tile*> mTiles;
+	std::vector<class Koopa*> mKoopas;
 
 	class LevelGoal* mLevelGoal = nullptr;
 
