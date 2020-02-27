@@ -7,6 +7,7 @@
 #include "LevelGoal.h"
 #include "Mario.h"
 #include "TileValues.h"
+#include "PowBlock.h"
 #include "Koopa.h"
 
 TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) : SpriteComponent(owner, drawOrder) {}
@@ -116,9 +117,11 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == GOLDBRICK) {
 				SDL_Rect* goldBrickSrc = new SDL_Rect{ 0,32,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* brick = new Tile(mOwner->GetGame(), goldBrickSrc, destRect, 2);
-				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
-				tileRow.push_back(brick);
+				PowBlock* pow = new PowBlock(mOwner->GetGame(), goldBrickSrc, destRect);
+				pow->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
+
+				mOwner->GetGame()->AddPowBlock(pow);
+				tileRow.push_back(pow);
 			}
 			else if (type == COIN) {
 				SDL_Rect* coinSrc = new SDL_Rect{ 0,64,TILE_WIDTH,TILE_HEIGHT };

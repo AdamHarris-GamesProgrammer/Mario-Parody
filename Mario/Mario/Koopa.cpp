@@ -20,7 +20,8 @@ Koopa::Koopa(class Game* game) : Actor(game)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(8.0f);
 
-	std::cout << "Koopa spawned" << std::endl;
+
+	flippedTimer = flippedDuration;
 }
 
 Koopa::~Koopa()
@@ -51,6 +52,10 @@ void Koopa::UpdateActor(float deltaTime)
 					bMovingRight = false;
 				}
 
+				if (GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile) == AIR) {
+					bMovingRight = false;
+				}
+
 			}
 			else
 			{
@@ -60,6 +65,11 @@ void Koopa::UpdateActor(float deltaTime)
 					newPosition.x = GetPosition().x;
 					bMovingRight = true;
 				}
+
+				if (GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile) == AIR) {
+					bMovingRight = true;
+				}
+				
 			}
 
 			//restrict X Position to screen bounds
@@ -83,6 +93,14 @@ void Koopa::UpdateActor(float deltaTime)
 		else
 		{
 			csc->SetAnimTextures(flippedAnims);
+			flippedTimer -= deltaTime;
+
+			if (flippedTimer <= 0) {
+				bFlipped = false;
+				csc->SetAnimTextures(walkingAnims);
+				flippedTimer = 3.0f;
+			}
+
 		}
 
 		SetPosition(newPosition);

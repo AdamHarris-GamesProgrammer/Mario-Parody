@@ -24,6 +24,9 @@ private:
 	bool bAlive = true;
 	bool bFlipped = false;
 
+	float flippedTimer;
+	const float flippedDuration = 3.0f;
+
 	float mMovementSpeed = 25.0f;
 
 	std::vector<SDL_Texture*> walkingAnims; 

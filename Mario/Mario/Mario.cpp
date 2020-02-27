@@ -8,6 +8,7 @@
 #include "Tile.h"
 #include "TileValues.h"
 #include "Koopa.h"
+#include "PowBlock.h"
 
 
 
@@ -57,16 +58,9 @@ void Mario::UpdateActor(float deltaTime)
 		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 		//Top Collisions
-		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN)) {
+		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
 			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
-		}
-
-		if (topLeftTile == GOLDBRICK || topRightTile == GOLDBRICK) {
-			//TODO: SCREENSHAKE, Take health away from pow block
-			for (auto enemy : mGame->GetKoopas()) {
-				enemy->SetFlipped(true);
-			}
 		}
 
 		//Mid Collisions
@@ -85,6 +79,8 @@ void Mario::UpdateActor(float deltaTime)
 			bGrounded = true;
 		}
 
+
+
 		//constrains player to X level bounds
 		if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
 			newPosition.x = GetPosition().x;
@@ -102,7 +98,7 @@ void Mario::UpdateActor(float deltaTime)
 		newPosition.y += GRAVITY * deltaTime;
 		SetPlayerPosition(newPosition);
 	}
-	
+
 }
 
 void Mario::HandleEvents(const uint8_t* state)
@@ -173,6 +169,21 @@ void Mario::CollisionChecks()
 				else
 				{
 					bDead = true;
+				}
+			}
+		}
+	}
+
+	for (auto powBlock : GetGame()->GetPowBlocks())
+	{
+		if (powBlock != nullptr) {
+			if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
+				if (bJumping) {
+					for (auto enemy : mGame->GetKoopas()) {
+						enemy->SetFlipped(true);
+					}
+					powBlock->TakeDamage();
+					mJumpForce = 0.0f;
 				}
 			}
 		}

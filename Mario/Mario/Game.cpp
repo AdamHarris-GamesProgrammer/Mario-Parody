@@ -10,6 +10,7 @@
 #include "Tile.h"
 #include "LevelGoal.h"
 #include "Koopa.h"
+#include "PowBlock.h"
 
 bool Game::Initialize()
 {
@@ -148,7 +149,20 @@ void Game::RemoveKoopa(Koopa* koopa)
 	if (iter != mKoopas.end()) {
 		mKoopas.erase(iter);
 	}
-	std::cout << "koopa removed" << std::endl;
+}
+
+void Game::AddPowBlock(class PowBlock* powBlock)
+{
+	mPowBlocks.emplace_back(powBlock);
+}
+
+void Game::RemovePowBlock(class PowBlock* powBlock)
+{
+	auto iter = std::find(mPowBlocks.begin(), mPowBlocks.end(), powBlock);
+
+	if (iter != mPowBlocks.end()) {
+		mPowBlocks.erase(iter);
+	}
 }
 
 void Game::AddLevelGoal(LevelGoal* goal)
