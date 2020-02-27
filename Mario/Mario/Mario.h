@@ -12,7 +12,10 @@ public:
 
 	void ChangePlayerTile(Vector2 position);
 
+	bool GetDead() const { return bDead; }
+	void SetDead(bool newValue) { bDead = newValue; }
 
+	void SetPlayerPosition(const Vector2& newValue);
 
 private:
 	class CharacterSpriteComponent* csc;
@@ -23,10 +26,18 @@ private:
 	bool bCanJump;
 	bool bJumping;
 
+	bool bDead = false;
+
 	float mJumpForce;
 
 	float mPlayerVelX;
 	
 	float mMovementSpeed = 5.0f;
+
+	void CollisionChecks();
+	void Jump(Vector2& newPos, float deltaTime);
+
+
+
 };
 

@@ -124,6 +124,15 @@ void Game::EmptyMap() {
 		tile->SetState(Actor::EDead);
 		
 	}
+
+	for (auto& koopa : mKoopas) {
+		koopa->SetState(Actor::EDead);
+	}
+
+	for (auto& koopa : mKoopas) {
+		RemoveKoopa(koopa);
+	}
+
 	map->ClearMap();
 }
 
@@ -139,6 +148,7 @@ void Game::RemoveKoopa(Koopa* koopa)
 	if (iter != mKoopas.end()) {
 		mKoopas.erase(iter);
 	}
+	std::cout << "koopa removed" << std::endl;
 }
 
 void Game::AddLevelGoal(LevelGoal* goal)

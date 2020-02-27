@@ -7,6 +7,7 @@
 #include "Coin.h"
 #include "Tile.h"
 #include "TileValues.h"
+#include "Koopa.h"
 
 
 
@@ -32,72 +33,120 @@ void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
 
-	float newYPos = GetPosition().y;
-	float newXPos = GetPosition().x;
+	if (!bDead) {
+		Vector2 newPosition = GetPosition();
 
-	if (mPlayerVelX != 0) {
-		newXPos += mPlayerVelX * mMovementSpeed * deltaTime;
-	}
+		if (mPlayerVelX != 0) {
+			newPosition.x += mPlayerVelX * mMovementSpeed * deltaTime;
+		}
 
-	if (bJumping) {
-		newYPos -= mJumpForce * deltaTime;
+		if (bJumping) {
+			Jump(newPosition, deltaTime);
+		}
 
-		mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
+		int leftTile = newPosition.x / TILE_WIDTH;
+		int rightTile = (newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
+		int topTile = newPosition.y / TILE_HEIGHT;
+		int bottomTile = (newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
-		if (mJumpForce <= 0.0f) {
-			bJumping = false;
-			bCanJump = true;
+		int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
+		int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
+		int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+		int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+		int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
+
+		//Top Collisions
+		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN)) {
+			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
 		}
-	}
 
-	int leftTile = newXPos / TILE_WIDTH;
-	int rightTile = (newXPos + csc->GetTexWidth()) / TILE_WIDTH;
-	int topTile = newYPos / TILE_HEIGHT;
-	int bottomTile = (newYPos + csc->GetTexHeight()) / TILE_HEIGHT;
-	
+		if (topLeftTile == GOLDBRICK || topRightTile == GOLDBRICK) {
+			//TODO: SCREENSHAKE, Take health away from pow block
+			for (auto enemy : mGame->GetKoopas()) {
+				enemy->SetFlipped(true);
+			}
+		}
 
-	int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
-	int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
-	int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-	int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
-	int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
-	int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
+		//Mid Collisions
+		if (midLeftTile == BRICK || midRightTile == BRICK) {
+			newPosition.x = GetPosition().x;
+		}
 
-	//Top Collisions
-	if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN) ) {
-		newYPos = GetPosition().y;
-		mJumpForce = 0.0f;
-	}
+		//Bottom collisions
+		if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN && bottomLeftTile == KOOPATURN)) {
+			bGrounded = false;
+			newPosition.y += GRAVITY * deltaTime;
+		}
+		else
+		{
+			bCanJump = true;
+			bGrounded = true;
+		}
 
-	//Mid Collisions
-	if (midLeftTile == BRICK || midRightTile == BRICK) {
-		newXPos = GetPosition().x;
-	}
-	
-	//Bottom collisions
-	if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN && bottomLeftTile == KOOPATURN)) {
-		bGrounded = false;
-		newYPos += GRAVITY * deltaTime;
+		//constrains player to X level bounds
+		if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+			newPosition.x = GetPosition().x;
+		}
+
+		//Sets the players position and dest rect to work with the camera system
+		SetPlayerPosition(newPosition);
+		//checks for collision with coins, enemies and level goals
+		CollisionChecks();
 	}
 	else
 	{
-		bCanJump = true;
-		bGrounded = true;
+		//player falls off screen
+		Vector2 newPosition = GetPosition();
+		newPosition.y += GRAVITY * deltaTime;
+		SetPlayerPosition(newPosition);
+	}
+	
+}
+
+void Mario::HandleEvents(const uint8_t* state)
+{
+	mPlayerVelX = 0.0f;
+
+	if (!bDead) {
+		if (state[SDL_SCANCODE_A]) {
+			csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
+			mPlayerVelX += -25.0f;
+		}
+		else if (state[SDL_SCANCODE_D]) {
+			csc->SetRendererFlip(SDL_FLIP_NONE);
+			mPlayerVelX += 25.0f;
+		}
+
+		if (state[SDL_SCANCODE_SPACE]) {
+			if (bGrounded) {
+				if (!bJumping && bCanJump) {
+					mJumpForce = INITIAL_JUMP_FORCE;
+					bGrounded = false;
+					bJumping = true;
+					bCanJump = false;
+				}
+			}
+		}
 	}
 
-	//constrains player to X level bounds
-	if (newXPos < 0.0f || (newXPos + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
-		newXPos = GetPosition().x;
-	}
+}
 
+void Mario::ChangePlayerTile(Vector2 position)
+{
+	GetGame()->GetMap()->ChangeTileAt(position.y / TILE_HEIGHT, position.x / TILE_WIDTH, -1);
+}
 
-	SetPosition(Vector2(newXPos, newYPos));
-
-	//controls the players screen position related to the camera position
+void Mario::SetPlayerPosition(const Vector2& newValue)
+{
+	Actor::SetPosition(newValue);
 	csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
 	csc->GetDestRect()->y = GetPosition().y;
+}
 
+void Mario::CollisionChecks()
+{
 	//checks to see if a coin has been picked up
 	for (auto coin : GetGame()->GetCoins()) {
 		if (Intersect(*mCircle, *(coin->GetCircle()))) {
@@ -113,35 +162,33 @@ void Mario::UpdateActor(float deltaTime)
 			GetGame()->NextLevel();
 		}
 	}
-}
 
-void Mario::HandleEvents(const uint8_t* state)
-{
-	mPlayerVelX = 0.0f;
-
-	if (state[SDL_SCANCODE_A]) {
-		csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
-		mPlayerVelX += -25.0f;
-	}
-	else if (state[SDL_SCANCODE_D]) {
-		csc->SetRendererFlip(SDL_FLIP_NONE);
-		mPlayerVelX += 25.0f;
-	}
-
-	if (state[SDL_SCANCODE_SPACE]) {
-		if (bGrounded) {
-			if (!bJumping && bCanJump) {
-				mJumpForce = INITIAL_JUMP_FORCE;
-				bGrounded = false;
-				bJumping = true;
-				bCanJump = false;
+	for (auto enemy : GetGame()->GetKoopas()) {
+		if (enemy != nullptr) {
+			if (Intersect(*mCircle, *(enemy->GetCircle()))) {
+				//TODO setup koopa active check
+				if (enemy->GetFlipped()) {
+					enemy->SetAlive(false);
+				}
+				else
+				{
+					bDead = true;
+				}
 			}
 		}
 	}
 }
 
-void Mario::ChangePlayerTile(Vector2 position)
+void Mario::Jump(Vector2& newPos, float deltaTime)
 {
-	GetGame()->GetMap()->ChangeTileAt(position.y / TILE_HEIGHT, position.x / TILE_WIDTH, -1);
+	newPos.y -= mJumpForce * deltaTime;
+
+	mJumpForce -= JUMP_FORCE_DECREMENT * deltaTime;
+
+	if (mJumpForce <= 0.0f) {
+		bJumping = false;
+		bCanJump = true;
+		mJumpForce = 0.0f;
+	}
 }
 

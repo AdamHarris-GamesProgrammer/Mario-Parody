@@ -9,14 +9,16 @@ Koopa::Koopa(class Game* game) : Actor(game)
 {
 	csc = new CharacterSpriteComponent(this, 110, 32, 30);
 	
-	std::vector<SDL_Texture*> anims = {
-		game->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa01.png")
-	};
-	csc->SetAnimTextures(anims);
+	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa01.png"));
+	
+	
+	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped01.png"));
+
+	csc->SetAnimTextures(walkingAnims);
 	csc->SetAnimFPS(1);
 
 	mCircle = new CircleComponent(this);
-	mCircle->SetRadius(16.0f);
+	mCircle->SetRadius(8.0f);
 
 	std::cout << "Koopa spawned" << std::endl;
 }
@@ -28,56 +30,68 @@ Koopa::~Koopa()
 
 void Koopa::UpdateActor(float deltaTime)
 {
+	Vector2 newPosition = GetPosition();
+	if (bAlive) {
+		if (!bFlipped) {
 
-	float newXPos = GetPosition().x;
-	float newYPos = GetPosition().y;
+			int leftTile = newPosition.x / TILE_WIDTH;
+			int rightTile = (newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
+			int topTile = newPosition.y / TILE_HEIGHT;
+			int bottomTile = (newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
-	int leftTile = newXPos / TILE_WIDTH;
-	int rightTile = (newXPos + csc->GetTexWidth()) / TILE_WIDTH;
-	int topTile = newYPos / TILE_HEIGHT;
-	int bottomTile = (newYPos + csc->GetTexHeight()) / TILE_HEIGHT;
+			int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+			int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
 
-	int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-	int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+			if (bMovingRight) {
+				newPosition.x += mMovementSpeed * deltaTime;
 
-	if (bMovingRight) {
-		newXPos += mMovementSpeed * deltaTime;
+				//checks right tile collision
+				if (midRightTile == BRICK || midRightTile == KOOPATURN) {
+					newPosition.x = GetPosition().x;
+					bMovingRight = false;
+				}
 
-		//checks right tile collision
-		if (midRightTile == BRICK || midRightTile == KOOPATURN) {
-			newXPos = GetPosition().x;
-			bMovingRight = false;
+			}
+			else
+			{
+				newPosition.x -= mMovementSpeed * deltaTime;
+
+				if (midLeftTile == BRICK || midLeftTile == KOOPATURN) {
+					newPosition.x = GetPosition().x;
+					bMovingRight = true;
+				}
+			}
+
+			//restrict X Position to screen bounds
+			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+				newPosition.x = GetPosition().x;
+				bMovingRight = !bMovingRight;
+			}
+
+
+			//orient sprite
+			if (bMovingRight) {
+				csc->SetRendererFlip(SDL_FLIP_NONE);
+			}
+			else
+			{
+				csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
+			}
+
+
+		}
+		else
+		{
+			csc->SetAnimTextures(flippedAnims);
 		}
 
+		SetPosition(newPosition);
+		csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
+		csc->GetDestRect()->y = GetPosition().y;
 	}
-	else
-	{
-		newXPos -= mMovementSpeed * deltaTime;
-
-		if (midLeftTile == BRICK || midLeftTile == KOOPATURN) {
-			newXPos = GetPosition().x;
-			bMovingRight = true;
-		}
+	else {
+		mGame->RemoveKoopa(this);
+		delete this;
 	}
-
-	//restrict X Position to screen bounds
-	if (newXPos < 0.0f || (newXPos + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
-		newXPos = GetPosition().x;
-		bMovingRight = !bMovingRight;
-	}
-
-
-	//orient sprite
-	if (bMovingRight) {
-		csc->SetRendererFlip(SDL_FLIP_NONE);
-	}
-	else
-	{
-		csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
-	}
-
-
-	SetPosition(Vector2(newXPos, newYPos));
-	csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
-	csc->GetDestRect()->y = GetPosition().y;
+	
 }
