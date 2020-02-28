@@ -11,7 +11,6 @@
 #include "LevelGoal.h"
 #include "Koopa.h"
 #include "PowBlock.h"
-#include "Music.h"
 
 bool Game::Initialize()
 {
@@ -80,10 +79,6 @@ void Game::LoadContent()
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap(levels[currentLevel]);
-
-	mGameMusic = new Music();
-	mGameMusic->Load("Assets/Sounds/Music/GameMusic.mp3");
-	mGameMusic->Play();
 }
 
 void Game::AddCoin(Coin* coin)

@@ -141,7 +141,6 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
-    <ClCompile Include="Music.cpp" />
     <ClCompile Include="PowBlock.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -167,7 +166,6 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MovementComponent.h" />
-    <ClInclude Include="Music.h" />
     <ClInclude Include="PowBlock.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TextSpriteComponent.h" />
