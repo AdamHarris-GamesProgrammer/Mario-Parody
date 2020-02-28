@@ -35,9 +35,12 @@ public:
 
 	class Tile* GetTile(int row, int column) {
 		if (row < mLevelHeight && column < mLevelWidth && row > 0 && column > 0) {
-			return mTileMap.at(row).at(column);
+			//return mTileMap.at(row).at(column);
+			return nullptr;
 		}
 	}
+
+	std::vector<class Tile*>& GetTileMap() { return mTileMap; }
 
 	int GetCalculatedLevelWidth() { return mLevelWidth * TILE_WIDTH; }
 	int GetCalculatedLevelHeight() { return mLevelHeight * TILE_HEIGHT; }
@@ -49,6 +52,6 @@ private:
 	std::vector<class Coin*> mCoins;
 
 	std::vector<std::vector<int>> mMap;
-	std::vector<std::vector<class Tile*>> mTileMap;
+	std::vector<class Tile*> mTileMap;
 };
 

@@ -72,6 +72,8 @@ private:
 	class Actor* bgActor = nullptr;
 	class Actor* fgActor = nullptr;
 
+	class Music* mGameMusic = nullptr;
+
 	std::vector<class Coin*> mCoins;
 
 	std::vector<class Tile*> mTiles;
