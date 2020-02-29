@@ -17,10 +17,13 @@ Mario::Mario(class Game* game) : Actor(game)
 	csc = new CharacterSpriteComponent(this);
 
 	std::vector<SDL_Texture*> anims = {
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioTest.png", true)
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true),
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true),
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true),
+		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle04.png", true)
 	};
 	csc->SetAnimTextures(anims);
-	csc->SetAnimFPS(3);
+	csc->SetAnimFPS(2);
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
@@ -45,10 +48,10 @@ void Mario::UpdateActor(float deltaTime)
 			Jump(newPosition, deltaTime);
 		}
 
-		int leftTile = newPosition.x / TILE_WIDTH;
-		int rightTile = (newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
-		int topTile = newPosition.y / TILE_HEIGHT;
-		int bottomTile = (newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
+		int leftTile = (int)newPosition.x / TILE_WIDTH;
+		int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
+		int topTile = (int)newPosition.y / TILE_HEIGHT;
+		int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
 		int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
 		int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
@@ -68,8 +71,22 @@ void Mario::UpdateActor(float deltaTime)
 			newPosition.x = GetPosition().x;
 		}
 
+		//jumping mid air collisions
+		if (/*newPosition.y != GetPosition().y*/ bJumping) {
+			if (bottomLeftTile == BRICK || bottomRightTile == BRICK) {
+				newPosition.x = GetPosition().x;
+			}
+			if (midLeftTile == BRICK || midRightTile == BRICK) {
+				newPosition.x = GetPosition().x;
+			}
+			if (topLeftTile == BRICK || topRightTile == BRICK) {
+				newPosition.x = GetPosition().x;
+			}
+		}
+		
+
 		//Bottom collisions
-		if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN && bottomLeftTile == KOOPATURN)) {
+		if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN) || (bottomRightTile == COIN || bottomLeftTile == COIN) || (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)) {
 			bGrounded = false;
 			newPosition.y += GRAVITY * deltaTime;
 		}
@@ -131,14 +148,14 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::ChangePlayerTile(Vector2 position)
 {
-	GetGame()->GetMap()->ChangeTileAt(position.y / TILE_HEIGHT, position.x / TILE_WIDTH, -1);
+	GetGame()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
 }
 
 void Mario::SetPlayerPosition(const Vector2& newValue)
 {
 	Actor::SetPosition(newValue);
-	csc->GetDestRect()->x = GetPosition().x - GetGame()->mCamera.x;
-	csc->GetDestRect()->y = GetPosition().y;
+	csc->GetDestRect()->x = (int)GetPosition().x - (int)GetGame()->mCamera.x;
+	csc->GetDestRect()->y = (int)GetPosition().y;
 }
 
 void Mario::CollisionChecks()
@@ -146,7 +163,7 @@ void Mario::CollisionChecks()
 	//checks to see if a coin has been picked up
 	for (auto coin : GetGame()->GetCoins()) {
 		if (Intersect(*mCircle, *(coin->GetCircle()))) {
-			GetGame()->GetMap()->ChangeTileAt((coin->GetPosition().y / TILE_HEIGHT), (coin->GetPosition().x / TILE_WIDTH), -1);
+			GetGame()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
 			coin->SetState(EDead);
 			mGame->IncrementScore();
 		}
@@ -168,7 +185,8 @@ void Mario::CollisionChecks()
 				}
 				else
 				{
-					bDead = true;
+					//TODO: Uncomment this line to enable player death
+					//bDead = true;
 				}
 			}
 		}
@@ -198,7 +216,6 @@ void Mario::Jump(Vector2& newPos, float deltaTime)
 
 	if (mJumpForce <= 0.0f) {
 		bJumping = false;
-		bCanJump = true;
 		mJumpForce = 0.0f;
 	}
 }

@@ -95,8 +95,8 @@ void Game::RemoveCoin(Coin* coin)
 	}
 }
 
-void Game::IncrementScore() {
-	score++;
+void Game::IncrementScore(int amount) {
+	score += amount;
 	std::string text = "Score: " + std::to_string(score);
 	scoreTsc->SetText(text);
 }
@@ -132,6 +132,11 @@ void Game::EmptyMap() {
 
 	for (auto& koopa : mKoopas) {
 		RemoveKoopa(koopa);
+	}
+
+	for (auto& powBlock : mPowBlocks) {
+		powBlock->SetState(Actor::EDead);
+		RemovePowBlock(powBlock);
 	}
 
 	map->ClearMap();

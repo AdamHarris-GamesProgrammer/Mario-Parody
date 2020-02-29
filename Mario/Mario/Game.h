@@ -37,7 +37,7 @@ public:
 
 	void AddCoin(class Coin* coin);
 	void RemoveCoin(class Coin* coin);
-	void IncrementScore();
+	void IncrementScore(int amount = 10);
 	std::vector<class Coin*>& GetCoins() { return mCoins; }
 
 	void AddTile(class Tile* tile);

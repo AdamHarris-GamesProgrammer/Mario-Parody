@@ -10,7 +10,10 @@ Koopa::Koopa(class Game* game) : Actor(game)
 	csc = new CharacterSpriteComponent(this, 110, 32, 30);
 	
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa01.png"));
-	
+	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa02.png"));
+	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa03.png"));
+	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa04.png"));
+	csc->SetAnimFPS(4);
 	
 	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped01.png"));
 
@@ -108,6 +111,7 @@ void Koopa::UpdateActor(float deltaTime)
 		csc->GetDestRect()->y = GetPosition().y;
 	}
 	else {
+		mGame->IncrementScore(100);
 		mGame->RemoveKoopa(this);
 		delete this;
 	}
