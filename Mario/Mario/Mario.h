@@ -35,6 +35,7 @@ private:
 	float mMovementSpeed = 5.0f;
 
 	void CollisionChecks();
+
 	void Jump(Vector2& newPos, float deltaTime);
 
 
