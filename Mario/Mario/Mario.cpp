@@ -72,7 +72,7 @@ void Mario::UpdateActor(float deltaTime)
 		}
 
 		//jumping mid air collisions
-		if (/*newPosition.y != GetPosition().y*/ bJumping) {
+		if (bJumping) {
 			if (bottomLeftTile == BRICK || bottomRightTile == BRICK) {
 				newPosition.x = GetPosition().x;
 			}
@@ -84,7 +84,6 @@ void Mario::UpdateActor(float deltaTime)
 			}
 		}
 		
-
 		//Bottom collisions
 		if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN) || (bottomRightTile == COIN || bottomLeftTile == COIN) || (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)) {
 			bGrounded = false;
@@ -95,7 +94,6 @@ void Mario::UpdateActor(float deltaTime)
 			bCanJump = true;
 			bGrounded = true;
 		}
-
 
 
 		//constrains player to X level bounds

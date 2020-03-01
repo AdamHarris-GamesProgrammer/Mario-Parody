@@ -12,6 +12,8 @@
 #include "LevelGoal.h"
 
 #include <vector>
+#include <fstream>
+
 class Game
 {
 public:
@@ -56,6 +58,8 @@ public:
 	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
 	void AddLevelGoal(class LevelGoal* goal);
 
+	int GetCurrentLevel() const { return mCurrentLevel; }
+
 	void NextLevel();
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -64,6 +68,8 @@ public:
 
 private:
 	void LoadContent();
+
+	class ScoreManager* mScoreManager = nullptr;
 
 	class Mario* mPlayer = nullptr;
 	class Actor* mapActor = nullptr;
@@ -80,14 +86,15 @@ private:
 
 	class LevelGoal* mLevelGoal = nullptr;
 
-	Actor* scoreText = nullptr;
-	class TextSpriteComponent* scoreTsc = nullptr;
+	Actor* mScoreText = nullptr;
+	class TextSpriteComponent* mScoreTsc = nullptr;
 
-	int currentLevel = 0;
-	std::string levels[4];
+	int mCurrentLevel = 0;
+	std::string mLevels[4];
 
-	int score = 0;
+	int mScore = 0;
+	int mHighScore = 0;
 
-	BlueSky* mEngine;
+	BlueSky* mEngine = nullptr;
 };
 

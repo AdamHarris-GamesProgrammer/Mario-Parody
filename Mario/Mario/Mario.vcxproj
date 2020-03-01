@@ -142,6 +142,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PowBlock.cpp" />
+    <ClCompile Include="ScoreManager.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TextSpriteComponent.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PowBlock.h" />
+    <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TextSpriteComponent.h" />
     <ClInclude Include="Tile.h" />

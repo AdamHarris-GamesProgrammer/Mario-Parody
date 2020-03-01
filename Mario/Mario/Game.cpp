@@ -11,6 +11,7 @@
 #include "LevelGoal.h"
 #include "Koopa.h"
 #include "PowBlock.h"
+#include "ScoreManager.h"
 
 bool Game::Initialize()
 {
@@ -62,23 +63,27 @@ void Game::LoadContent()
 	//Mario
 	mPlayer = new Mario(this);
 
-	scoreText = new Actor(this);
-	scoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
-	scoreTsc = new TextSpriteComponent(scoreText);
-	scoreTsc->SetText("Score: 0");
-	scoreTsc->SetTextSize(80);
+	mCurrentLevel = 0;
+	mScoreManager = new ScoreManager(this);
+	mHighScore = mScoreManager->GetHighscore();
+	std::cout << "Highscore: " << mHighScore << std::endl;
+	mScoreText = new Actor(this);
+	mScoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
+	mScoreTsc = new TextSpriteComponent(mScoreText);
+	mScoreTsc->SetText("Score: 0");
+	mScoreTsc->SetTextSize(80);
 
-	levels[0] = "Assets/Maps/Mario01.csv";
-	levels[1] = "Assets/Mario_TestLevel2.csv";
-	levels[2] = "Assets/MarioBigTest.csv";
-	levels[3] = "Assets/MarioSmallTest.csv";
+	mLevels[0] = "Assets/Maps/Mario01.csv";
+	mLevels[1] = "Assets/Maps/Mario02.csv";
+	mLevels[2] = "Assets/MarioBigTest.csv";
+	mLevels[3] = "Assets/MarioSmallTest.csv";
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
 
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
-	map->LoadMap(levels[currentLevel]);
+	map->LoadMap(mLevels[mCurrentLevel]);
 }
 
 void Game::AddCoin(Coin* coin)
@@ -96,9 +101,9 @@ void Game::RemoveCoin(Coin* coin)
 }
 
 void Game::IncrementScore(int amount) {
-	score += amount;
-	std::string text = "Score: " + std::to_string(score);
-	scoreTsc->SetText(text);
+	mScore += amount;
+	std::string text = "Score: " + std::to_string(mScore);
+	mScoreTsc->SetText(text);
 }
 
 void Game::AddTile(Tile* tile)
@@ -177,11 +182,15 @@ void Game::AddLevelGoal(LevelGoal* goal)
 
 void Game::NextLevel()
 {
-	score = 0;
-	scoreTsc->SetText("Score: " + score);
-	currentLevel++; 
+	if (mScore > mHighScore) {
+		mScoreManager->SetHighscore(mScore);
+	}
+	mScore = 0;
+	mScoreTsc->SetText("Score: " + mScore);
+	mCurrentLevel++; 
 	EmptyMap();
-	map->LoadMap(levels[currentLevel]);
+	mHighScore = mScoreManager->GetHighscore();
+	map->LoadMap(mLevels[mCurrentLevel]);
 }
 
 void Game::PollInput()
@@ -191,29 +200,33 @@ void Game::PollInput()
 	mPlayer->HandleEvents(state);
 
 	if (state[SDL_SCANCODE_1]) {
-		score = 0;
-		scoreTsc->SetText("Score: " + score);
+		mScore = 0;
+		mScoreTsc->SetText("Score: " + mScore);
+		mCurrentLevel = 0;
 		EmptyMap();
-		map->LoadMap(levels[0]);
+		map->LoadMap(mLevels[mCurrentLevel]);
 		
 	}
 	else if (state[SDL_SCANCODE_2]) {
-		score = 0;
-		scoreTsc->SetText("Score: " + score);
+		mScore = 0;
+		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
-		map->LoadMap(levels[1]);
+		mCurrentLevel = 1;
+		map->LoadMap(mLevels[mCurrentLevel]);
 	}
 	else if (state[SDL_SCANCODE_3]) {
-		score = 0;
-		scoreTsc->SetText("Score: " + score);
+		mScore = 0;
+		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
-		map->LoadMap(levels[2]);
+		mCurrentLevel = 2;
+		map->LoadMap(mLevels[mCurrentLevel]);
 	}
 	else if (state[SDL_SCANCODE_4]) {
-		score = 0;
-		scoreTsc->SetText("Score: " + score);
+		mScore = 0;
+		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
-		map->LoadMap(levels[3]);
+		mCurrentLevel = 3;
+		map->LoadMap(mLevels[mCurrentLevel]);
 	}
 }
 
