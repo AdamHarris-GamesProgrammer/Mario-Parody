@@ -6,7 +6,7 @@
 class Tile : public Actor, public SpriteComponent
 {
 public:
-	Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType, bool wall);
+	Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType);
 	~Tile();
 	
 	void Draw(SDL_Renderer* renderer) override;
@@ -15,14 +15,11 @@ public:
 
 	void Update(float deltaTime) override;
 
-	bool GetWall() const { return isWall; }
-
 private:
 	int mTileType;
 
 
 	Vector2 position;
 
-	bool isWall;
 };
 

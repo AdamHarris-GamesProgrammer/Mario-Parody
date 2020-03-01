@@ -60,28 +60,28 @@ void TileMapComponent::GenerateObjects() {
 			if (type == AIR) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1,false);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
 				tileRow.push_back(blankTile);
 			}
 			else if (type == BRICK) {
 				SDL_Rect* brickSrc = new SDL_Rect { 0,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, 0,true);
+				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, 0);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 				tileRow.push_back(brick);
 			}
 			else if (type == DROPBRICK) {
 				SDL_Rect* brickSrc = new SDL_Rect{ 32,0,TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, -1, false);
+				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, -1);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 				tileRow.push_back(brick);
 			}
 			else if (type == PLAYERSPAWN) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1,false);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
 				tileRow.push_back(blankTile);
 
@@ -97,7 +97,7 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == KOOPA) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1,false);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
 				tileRow.push_back(blankTile);
 
@@ -110,7 +110,7 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == KOOPATURN) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1,false);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
 
 				tileRow.push_back(blankTile);
 			}

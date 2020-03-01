@@ -1,7 +1,7 @@
 #include "PowBlock.h"
 #include "Game.h"
 #include "TileMapComponent.h"
-PowBlock::PowBlock(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 32, true)
+PowBlock::PowBlock(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 32)
 {
 
 }
