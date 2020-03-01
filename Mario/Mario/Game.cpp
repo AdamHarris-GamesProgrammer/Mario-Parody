@@ -12,6 +12,7 @@
 #include "Koopa.h"
 #include "PowBlock.h"
 #include "ScoreManager.h"
+#include "ButtonComponent.h"
 
 bool Game::Initialize()
 {
@@ -31,6 +32,11 @@ bool Game::Initialize()
 
 void Game::LoadContent()
 {
+	mButtonTestActor = new Actor(this);
+	mButtonTestActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+
+	mButtonTestComponent = new ButtonComponent(mButtonTestActor);
+
 	//Background clouds
 	bgActor = new Actor(this);
 	bgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
@@ -195,7 +201,14 @@ void Game::NextLevel()
 
 void Game::PollInput()
 {
+	SDL_Event event;
+	SDL_PollEvent(&event);
+	mButtonTestComponent->HandleEvent(&event);
+
 	mEngine->PollInput();
+
+
+
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	mPlayer->HandleEvents(state);
 

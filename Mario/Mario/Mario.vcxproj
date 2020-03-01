@@ -130,6 +130,7 @@
     <ClCompile Include="AnimSpriteComponent.cpp" />
     <ClCompile Include="BGSpriteComponent.cpp" />
     <ClCompile Include="BlueSky.cpp" />
+    <ClCompile Include="ButtonComponent.cpp" />
     <ClCompile Include="CharacterSpriteComponent.cpp" />
     <ClCompile Include="CircleComponent.cpp" />
     <ClCompile Include="Coin.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="AnimSpriteComponent.h" />
     <ClInclude Include="BGSpriteComponent.h" />
     <ClInclude Include="BlueSky.h" />
+    <ClInclude Include="ButtonComponent.h" />
     <ClInclude Include="CharacterSpriteComponent.h" />
     <ClInclude Include="CircleComponent.h" />
     <ClInclude Include="Coin.h" />

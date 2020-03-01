@@ -78,6 +78,9 @@ private:
 	class Actor* bgActor = nullptr;
 	class Actor* fgActor = nullptr;
 
+	Actor* mButtonTestActor = nullptr;
+	class ButtonComponent* mButtonTestComponent = nullptr;
+
 	std::vector<class Coin*> mCoins;
 
 	std::vector<class Tile*> mTiles;
