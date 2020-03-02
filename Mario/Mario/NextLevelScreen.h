@@ -5,6 +5,7 @@
 #include "ButtonComponent.h"
 #include "TextSpriteComponent.h"
 #include "NextLevelButton.h"
+#include "BGSpriteComponent.h"
 
 class NextLevelScreen
 {
@@ -32,6 +33,9 @@ private:
 	NextLevelButton* nextLevelButton;
 	ButtonComponent* tryAgainButton;
 	ButtonComponent* exitToMainMenuButton;
+
+	Actor* mMenuActor = nullptr;
+	SpriteComponent* mMenuBackground = nullptr;
 
 
 	std::vector<class ButtonComponent*> mButtonActors;

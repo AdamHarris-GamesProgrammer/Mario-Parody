@@ -30,6 +30,9 @@ void SpriteComponent::Draw(SDL_Renderer* renderer)
 	if (mTexture) {
 		mDestRect->x -= mOwner->GetGame()->mCamera.x;
 		mDestRect->y -= mOwner->GetGame()->mCamera.y;
+
+		mDestRect->w = mTexWidth;
+		mDestRect->h = mTexHeight;
 		SDL_RenderCopyEx(renderer,
 			mTexture,
 			mSrcRect,

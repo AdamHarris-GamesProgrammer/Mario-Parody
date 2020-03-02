@@ -74,7 +74,7 @@ void Game::LoadContent()
 	mScoreText->SetPosition(Vector2(SCREEN_WIDTH / 2, 32));
 	mScoreTsc = new TextSpriteComponent(mScoreText);
 	mScoreTsc->SetText("Score: 0");
-	mScoreTsc->SetTextSize(80);
+	mScoreTsc->SetTextSize(72);
 
 	mLevels[0] = "Assets/Maps/Mario01.csv";
 	mLevels[1] = "Assets/Maps/Mario02.csv";

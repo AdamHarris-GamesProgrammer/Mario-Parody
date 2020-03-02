@@ -184,7 +184,7 @@ void Mario::CollisionChecks()
 				else
 				{
 					//TODO: Uncomment this line to enable player death
-					//bDead = true;
+					bDead = true;
 				}
 			}
 		}
