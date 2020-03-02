@@ -2,16 +2,19 @@
 #include "Actor.h"
 #include "Game.h"
 #include "BlueSky.h"
+#include "TextSpriteComponent.h"
 
 ButtonComponent::ButtonComponent(class Actor* owner, int drawOrder /*= 100*/) : SpriteComponent(owner, drawOrder)
 {
 	mPosition.x = 0;
 	mPosition.y = 0;
 
-	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (400x200).png"));
 	mButtonWidth = GetTexWidth() / BUTTON_SPRITE_TOTAL;
 	mButtonHeight = GetTexHeight();
 	mCurrentSprite = BUTTON_SPRITE_MOUSE_OUT;
+
+	mButtonTextActor = new Actor(mOwner->GetGame());
+	mButtonTextComponent = new TextSpriteComponent(mButtonTextActor, 160);
 }
 
 ButtonComponent::~ButtonComponent()
@@ -52,15 +55,15 @@ void ButtonComponent::HandleEvent(SDL_Event* e)
 			switch (e->type)
 			{
 			case SDL_MOUSEMOTION:
-				std::cout << "Mouse Over" << std::endl;
+				OnMouseOver();
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				std::cout << "Mouse Button Down" << std::endl;
+				OnMouseButtonDown();
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
 				break;
 			case SDL_MOUSEBUTTONUP:
-				std::cout << "Mouse Button Up" << std::endl;
+				OnMouseButtonUp();
 				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
 				break;
 			}
@@ -74,4 +77,29 @@ void ButtonComponent::Draw(SDL_Renderer* renderer)
 	SDL_Rect* destRect = new SDL_Rect{ (int)mPosition.x, (int)mPosition.y, mButtonWidth, mButtonHeight };
 
 	SDL_RenderCopy(renderer, mTexture, srcRect, destRect);
+}
+
+void ButtonComponent::SetTexture(SDL_Texture* texture)
+{
+	mTexture = texture;
+
+	SDL_QueryTexture(texture, nullptr, nullptr, &mTexWidth, &mTexHeight);
+	mButtonWidth = mTexWidth / BUTTON_SPRITE_TOTAL;
+	mButtonHeight = mTexHeight;
+	SetButtonTextPosition(Vector2(mPosition.x + mButtonWidth / 2, mPosition.y + mButtonHeight / 2));
+}
+
+void ButtonComponent::OnMouseOver()
+{
+	std::cout << "Mouse Over" << std::endl;
+}
+
+void ButtonComponent::OnMouseButtonDown()
+{
+	std::cout << "Mouse Button Down" << std::endl;
+}
+
+void ButtonComponent::OnMouseButtonUp()
+{
+	std::cout << "Mouse Button Up" << std::endl;
 }

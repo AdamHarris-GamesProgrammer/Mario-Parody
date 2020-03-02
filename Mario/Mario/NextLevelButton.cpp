@@ -1,0 +1,27 @@
+#include "NextLevelButton.h"
+#include "Game.h"
+#include "Actor.h"
+#include "ButtonComponent.h"
+#include "TextSpriteComponent.h"
+#include "SDL_pixels.h"
+#include "Math.h"
+
+NextLevelButton::NextLevelButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
+{
+	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
+	SetButtonText("Next Level");
+	ButtonComponent::SetPosition(position);
+	SDL_Color color = SDL_Color();
+	color = { 0,0,0,255 };
+	mButtonTextComponent->SetTextColor(color);
+}
+
+NextLevelButton::~NextLevelButton()
+{
+
+}
+
+void NextLevelButton::OnMouseButtonDown()
+{
+	mOwner->GetGame()->NextLevel();
+}

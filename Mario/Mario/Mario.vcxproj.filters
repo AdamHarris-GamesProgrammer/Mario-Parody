@@ -87,6 +87,12 @@
     <ClCompile Include="ButtonComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NextLevelButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NextLevelScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -162,6 +168,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ButtonComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NextLevelButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NextLevelScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,7 +17,7 @@ public:
 	void Draw(SDL_Renderer* renderer) override;
 
 	void SetFont(TTF_Font* newFont) { mFont = newFont; }
-	void SetTextColor(SDL_Color newColor) { mTextColor = newColor; }
+	void SetTextColor(SDL_Color newColor);
 	void SetTextSize(int newSize);
 	void SetText(std::string newText);
 	void SetFontFilePath(std::string newPath) { mFilePath = newPath; }

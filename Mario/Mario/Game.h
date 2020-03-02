@@ -10,7 +10,10 @@
 #include "Constants.h"
 #include "BlueSky.h"
 #include "LevelGoal.h"
-
+#include "NextLevelScreen.h"
+#include "NextLevelButton.h"
+#include "TextSpriteComponent.h"
+#include "ButtonComponent.h"
 #include <vector>
 #include <fstream>
 
@@ -64,6 +67,10 @@ public:
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
+	int GetScore() const { return mScore; }
+	int GetHighscore() const { return mHighScore; }
+
+
 	BlueSky* GetEngine() const { return mEngine; }
 
 private:
@@ -78,9 +85,6 @@ private:
 	class Actor* bgActor = nullptr;
 	class Actor* fgActor = nullptr;
 
-	Actor* mButtonTestActor = nullptr;
-	class ButtonComponent* mButtonTestComponent = nullptr;
-
 	std::vector<class Coin*> mCoins;
 
 	std::vector<class Tile*> mTiles;
@@ -88,6 +92,8 @@ private:
 	std::vector<class PowBlock*> mPowBlocks;
 
 	class LevelGoal* mLevelGoal = nullptr;
+
+	class NextLevelScreen* mNextLevelScreen = nullptr;
 
 	Actor* mScoreText = nullptr;
 	class TextSpriteComponent* mScoreTsc = nullptr;

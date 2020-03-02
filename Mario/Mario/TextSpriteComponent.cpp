@@ -52,6 +52,12 @@ void TextSpriteComponent::Draw(SDL_Renderer* renderer)
 	}
 }
 
+void TextSpriteComponent::SetTextColor(SDL_Color newColor)
+{
+	mTextColor = newColor;
+	mTexture = mOwner->GetGame()->GetEngine()->GetTextureFromFont(mFilePath, mPointSize, mText, mTextColor);
+}
+
 void TextSpriteComponent::SetTextSize(int newSize)
 {
 	mPointSize = newSize;

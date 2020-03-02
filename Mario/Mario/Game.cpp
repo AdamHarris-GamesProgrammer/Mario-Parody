@@ -13,6 +13,7 @@
 #include "PowBlock.h"
 #include "ScoreManager.h"
 #include "ButtonComponent.h"
+#include "NextLevelButton.h"
 
 bool Game::Initialize()
 {
@@ -32,10 +33,6 @@ bool Game::Initialize()
 
 void Game::LoadContent()
 {
-	mButtonTestActor = new Actor(this);
-	mButtonTestActor->SetPosition(Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
-
-	mButtonTestComponent = new ButtonComponent(mButtonTestActor);
 
 	//Background clouds
 	bgActor = new Actor(this);
@@ -90,6 +87,8 @@ void Game::LoadContent()
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap(mLevels[mCurrentLevel]);
+
+	mNextLevelScreen = new NextLevelScreen(this);
 }
 
 void Game::AddCoin(Coin* coin)
@@ -194,6 +193,10 @@ void Game::NextLevel()
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 	mCurrentLevel++; 
+
+	if (mCurrentLevel > 3) {
+		mCurrentLevel = 0;
+	}
 	EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
 	map->LoadMap(mLevels[mCurrentLevel]);
@@ -203,7 +206,7 @@ void Game::PollInput()
 {
 	SDL_Event event;
 	SDL_PollEvent(&event);
-	mButtonTestComponent->HandleEvent(&event);
+	mNextLevelScreen->Update(0.16f, event);
 
 	mEngine->PollInput();
 
