@@ -234,7 +234,10 @@ void BlueSky::Render()
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites) {
-		sprite->Draw(mRenderer);
+		if (sprite->GetOwner()->GetState() == Actor::EActive) {
+			sprite->Draw(mRenderer);
+
+		}
 	}
 
 	SDL_RenderPresent(mRenderer);

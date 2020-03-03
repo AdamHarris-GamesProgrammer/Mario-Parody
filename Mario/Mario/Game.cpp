@@ -187,9 +187,8 @@ void Game::AddLevelGoal(LevelGoal* goal)
 
 void Game::NextLevel()
 {
-	if (mScore > mHighScore) {
-		mScoreManager->SetHighscore(mScore);
-	}
+	mNextLevelScreen->SetActive(false);
+
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 	mCurrentLevel++; 
@@ -266,6 +265,16 @@ void Game::Update()
 void Game::Render()
 {
 	mEngine->Render();
+}
+
+void Game::LoadNextLevelMenu()
+{
+	if (mScore > mHighScore) {
+		mScoreManager->SetHighscore(mScore);
+		mHighScore = mScore;
+	}
+
+	mNextLevelScreen->SetActive(true);
 }
 
 void Game::Shutdown()

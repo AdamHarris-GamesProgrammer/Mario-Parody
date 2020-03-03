@@ -33,7 +33,7 @@ public:
 
 	void Render();
 
-
+	void LoadNextLevelMenu();
 
 	class Mario* GetPlayer() { return mPlayer; }
 	void SetPlayerSpawnPoint(Vector2 position);

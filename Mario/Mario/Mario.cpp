@@ -170,7 +170,7 @@ void Mario::CollisionChecks()
 	//checks to see if the player is colliding with the level goal
 	if (GetGame()->GetLevelGoal() != nullptr) {
 		if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
-			GetGame()->NextLevel();
+			GetGame()->LoadNextLevelMenu();
 		}
 	}
 

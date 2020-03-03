@@ -38,9 +38,6 @@ private:
 	SpriteComponent* mMenuBackground = nullptr;
 
 
-	std::vector<class ButtonComponent*> mButtonActors;
-	std::vector<class Actor*> mTextActors;
-
 	bool isActive = false;
 
 	void Activate();
