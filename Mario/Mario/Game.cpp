@@ -138,17 +138,15 @@ void Game::EmptyMap() {
 
 	for (auto& koopa : mKoopas) {
 		koopa->SetState(Actor::EDead);
-	}
-
-	for (auto& koopa : mKoopas) {
 		RemoveKoopa(koopa);
 	}
 
 	for (auto& powBlock : mPowBlocks) {
-		powBlock->SetState(Actor::EDead);
+		//powBlock->SetState(Actor::EDead);
 		RemovePowBlock(powBlock);
 	}
 
+	mPowBlocks.clear();
 	map->ClearMap();
 }
 
@@ -189,6 +187,8 @@ void Game::NextLevel()
 {
 	mNextLevelScreen->SetActive(false);
 
+	gameOver = true;
+
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 	mCurrentLevel++; 
@@ -199,6 +199,7 @@ void Game::NextLevel()
 	EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
 	map->LoadMap(mLevels[mCurrentLevel]);
+	gameOver = false;
 }
 
 void Game::PollInput()
@@ -209,39 +210,45 @@ void Game::PollInput()
 
 	mEngine->PollInput();
 
-
-
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	mPlayer->HandleEvents(state);
 
 	if (state[SDL_SCANCODE_1]) {
+		gameOver = true;
 		mScore = 0;
 		mScoreTsc->SetText("Score: " + mScore);
 		mCurrentLevel = 0;
 		EmptyMap();
 		map->LoadMap(mLevels[mCurrentLevel]);
+		gameOver = false;
 		
 	}
 	else if (state[SDL_SCANCODE_2]) {
+		gameOver = true;
 		mScore = 0;
 		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
 		mCurrentLevel = 1;
 		map->LoadMap(mLevels[mCurrentLevel]);
+		gameOver = false;
 	}
 	else if (state[SDL_SCANCODE_3]) {
+		gameOver = true;
 		mScore = 0;
 		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
 		mCurrentLevel = 2;
 		map->LoadMap(mLevels[mCurrentLevel]);
+		gameOver = false;
 	}
 	else if (state[SDL_SCANCODE_4]) {
+		gameOver = true;
 		mScore = 0;
 		mScoreTsc->SetText("Score: " + mScore);
 		EmptyMap();
 		mCurrentLevel = 3;
 		map->LoadMap(mLevels[mCurrentLevel]);
+		gameOver = false;
 	}
 }
 

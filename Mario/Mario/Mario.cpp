@@ -33,6 +33,18 @@ Mario::Mario(class Game* game) : Actor(game)
 	bCanJump = true;
 }
 
+Mario::~Mario()
+{
+	RemoveComponent(csc);
+	RemoveComponent(mCircle);
+
+	delete csc;
+	delete mCircle;
+
+	csc = NULL;
+	mCircle = NULL;
+}
+
 void Mario::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
@@ -158,48 +170,50 @@ void Mario::SetPlayerPosition(const Vector2& newValue)
 
 void Mario::CollisionChecks()
 {
-	//checks to see if a coin has been picked up
-	for (auto coin : GetGame()->GetCoins()) {
-		if (Intersect(*mCircle, *(coin->GetCircle()))) {
-			GetGame()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
-			coin->SetState(EDead);
-			mGame->IncrementScore();
+	if (!mGame->IsGameOver()) {
+		//checks to see if a coin has been picked up
+		for (auto coin : GetGame()->GetCoins()) {
+			if (Intersect(*mCircle, *(coin->GetCircle()))) {
+				GetGame()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
+				coin->SetState(EDead);
+				mGame->IncrementScore();
+			}
 		}
-	}
 
-	//checks to see if the player is colliding with the level goal
-	if (GetGame()->GetLevelGoal() != nullptr) {
-		if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
-			GetGame()->LoadNextLevelMenu();
+		//checks to see if the player is colliding with the level goal
+		if (GetGame()->GetLevelGoal() != nullptr) {
+			if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
+				GetGame()->LoadNextLevelMenu();
+			}
 		}
-	}
 
-	for (auto enemy : GetGame()->GetKoopas()) {
-		if (enemy != nullptr) {
-			if (Intersect(*mCircle, *(enemy->GetCircle()))) {
-				//TODO setup koopa active check
-				if (enemy->GetFlipped()) {
-					enemy->SetAlive(false);
-				}
-				else
-				{
-					//TODO: Uncomment this line to enable player death
-					bDead = true;
+		for (auto enemy : GetGame()->GetKoopas()) {
+			if (enemy != nullptr) {
+				if (Intersect(*mCircle, *(enemy->GetCircle()))) {
+					//TODO setup koopa active check
+					if (enemy->GetFlipped()) {
+						enemy->SetAlive(false);
+					}
+					else
+					{
+						//TODO: Uncomment this line to enable player death
+						bDead = true;
+					}
 				}
 			}
 		}
-	}
 
-	for (auto powBlock : GetGame()->GetPowBlocks())
-	{
-		if (powBlock != nullptr) {
-			if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
-				if (bJumping) {
-					for (auto enemy : mGame->GetKoopas()) {
-						enemy->SetFlipped(true);
+		for (auto powBlock : GetGame()->GetPowBlocks())
+		{
+			if (powBlock != nullptr) {
+				if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
+					if (bJumping) {
+						for (auto enemy : mGame->GetKoopas()) {
+							enemy->SetFlipped(true);
+						}
+						powBlock->TakeDamage();
+						mJumpForce = 0.0f;
 					}
-					powBlock->TakeDamage();
-					mJumpForce = 0.0f;
 				}
 			}
 		}

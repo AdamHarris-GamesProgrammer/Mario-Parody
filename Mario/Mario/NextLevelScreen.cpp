@@ -44,7 +44,25 @@ NextLevelScreen::NextLevelScreen(class Game* game) : mGame(game)
 
 NextLevelScreen::~NextLevelScreen()
 {
+	delete successText;
+	delete scoreText;
+	delete highscoreText;
 
+	delete successTextTsc;
+	delete tryAgainButton;
+	delete exitToMainMenuButton;
+
+	delete mMenuActor;
+	delete mMenuBackground;
+
+	successText = NULL;
+	scoreText = NULL;
+	highscoreText = NULL;
+	scoreTextTsc = NULL;
+	tryAgainButton = NULL;
+	exitToMainMenuButton = NULL;
+	mMenuActor = NULL;
+	mMenuBackground = NULL;
 }
 
 void NextLevelScreen::Update(float deltaTime, SDL_Event& e)

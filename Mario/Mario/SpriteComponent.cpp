@@ -22,6 +22,8 @@ SpriteComponent::SpriteComponent(class Actor* owner, int drawOrder /*= 100*/) : 
 
 SpriteComponent::~SpriteComponent()
 {
+	delete mDestRect;
+	delete mSrcRect;
 	mOwner->GetGame()->GetEngine()->RemoveSprite(this);
 }
 

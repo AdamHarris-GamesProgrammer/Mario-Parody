@@ -9,6 +9,8 @@ Coin::Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game,
 
 Coin::~Coin() {
 	GetGame()->RemoveCoin(this);
+	delete mCircle;
+	mCircle = NULL;
 }
 
 

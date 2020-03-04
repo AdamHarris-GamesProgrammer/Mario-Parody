@@ -19,7 +19,8 @@ ButtonComponent::ButtonComponent(class Actor* owner, int drawOrder /*= 100*/) : 
 
 ButtonComponent::~ButtonComponent()
 {
-
+	delete mButtonTextComponent;
+	mButtonTextComponent = NULL;
 }
 
 void ButtonComponent::SetPosition(Vector2 position)

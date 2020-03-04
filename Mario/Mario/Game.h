@@ -73,17 +73,22 @@ public:
 
 	BlueSky* GetEngine() const { return mEngine; }
 
+	bool IsGameOver() const { return gameOver; }
 private:
+	bool gameOver = false;
+
 	void LoadContent();
 
 	class ScoreManager* mScoreManager = nullptr;
+
+	class Actor* bgActor = nullptr;
+	class Actor* fgActor = nullptr;
 
 	class Mario* mPlayer = nullptr;
 	class Actor* mapActor = nullptr;
 	class TileMapComponent* map = nullptr;
 
-	class Actor* bgActor = nullptr;
-	class Actor* fgActor = nullptr;
+
 
 	std::vector<class Coin*> mCoins;
 
@@ -107,3 +112,43 @@ private:
 	BlueSky* mEngine = nullptr;
 };
 
+/*LevelManager
+public:
+ChangeLevel()
+NextLevel()
+RetryLevel()
+
+GetCurrentLevelIndex()
+protected:
+int mCurrentLevelIndex
+private:
+
+*/
+
+/*TiledLevel  : public LevelManager
+public:
+
+AddTile()
+RemoveTile()
+GetTiles()
+AddCoin()
+RemoveCoin()
+GetCoins()
+AddKoopa()
+RemoveKoopa()
+GetKoopas()
+AddPowBlock()
+RemovePowBlock()
+GetPowBlocks()
+EmptyMap()
+
+protected:
+
+
+private:
+Coin Vector mCoins
+Kooopa Vector mKoopas
+PowBlock Vector mPowBlocks
+Tile Vectro mTiles
+
+*/

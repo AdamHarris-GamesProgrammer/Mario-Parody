@@ -46,8 +46,6 @@ private:
 	int mLevelWidth;
 	int mLevelHeight;
 
-	std::vector<class Coin*> mCoins;
-
 	std::vector<std::vector<int>> mMap;
 	std::vector<std::vector<class Tile*>> mTileMap;
 };

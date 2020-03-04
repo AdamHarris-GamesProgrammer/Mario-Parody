@@ -29,7 +29,14 @@ Koopa::Koopa(class Game* game) : Actor(game)
 
 Koopa::~Koopa()
 {
+	RemoveComponent(csc);
+	RemoveComponent(mCircle);
 
+	delete csc;
+	delete mCircle;
+
+	csc = NULL;
+	mCircle = NULL;
 }
 
 void Koopa::UpdateActor(float deltaTime)

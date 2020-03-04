@@ -28,7 +28,9 @@ TextSpriteComponent::TextSpriteComponent(class Actor* owner, int updateOrder /*=
 
 TextSpriteComponent::~TextSpriteComponent()
 {
-
+	TTF_CloseFont(mFont);
+	mFont = NULL;
+	delete mFont;
 }
 
 void TextSpriteComponent::Draw(SDL_Renderer* renderer)

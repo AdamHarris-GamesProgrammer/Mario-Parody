@@ -7,6 +7,8 @@ class Mario : public Actor
 {
 public:
 	Mario(class Game* game);
+	~Mario();
+
 	void UpdateActor(float deltaTime) override;
 	void HandleEvents(const uint8_t* state);
 
@@ -25,6 +27,8 @@ private:
 	bool bGrounded = true;
 	bool bCanJump;
 	bool bJumping;
+	
+
 
 	bool bDead = false;
 
