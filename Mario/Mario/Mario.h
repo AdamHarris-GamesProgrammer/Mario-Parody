@@ -2,6 +2,8 @@
 #include "Actor.h"
 #include "SDL.h"
 #include "Constants.h"
+#include "Sound.h"
+#include "Music.h"
 
 class Mario : public Actor
 {
@@ -28,7 +30,7 @@ private:
 	bool bCanJump;
 	bool bJumping;
 	
-
+	Music* mJumpSound = nullptr;
 
 	bool bDead = false;
 

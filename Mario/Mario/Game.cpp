@@ -49,11 +49,9 @@ void Game::LoadContent()
 	bg->SetBGTexture(bgtexs);
 	bg->SetScrollSpeed(-25.0f);
 
-	gMusic = Mix_LoadMUS("Assets/Audio/BgMusic.mp3");
+	mBGMusic = new Music();
+	mBGMusic->Load("Assets/Audio/BgMusic.mp3");
 
-	if (!gMusic) {
-		std::cout << "Error: Cannot load BgMusic.mp3: " << Mix_GetError() << std::endl;
-	}
 
 	//foreground textures
 	fgActor = new Actor(this);
@@ -94,7 +92,6 @@ void Game::LoadContent()
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap(mLevels[mCurrentLevel]);
-
 	mNextLevelScreen = new NextLevelScreen(this);
 }
 
@@ -263,6 +260,10 @@ void Game::Update()
 {
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
 
+	if (!mBGMusic->IsPlaying()) {
+		mBGMusic->Play();
+	}
+
 	if (mCamera.x < 0)
 		mCamera.x = 0;
 	if (mCamera.x > mCamera.w)
@@ -271,10 +272,6 @@ void Game::Update()
 		mCamera.y = 0;
 	if (mCamera.y > mCamera.h)
 		mCamera.y = mCamera.h;
-
-	if (Mix_PlayingMusic() == 0) {
-		Mix_PlayMusic(gMusic, -1);
-	}
 
 	mEngine->Update();
 }

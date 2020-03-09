@@ -16,7 +16,8 @@
 #include "ButtonComponent.h"
 #include <vector>
 #include <fstream>
-#include "SDL_mixer.h"
+#include "Sound.h"
+#include "Music.h"
 
 class Game
 {
@@ -89,7 +90,7 @@ private:
 	class Actor* mapActor = nullptr;
 	class TileMapComponent* map = nullptr;
 
-	Mix_Music* gMusic = NULL;
+	Music* mBGMusic = nullptr;
 
 	std::vector<class Coin*> mCoins;
 

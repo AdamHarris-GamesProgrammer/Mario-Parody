@@ -28,6 +28,9 @@ Mario::Mario(class Game* game) : Actor(game)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
 
+	mJumpSound = new Music();
+	mJumpSound->Load("Assets/Audio/Jump.mp3");
+
 	mPlayerVelX = 0.0f;
 
 	bCanJump = true;
@@ -145,6 +148,7 @@ void Mario::HandleEvents(const uint8_t* state)
 		if (state[SDL_SCANCODE_SPACE]) {
 			if (bGrounded) {
 				if (!bJumping && bCanJump) {
+					mJumpSound->Play(1);
 					mJumpForce = INITIAL_JUMP_FORCE;
 					bGrounded = false;
 					bJumping = true;

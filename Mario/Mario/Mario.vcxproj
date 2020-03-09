@@ -142,10 +142,12 @@
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="NextLevelButton.cpp" />
     <ClCompile Include="NextLevelScreen.cpp" />
     <ClCompile Include="PowBlock.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TextSpriteComponent.cpp" />
@@ -171,10 +173,12 @@
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="Music.h" />
     <ClInclude Include="NextLevelButton.h" />
     <ClInclude Include="NextLevelScreen.h" />
     <ClInclude Include="PowBlock.h" />
     <ClInclude Include="ScoreManager.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="TextSpriteComponent.h" />
     <ClInclude Include="Tile.h" />
