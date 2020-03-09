@@ -15,6 +15,7 @@
 #include "ButtonComponent.h"
 #include "NextLevelButton.h"
 
+
 bool Game::Initialize()
 {
 	mEngine = new BlueSky(this);
@@ -47,6 +48,12 @@ void Game::LoadContent()
 
 	bg->SetBGTexture(bgtexs);
 	bg->SetScrollSpeed(-25.0f);
+
+	gMusic = Mix_LoadMUS("Assets/Audio/BgMusic.mp3");
+
+	if (!gMusic) {
+		std::cout << "Error: Cannot load BgMusic.mp3: " << Mix_GetError() << std::endl;
+	}
 
 	//foreground textures
 	fgActor = new Actor(this);
@@ -265,6 +272,9 @@ void Game::Update()
 	if (mCamera.y > mCamera.h)
 		mCamera.y = mCamera.h;
 
+	if (Mix_PlayingMusic() == 0) {
+		Mix_PlayMusic(gMusic, -1);
+	}
 
 	mEngine->Update();
 }
