@@ -2,9 +2,8 @@
 #include "SpriteComponent.h"
 #include "Game.h"
 
-Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType, bool wall):  Actor(game), SpriteComponent(this), mTileType(tileType)
+Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType):  Actor(game), SpriteComponent(this), mTileType(tileType)
 {	
-	isWall = wall;
 	mSrcRect = src;
 	mDestRect = dest;
 

@@ -81,8 +81,6 @@ void Mario::UpdateActor(float deltaTime)
 		int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
 		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
-
-
 		//Top Collisions
 		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
 			newPosition.y = GetPosition().y;
