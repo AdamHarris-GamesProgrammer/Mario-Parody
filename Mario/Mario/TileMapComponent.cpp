@@ -130,6 +130,37 @@ void TileMapComponent::GenerateObjects() {
 				mOwner->GetGame()->AddCoin(coin);
 				tileRow.push_back(coin);
 			}
+			else if (type == PIPE_HORIZONTAL) {
+				SDL_Rect* pipeSrc = new SDL_Rect{ 0, 96, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				tileRow.push_back(tile);
+			}
+			else if(type == PIPE_LEFTEND)
+			{
+				SDL_Rect* pipeSrc = new SDL_Rect{ 64, 96, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				tileRow.push_back(tile);
+			}
+			else if (type == PIPE_RIGHTEND) {
+				SDL_Rect* pipeSrc = new SDL_Rect{ 32, 96, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				tileRow.push_back(tile);
+			}
+			else if (type == PIPE_VERTICAL) {
+				SDL_Rect* pipeSrc = new SDL_Rect{ 96, 96, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				tileRow.push_back(tile);
+			}
+			else if (type == PIPE_VERTICAL_TOP) {
+				SDL_Rect* pipeSrc = new SDL_Rect{ 128, 96, TILE_WIDTH, TILE_HEIGHT };
+
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				tileRow.push_back(tile);
+			}
 			else {
 
 			}

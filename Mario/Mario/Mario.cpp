@@ -82,7 +82,8 @@ void Mario::UpdateActor(float deltaTime)
 		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 		//Top Collisions
-		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
+		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) 
+			|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
 			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
 			marioSound->PlaySoundEffect(mHeadHitSound);
@@ -107,7 +108,12 @@ void Mario::UpdateActor(float deltaTime)
 		}
 		
 		//Bottom collisions
-		if ((bottomRightTile == AIR && bottomLeftTile == AIR) || (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK) || (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN) || (bottomRightTile == COIN || bottomLeftTile == COIN) || (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)) {
+		if ((bottomRightTile == AIR && bottomLeftTile == AIR) 
+			|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
+			|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN) 
+			|| (bottomRightTile == COIN || bottomLeftTile == COIN) 
+			|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
+			|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)) {
 			bGrounded = false;
 			newPosition.y += GRAVITY * deltaTime;
 		}
