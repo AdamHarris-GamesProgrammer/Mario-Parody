@@ -30,7 +30,15 @@ private:
 	bool bCanJump;
 	bool bJumping;
 	
-	Music* mJumpSound = nullptr;
+	Sound* marioSound;
+
+	Mix_Chunk* mJumpSound = nullptr;
+	Mix_Chunk* mCoinSound = nullptr;
+	Mix_Chunk* mDeathSound = nullptr;
+	Mix_Chunk* mHeadHitSound = nullptr;
+	Mix_Chunk* mLevelWonSound = nullptr;
+	Mix_Chunk* mGameOverSound = nullptr;
+	Mix_Chunk* mEnemyKillSound = nullptr;
 
 	bool bDead = false;
 

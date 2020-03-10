@@ -28,8 +28,14 @@ Mario::Mario(class Game* game) : Actor(game)
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
 
-	mJumpSound = new Music();
-	mJumpSound->Load("Assets/Audio/Jump.mp3");
+	marioSound = new Sound();
+	mJumpSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Jump.wav");
+	mCoinSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Coin.wav");
+	mDeathSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Die.wav");
+	mHeadHitSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Thwomp.wav");
+	mLevelWonSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Flagpole.wav");
+	mGameOverSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Game Over.wav");
+	mEnemyKillSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Kick.wav");
 
 	mPlayerVelX = 0.0f;
 
@@ -79,6 +85,7 @@ void Mario::UpdateActor(float deltaTime)
 		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) || (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
 			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
+			marioSound->PlaySoundEffect(mHeadHitSound);
 		}
 
 		//Mid Collisions
@@ -148,7 +155,7 @@ void Mario::HandleEvents(const uint8_t* state)
 		if (state[SDL_SCANCODE_SPACE]) {
 			if (bGrounded) {
 				if (!bJumping && bCanJump) {
-					mJumpSound->Play(1);
+					marioSound->PlaySoundEffect(mJumpSound);
 					mJumpForce = INITIAL_JUMP_FORCE;
 					bGrounded = false;
 					bJumping = true;
@@ -180,6 +187,7 @@ void Mario::CollisionChecks()
 			if (Intersect(*mCircle, *(coin->GetCircle()))) {
 				GetGame()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
 				coin->SetState(EDead);
+				marioSound->PlaySoundEffect(mCoinSound);
 				mGame->IncrementScore();
 			}
 		}
@@ -188,6 +196,7 @@ void Mario::CollisionChecks()
 		if (GetGame()->GetLevelGoal() != nullptr) {
 			if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
 				GetGame()->LoadNextLevelMenu();
+				marioSound->PlaySoundEffect(mLevelWonSound);
 			}
 		}
 
@@ -197,9 +206,11 @@ void Mario::CollisionChecks()
 					//TODO setup koopa active check
 					if (enemy->GetFlipped()) {
 						enemy->SetAlive(false);
+						marioSound->PlaySoundEffect(mEnemyKillSound);
 					}
 					else
 					{
+						marioSound->PlaySoundEffect(mDeathSound);
 						//TODO: Uncomment this line to enable player death
 						bDead = true;
 					}

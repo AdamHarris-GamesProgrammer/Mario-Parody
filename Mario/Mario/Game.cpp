@@ -50,6 +50,7 @@ void Game::LoadContent()
 	bg->SetScrollSpeed(-25.0f);
 
 	mBGMusic = new Music();
+	mBGMusic->SetVolume(20);
 	mBGMusic->Load("Assets/Audio/BgMusic.mp3");
 
 

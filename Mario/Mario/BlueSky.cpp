@@ -25,8 +25,7 @@ bool BlueSky::Initialize()
 		printf("Failed to initialize IMG! IMG_Error: %s\n", IMG_GetError());
 		return false;
 	}
-
-	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) != 0) {
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0) {
 		printf("Failed to initialize Mixer! Mixer_Error: %s\n", Mix_GetError());
 		return false;
 	}

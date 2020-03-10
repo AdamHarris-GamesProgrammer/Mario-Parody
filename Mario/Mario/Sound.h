@@ -7,27 +7,13 @@
 class Sound
 {
 public:
-	Sound(bool loop = false);
+	Sound();
 	~Sound();
 
-	void Load(std::string filePath);
-	void Play();
-	void Pause();
-	void Resume();
-	void FadeOut(int fadeOutTime);
-	void FadeIn(int numOfLoops, int fadeInTime);
-
-	int GetVolume() { return mVolume; }
-	void SetVolume(int newValue) {
-		if (newValue <= MIX_MAX_VOLUME) { mVolume = newValue; }
-		else { mVolume = MIX_MAX_VOLUME; }
-		Mix_VolumeChunk(mSoundEffect, mVolume);
-	}
+	Mix_Chunk* LoadSoundEffect(std::string filePath);
+	void PlaySoundEffect(Mix_Chunk* sound);
 
 private:
-	Mix_Chunk* mSoundEffect;
-	bool mLooping = false;
-
-	int mVolume;
+	Mix_Chunk* mSound;
 };
 

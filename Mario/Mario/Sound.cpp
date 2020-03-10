@@ -1,45 +1,28 @@
 #include "Sound.h"
 
-Sound::Sound(bool loop /*= false*/)
+Sound::Sound()
 {
-	mLooping = loop;
+
 }
 
 Sound::~Sound()
 {
-	Mix_FreeChunk(mSoundEffect);
-	mSoundEffect = NULL;
+
 }
 
-void Sound::Load(std::string filePath)
+Mix_Chunk* Sound::LoadSoundEffect(std::string filePath)
 {
-	mSoundEffect = Mix_LoadWAV(filePath.c_str());
-	if (!mSoundEffect) {
-		printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+	mSound = nullptr;
+
+	mSound = Mix_LoadWAV(filePath.c_str());
+	if (!mSound) {
+		printf("Could not load %s\nMix Error: %s", filePath.c_str(), Mix_GetError());
 	}
+
+	return mSound;
 }
 
-void Sound::Play()
+void Sound::PlaySoundEffect(Mix_Chunk* sound)
 {
-	Mix_PlayChannel(-1, mSoundEffect, mLooping);
-}
-
-void Sound::Pause()
-{
-	Mix_Pause(-1);
-}
-
-void Sound::Resume()
-{
-	Mix_Resume(-1);
-}
-
-void Sound::FadeOut(int fadeOutTime)
-{
-	Mix_FadeOutChannel(-1, fadeOutTime);
-}
-
-void Sound::FadeIn(int numOfLoops, int fadeInTime)
-{
-	Mix_FadeInChannel(-1, mSoundEffect, numOfLoops, fadeInTime);
+	Mix_PlayChannel(-1, sound, 0);
 }
