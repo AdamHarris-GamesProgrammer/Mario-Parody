@@ -16,14 +16,19 @@ Mario::Mario(class Game* game) : Actor(game)
 {
 	csc = new CharacterSpriteComponent(this);
 
-	std::vector<SDL_Texture*> anims = {
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true),
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true),
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true),
-		game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle04.png", true)
-	};
-	csc->SetAnimTextures(anims);
-	csc->SetAnimFPS(2);
+	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true));
+	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true));
+	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true));
+	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle04.png", true));
+
+	csc->SetAnimTextures(mIdleAnims);
+	csc->SetAnimFPS(4);
+
+	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk01.png", true));
+	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
+	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
+
+
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
@@ -59,6 +64,15 @@ void Mario::UpdateActor(float deltaTime)
 	Actor::UpdateActor(deltaTime);
 
 	if (!bDead) {
+
+		if (mPlayerVelX != 0.0f) {
+			csc->SetAnimTextures(mWalkingAnims);
+		}
+		else
+		{
+			csc->SetAnimTextures(mIdleAnims);
+		}
+
 		Vector2 newPosition = GetPosition();
 
 		if (mPlayerVelX != 0) {
@@ -67,6 +81,7 @@ void Mario::UpdateActor(float deltaTime)
 
 		if (bJumping) {
 			Jump(newPosition, deltaTime);
+			csc->SetAnimTextures(mJumpingAnims);
 		}
 
 		int leftTile = (int)newPosition.x / TILE_WIDTH;
@@ -82,15 +97,16 @@ void Mario::UpdateActor(float deltaTime)
 		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 		//Top Collisions
-		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK) 
-			|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK)) {
+		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP) 
+			|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
 			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
 			marioSound->PlaySoundEffect(mHeadHitSound);
 		}
 
 		//Mid Collisions
-		if (midLeftTile == BRICK || midRightTile == BRICK) {
+		if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP) 
+			|| (midRightTile == BRICK || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP)) {
 			newPosition.x = GetPosition().x;
 		}
 

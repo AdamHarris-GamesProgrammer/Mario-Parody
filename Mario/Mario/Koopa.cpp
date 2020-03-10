@@ -57,7 +57,7 @@ void Koopa::UpdateActor(float deltaTime)
 				newPosition.x += mMovementSpeed * deltaTime;
 
 				//checks right tile collision
-				if (midRightTile == BRICK || midRightTile == KOOPATURN) {
+				if (midRightTile == BRICK || midRightTile == KOOPATURN || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP) {
 					newPosition.x = GetPosition().x;
 					bMovingRight = false;
 				}
@@ -71,7 +71,7 @@ void Koopa::UpdateActor(float deltaTime)
 			{
 				newPosition.x -= mMovementSpeed * deltaTime;
 
-				if (midLeftTile == BRICK || midLeftTile == KOOPATURN) {
+				if (midLeftTile == BRICK || midLeftTile == KOOPATURN || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP) {
 					newPosition.x = GetPosition().x;
 					bMovingRight = true;
 				}

@@ -5,6 +5,8 @@
 #include "Sound.h"
 #include "Music.h"
 
+#include <vector>
+
 class Mario : public Actor
 {
 public:
@@ -48,8 +50,14 @@ private:
 	
 	float mMovementSpeed = 5.0f;
 
+	std::vector<SDL_Texture*> mIdleAnims;
+	std::vector<SDL_Texture*> mWalkingAnims;
+	std::vector<SDL_Texture*> mJumpingAnims;
+
 	void CollisionChecks();
 	void Jump(Vector2& newPos, float deltaTime);
+
+	
 
 
 
