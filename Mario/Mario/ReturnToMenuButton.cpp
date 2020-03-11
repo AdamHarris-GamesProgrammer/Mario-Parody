@@ -1,7 +1,7 @@
 #include "ReturnToMenuButton.h"
 #include "Game.h"
 
-ReturnToMenuButton::ReturnToMenuButton(Game* game, Vector2 position) : ButtonComponent(this), Actor(game)
+ReturnToMenuButton::ReturnToMenuButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
 	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);

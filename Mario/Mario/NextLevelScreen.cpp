@@ -41,6 +41,9 @@ NextLevelScreen::NextLevelScreen(class Game* game) : mGame(game)
 
 	nextLevelButton->SetState(Actor::EPaused);
 	nextLevelButton->mButtonTextComponent->GetOwner()->SetState(Actor::EPaused);
+
+	exitToMainMenuButton->SetState(Actor::EPaused);
+	exitToMainMenuButton->mButtonTextComponent->GetOwner()->SetState(Actor::EPaused);
 }
 
 NextLevelScreen::~NextLevelScreen()
@@ -70,7 +73,7 @@ void NextLevelScreen::Update(float deltaTime, SDL_Event& e)
 {
 	if (isActive) {
 		nextLevelButton->HandleEvent(&e);
-
+		exitToMainMenuButton->HandleEvent(&e);
 	}
 }
 
@@ -97,6 +100,9 @@ void NextLevelScreen::Activate()
 
 	nextLevelButton->SetState(Actor::EActive);
 	nextLevelButton->mButtonTextComponent->GetOwner()->SetState(Actor::EActive);
+
+	exitToMainMenuButton->SetState(Actor::EActive);
+	exitToMainMenuButton->mButtonTextComponent->GetOwner()->SetState(Actor::EActive);
 }
 
 void NextLevelScreen::DeActivate()
@@ -107,4 +113,7 @@ void NextLevelScreen::DeActivate()
 
 	nextLevelButton->SetState(Actor::EPaused);
 	nextLevelButton->mButtonTextComponent->GetOwner()->SetState(Actor::EPaused);
+
+	exitToMainMenuButton->SetState(Actor::EPaused);
+	exitToMainMenuButton->mButtonTextComponent->GetOwner()->SetState(Actor::EPaused);
 }
