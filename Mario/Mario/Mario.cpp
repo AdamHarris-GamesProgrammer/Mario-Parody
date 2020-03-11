@@ -64,14 +64,14 @@ void Mario::UpdateActor(float deltaTime)
 	Actor::UpdateActor(deltaTime);
 
 	if (!bDead) {
-
-		if (mPlayerVelX != 0.0f) {
-			csc->SetAnimTextures(mWalkingAnims);
+		if (!mWalking) {
+			csc->SetAnimTextures(mIdleAnims);
 		}
 		else
 		{
-			csc->SetAnimTextures(mIdleAnims);
+			csc->SetAnimTextures(mWalkingAnims);
 		}
+
 
 		Vector2 newPosition = GetPosition();
 
@@ -97,7 +97,7 @@ void Mario::UpdateActor(float deltaTime)
 		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 		//Top Collisions
-		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP) 
+		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
 			|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
 			newPosition.y = GetPosition().y;
 			mJumpForce = 0.0f;
@@ -105,7 +105,7 @@ void Mario::UpdateActor(float deltaTime)
 		}
 
 		//Mid Collisions
-		if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP) 
+		if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP)
 			|| (midRightTile == BRICK || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP)) {
 			newPosition.x = GetPosition().x;
 		}
@@ -122,12 +122,12 @@ void Mario::UpdateActor(float deltaTime)
 				newPosition.x = GetPosition().x;
 			}
 		}
-		
+
 		//Bottom collisions
-		if ((bottomRightTile == AIR && bottomLeftTile == AIR) 
+		if ((bottomRightTile == AIR && bottomLeftTile == AIR)
 			|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
-			|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN) 
-			|| (bottomRightTile == COIN || bottomLeftTile == COIN) 
+			|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN)
+			|| (bottomRightTile == COIN || bottomLeftTile == COIN)
 			|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
 			|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)) {
 			bGrounded = false;
@@ -164,19 +164,28 @@ void Mario::HandleEvents(const uint8_t* state)
 {
 	mPlayerVelX = 0.0f;
 
+	mWalking = false;
 	if (!bDead) {
 		if (state[SDL_SCANCODE_A]) {
 			csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
 			mPlayerVelX += -25.0f;
+			mWalking = true;
 		}
 		else if (state[SDL_SCANCODE_D]) {
 			csc->SetRendererFlip(SDL_FLIP_NONE);
 			mPlayerVelX += 25.0f;
+			mWalking = true;
+		}
+
+		if (state[SDL_SCANCODE_D] == 0 && state[SDL_SCANCODE_A] == 0) {
+			std::cout << "A OR D NOT PRESSED" << std::endl;
+			mWalking = false;
 		}
 
 		if (state[SDL_SCANCODE_SPACE]) {
 			if (bGrounded) {
 				if (!bJumping && bCanJump) {
+
 					marioSound->PlaySoundEffect(mJumpSound);
 					mJumpForce = INITIAL_JUMP_FORCE;
 					bGrounded = false;
