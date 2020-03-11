@@ -1,5 +1,6 @@
 #include "NextLevelScreen.h"
 #include "SpriteComponent.h"
+
 NextLevelScreen::NextLevelScreen(class Game* game) : mGame(game)
 {
 	SDL_Color black = SDL_Color();
@@ -32,7 +33,7 @@ NextLevelScreen::NextLevelScreen(class Game* game) : mGame(game)
 	highscoreTextTsc->SetTextColor(black);
 
 	nextLevelButton = new NextLevelButton(mGame, Vector2(250, 180));
-
+	exitToMainMenuButton = new ReturnToMenuButton(mGame, Vector2(250, 280));
 
 	successText->SetState(Actor::EPaused);
 	scoreText->SetState(Actor::EPaused);
@@ -67,8 +68,10 @@ NextLevelScreen::~NextLevelScreen()
 
 void NextLevelScreen::Update(float deltaTime, SDL_Event& e)
 {
-	mMenuBackground->Draw(mGame->GetEngine()->GetRenderer());
-	nextLevelButton->HandleEvent(&e);
+	if (isActive) {
+		nextLevelButton->HandleEvent(&e);
+
+	}
 }
 
 void NextLevelScreen::SetActive(bool newValue)

@@ -18,6 +18,9 @@
 #include <fstream>
 #include "Sound.h"
 #include "Music.h"
+#include "PlayButton.h"
+#include "MainMenuScreen.h"
+#include "ReturnToMenuButton.h"
 
 class Game
 {
@@ -66,6 +69,8 @@ public:
 	int GetCurrentLevel() const { return mCurrentLevel; }
 
 	void NextLevel();
+	void PlayFirstLevel();
+	void ReturnToMainMenu();
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -101,6 +106,7 @@ private:
 	class LevelGoal* mLevelGoal = nullptr;
 
 	class NextLevelScreen* mNextLevelScreen = nullptr;
+	class MainMenuScreen* mMainMenu = nullptr;
 
 	Actor* mScoreText = nullptr;
 	class TextSpriteComponent* mScoreTsc = nullptr;
@@ -114,43 +120,3 @@ private:
 	BlueSky* mEngine = nullptr;
 };
 
-/*LevelManager
-public:
-ChangeLevel()
-NextLevel()
-RetryLevel()
-
-GetCurrentLevelIndex()
-protected:
-int mCurrentLevelIndex
-private:
-
-*/
-
-/*TiledLevel  : public LevelManager
-public:
-
-AddTile()
-RemoveTile()
-GetTiles()
-AddCoin()
-RemoveCoin()
-GetCoins()
-AddKoopa()
-RemoveKoopa()
-GetKoopas()
-AddPowBlock()
-RemovePowBlock()
-GetPowBlocks()
-EmptyMap()
-
-protected:
-
-
-private:
-Coin Vector mCoins
-Kooopa Vector mKoopas
-PowBlock Vector mPowBlocks
-Tile Vectro mTiles
-
-*/

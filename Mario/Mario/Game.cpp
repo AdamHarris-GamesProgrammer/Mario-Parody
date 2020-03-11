@@ -82,10 +82,11 @@ void Game::LoadContent()
 	mScoreTsc->SetText("Score: 0");
 	mScoreTsc->SetTextSize(72);
 
-	mLevels[0] = "Assets/Maps/Mario01.csv";
-	mLevels[1] = "Assets/Maps/Mario02.csv";
-	mLevels[2] = "Assets/MarioBigTest.csv";
-	mLevels[3] = "Assets/MarioSmallTest.csv";
+
+	mLevels[0] = "Assets/Maps/MarioMainMenu.csv";
+	mLevels[1] = "Assets/Maps/Mario01.csv";
+	mLevels[2] = "Assets/Maps/Mario02.csv";
+	mLevels[3] = "Assets/MarioBigTest.csv";
 
 	mapActor = new Actor(this);
 	map = new TileMapComponent(mapActor);
@@ -93,7 +94,10 @@ void Game::LoadContent()
 	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
 	map->SetTexture(tilesTexture);
 	map->LoadMap(mLevels[mCurrentLevel]);
+
+
 	mNextLevelScreen = new NextLevelScreen(this);
+	mMainMenu = new MainMenuScreen(this);
 }
 
 void Game::AddCoin(Coin* coin)
@@ -207,11 +211,45 @@ void Game::NextLevel()
 	gameOver = false;
 }
 
+void Game::PlayFirstLevel()
+{
+	mMainMenu->SetActive(false);
+
+	gameOver = true;
+
+	mScore = 0;
+	mScoreTsc->SetText("Score: " + mScore);
+
+	EmptyMap();
+	mHighScore = mScoreManager->GetHighscore();
+	map->LoadMap(mLevels[1]);
+	gameOver = false;
+}
+
+void Game::ReturnToMainMenu()
+{
+	mNextLevelScreen->SetActive(false);
+
+
+	mMainMenu->SetActive(true);
+
+	gameOver = true;
+
+	mScore = 0;
+	mScoreTsc->SetText("Score: " + mScore);
+
+	EmptyMap();
+	mHighScore = mScoreManager->GetHighscore();
+	map->LoadMap(mLevels[0]);
+	gameOver = false;
+}
+
 void Game::PollInput()
 {
 	SDL_Event event;
 	SDL_PollEvent(&event);
 	mNextLevelScreen->Update(0.16f, event);
+	mMainMenu->Update(0.16f, event);
 
 	mEngine->PollInput();
 

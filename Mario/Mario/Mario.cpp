@@ -178,7 +178,6 @@ void Mario::HandleEvents(const uint8_t* state)
 		}
 
 		if (state[SDL_SCANCODE_D] == 0 && state[SDL_SCANCODE_A] == 0) {
-			std::cout << "A OR D NOT PRESSED" << std::endl;
 			mWalking = false;
 		}
 

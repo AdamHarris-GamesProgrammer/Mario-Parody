@@ -5,7 +5,7 @@
 #include "ButtonComponent.h"
 #include "TextSpriteComponent.h"
 #include "NextLevelButton.h"
-#include "BGSpriteComponent.h"
+#include "ReturnToMenuButton.h"
 
 class NextLevelScreen
 {
@@ -32,7 +32,7 @@ private:
 
 	NextLevelButton* nextLevelButton;
 	ButtonComponent* tryAgainButton;
-	ButtonComponent* exitToMainMenuButton;
+	ReturnToMenuButton* exitToMainMenuButton;
 
 	Actor* mMenuActor = nullptr;
 	SpriteComponent* mMenuBackground = nullptr;
