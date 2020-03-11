@@ -98,6 +98,7 @@ void Game::LoadContent()
 
 	mNextLevelScreen = new NextLevelScreen(this);
 	mMainMenu = new MainMenuScreen(this);
+	mGameOverScreen = new GameOverScreen(this);
 }
 
 void Game::AddCoin(Coin* coin)
@@ -231,11 +232,14 @@ void Game::PlayFirstLevel()
 void Game::ReturnToMainMenu()
 {
 	mNextLevelScreen->SetActive(false);
+	mGameOverScreen->SetActive(false);
+
 
 	bPaused = true;
 
 	mMainMenu->SetActive(true);
 
+	mPlayer->SetDead(false);
 	gameOver = true;
 
 	mScore = 0;
@@ -247,12 +251,31 @@ void Game::ReturnToMainMenu()
 	map->LoadMap(mLevels[mCurrentLevel]);
 }
 
+void Game::RetryLevel()
+{
+	mGameOverScreen->SetActive(false);
+
+	mScore = 0;
+	mScoreTsc->SetText("Score: " + mScore);
+
+	EmptyMap();
+	mHighScore = mScoreManager->GetHighscore();
+	map->LoadMap(mLevels[mCurrentLevel]);
+	mPlayer->SetDead(false);
+}
+
+void Game::OnPlayerDeath()
+{
+	mGameOverScreen->SetActive(true);
+}
+
 void Game::PollInput()
 {
 	SDL_Event event;
 	SDL_PollEvent(&event);
 	mNextLevelScreen->Update(0.16f, event);
 	mMainMenu->Update(0.16f, event);
+	mGameOverScreen->Update(0.16f, event);
 
 	mEngine->PollInput();
 

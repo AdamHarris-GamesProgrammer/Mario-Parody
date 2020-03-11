@@ -28,7 +28,7 @@ Mario::Mario(class Game* game) : Actor(game)
 	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
 	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
 
-
+	mJumpingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioJump01.png", true));
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
@@ -65,13 +65,20 @@ void Mario::UpdateActor(float deltaTime)
 		Actor::UpdateActor(deltaTime);
 
 		if (!bDead) {
-			if (!mWalking) {
-				csc->SetAnimTextures(mIdleAnims);
+			if (bJumping) {
+				csc->SetAnimTextures(mJumpingAnims);
 			}
 			else
 			{
-				csc->SetAnimTextures(mWalkingAnims);
+				if (!mWalking) {
+					csc->SetAnimTextures(mIdleAnims);
+				}
+				else
+				{
+					csc->SetAnimTextures(mWalkingAnims);
+				}
 			}
+
 
 
 			Vector2 newPosition = GetPosition();
@@ -251,7 +258,7 @@ void Mario::CollisionChecks()
 					else
 					{
 						marioSound->PlaySoundEffect(mDeathSound);
-						//TODO: Uncomment this line to enable player death
+						mGame->OnPlayerDeath();
 						bDead = true;
 					}
 				}

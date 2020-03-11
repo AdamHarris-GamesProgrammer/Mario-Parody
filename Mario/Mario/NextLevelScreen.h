@@ -6,6 +6,7 @@
 #include "TextSpriteComponent.h"
 #include "NextLevelButton.h"
 #include "ReturnToMenuButton.h"
+#include "RetryButton.h"
 
 class NextLevelScreen
 {
@@ -31,7 +32,7 @@ private:
 	TextSpriteComponent* highscoreTextTsc;
 
 	NextLevelButton* nextLevelButton;
-	ButtonComponent* tryAgainButton;
+	RetryButton* tryAgainButton;
 	ReturnToMenuButton* exitToMainMenuButton;
 
 	Actor* mMenuActor = nullptr;

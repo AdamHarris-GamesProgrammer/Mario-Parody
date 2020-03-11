@@ -137,6 +137,7 @@
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="LevelGoal.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="NextLevelScreen.cpp" />
     <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="PowBlock.cpp" />
+    <ClCompile Include="RetryButton.cpp" />
     <ClCompile Include="ReturnToMenuButton.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -171,6 +173,7 @@
     <ClInclude Include="ComponentsList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOverScreen.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="LevelGoal.h" />
     <ClInclude Include="MainMenuScreen.h" />
@@ -182,6 +185,7 @@
     <ClInclude Include="NextLevelScreen.h" />
     <ClInclude Include="PlayButton.h" />
     <ClInclude Include="PowBlock.h" />
+    <ClInclude Include="RetryButton.h" />
     <ClInclude Include="ReturnToMenuButton.h" />
     <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="Sound.h" />

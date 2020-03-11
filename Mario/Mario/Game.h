@@ -12,6 +12,7 @@
 #include "LevelGoal.h"
 #include "NextLevelScreen.h"
 #include "NextLevelButton.h"
+#include "GameOverScreen.h"
 #include "TextSpriteComponent.h"
 #include "ButtonComponent.h"
 #include <vector>
@@ -71,6 +72,9 @@ public:
 	void NextLevel();
 	void PlayFirstLevel();
 	void ReturnToMainMenu();
+	void RetryLevel();
+
+	void OnPlayerDeath();
 
 	SDL_Rect mCamera = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 
@@ -110,6 +114,7 @@ private:
 
 	class NextLevelScreen* mNextLevelScreen = nullptr;
 	class MainMenuScreen* mMainMenu = nullptr;
+	class GameOverScreen* mGameOverScreen = nullptr;
 
 	Actor* mScoreText = nullptr;
 	class TextSpriteComponent* mScoreTsc = nullptr;
