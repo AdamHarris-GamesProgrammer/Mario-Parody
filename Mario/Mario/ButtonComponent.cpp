@@ -92,15 +92,12 @@ void ButtonComponent::SetTexture(SDL_Texture* texture)
 
 void ButtonComponent::OnMouseOver()
 {
-	std::cout << "Mouse Over" << std::endl;
 }
 
 void ButtonComponent::OnMouseButtonDown()
 {
-	std::cout << "Mouse Button Down" << std::endl;
 }
 
 void ButtonComponent::OnMouseButtonUp()
 {
-	std::cout << "Mouse Button Up" << std::endl;
 }

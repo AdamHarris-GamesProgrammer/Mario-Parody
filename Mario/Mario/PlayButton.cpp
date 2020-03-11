@@ -23,7 +23,3 @@ void PlayButton::OnMouseButtonDown()
 	mOwner->GetGame()->PlayFirstLevel();
 }
 
-void PlayButton::OnMouseOver()
-{
-	std::cout << "Over Play Game Button!" << std::endl;
-}

@@ -10,7 +10,7 @@ MainMenuScreen::MainMenuScreen(class Game* game) : mGame(game)
 	marioLogo = new SpriteComponent(marioLogoActor, 300);
 	marioLogo->SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Logo.png"));
 
-	playButton = new PlayButton(mGame, Vector2(150, 300));
+	playButton = new PlayButton(mGame, Vector2(250, 250));
 }
 
 MainMenuScreen::~MainMenuScreen()

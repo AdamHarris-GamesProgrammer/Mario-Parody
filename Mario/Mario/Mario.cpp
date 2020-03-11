@@ -61,139 +61,149 @@ Mario::~Mario()
 
 void Mario::UpdateActor(float deltaTime)
 {
-	Actor::UpdateActor(deltaTime);
+	if (!GetGame()->IsGamePaused()) {
+		Actor::UpdateActor(deltaTime);
 
-	if (!bDead) {
-		if (!mWalking) {
-			csc->SetAnimTextures(mIdleAnims);
+		if (!bDead) {
+			if (!mWalking) {
+				csc->SetAnimTextures(mIdleAnims);
+			}
+			else
+			{
+				csc->SetAnimTextures(mWalkingAnims);
+			}
+
+
+			Vector2 newPosition = GetPosition();
+
+			if (mPlayerVelX != 0) {
+				newPosition.x += mPlayerVelX * mMovementSpeed * deltaTime;
+			}
+
+			if (bJumping) {
+				Jump(newPosition, deltaTime);
+				csc->SetAnimTextures(mJumpingAnims);
+			}
+
+			int leftTile = (int)newPosition.x / TILE_WIDTH;
+			int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
+			int topTile = (int)newPosition.y / TILE_HEIGHT;
+			int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
+
+			int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
+			int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
+			int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+			int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+			int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+			int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
+
+			//Top Collisions
+			if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
+				|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
+				newPosition.y = GetPosition().y;
+				mJumpForce = 0.0f;
+				marioSound->PlaySoundEffect(mHeadHitSound);
+			}
+
+			//Mid Collisions
+			if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP)
+				|| (midRightTile == BRICK || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP)) {
+				newPosition.x = GetPosition().x;
+			}
+
+			//jumping mid air collisions
+			if (bJumping) {
+				if (bottomLeftTile == BRICK || bottomRightTile == BRICK) {
+					newPosition.x = GetPosition().x;
+				}
+				if (midLeftTile == BRICK || midRightTile == BRICK) {
+					newPosition.x = GetPosition().x;
+				}
+				if (topLeftTile == BRICK || topRightTile == BRICK) {
+					newPosition.x = GetPosition().x;
+				}
+			}
+
+			//Bottom collisions
+			if ((bottomRightTile == AIR && bottomLeftTile == AIR)
+				|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
+				|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN)
+				|| (bottomRightTile == COIN || bottomLeftTile == COIN)
+				|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
+				|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)) {
+				bGrounded = false;
+				newPosition.y += GRAVITY * deltaTime;
+			}
+			else
+			{
+				bCanJump = true;
+				bGrounded = true;
+			}
+
+
+			//constrains player to X level bounds
+			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+				newPosition.x = GetPosition().x;
+			}
+
+			//Sets the players position and dest rect to work with the camera system
+			SetPlayerPosition(newPosition);
+			//checks for collision with coins, enemies and level goals
+			CollisionChecks();
 		}
 		else
 		{
-			csc->SetAnimTextures(mWalkingAnims);
-		}
-
-
-		Vector2 newPosition = GetPosition();
-
-		if (mPlayerVelX != 0) {
-			newPosition.x += mPlayerVelX * mMovementSpeed * deltaTime;
-		}
-
-		if (bJumping) {
-			Jump(newPosition, deltaTime);
-			csc->SetAnimTextures(mJumpingAnims);
-		}
-
-		int leftTile = (int)newPosition.x / TILE_WIDTH;
-		int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
-		int topTile = (int)newPosition.y / TILE_HEIGHT;
-		int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
-
-		int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
-		int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
-		int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-		int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
-		int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
-		int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
-
-		//Top Collisions
-		if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
-			|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
-			newPosition.y = GetPosition().y;
-			mJumpForce = 0.0f;
-			marioSound->PlaySoundEffect(mHeadHitSound);
-		}
-
-		//Mid Collisions
-		if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP)
-			|| (midRightTile == BRICK || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP)) {
-			newPosition.x = GetPosition().x;
-		}
-
-		//jumping mid air collisions
-		if (bJumping) {
-			if (bottomLeftTile == BRICK || bottomRightTile == BRICK) {
-				newPosition.x = GetPosition().x;
-			}
-			if (midLeftTile == BRICK || midRightTile == BRICK) {
-				newPosition.x = GetPosition().x;
-			}
-			if (topLeftTile == BRICK || topRightTile == BRICK) {
-				newPosition.x = GetPosition().x;
-			}
-		}
-
-		//Bottom collisions
-		if ((bottomRightTile == AIR && bottomLeftTile == AIR)
-			|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
-			|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN)
-			|| (bottomRightTile == COIN || bottomLeftTile == COIN)
-			|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
-			|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)) {
-			bGrounded = false;
+			//player falls off screen
+			Vector2 newPosition = GetPosition();
 			newPosition.y += GRAVITY * deltaTime;
+			SetPlayerPosition(newPosition);
 		}
-		else
-		{
-			bCanJump = true;
-			bGrounded = true;
-		}
-
-
-		//constrains player to X level bounds
-		if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
-			newPosition.x = GetPosition().x;
-		}
-
-		//Sets the players position and dest rect to work with the camera system
-		SetPlayerPosition(newPosition);
-		//checks for collision with coins, enemies and level goals
-		CollisionChecks();
 	}
 	else
 	{
-		//player falls off screen
-		Vector2 newPosition = GetPosition();
-		newPosition.y += GRAVITY * deltaTime;
-		SetPlayerPosition(newPosition);
+		SetPlayerPosition(GetPosition());
 	}
+	
 
 }
 
 void Mario::HandleEvents(const uint8_t* state)
 {
-	mPlayerVelX = 0.0f;
+	if (!GetGame()->IsGamePaused()) {
+		mPlayerVelX = 0.0f;
 
-	mWalking = false;
-	if (!bDead) {
-		if (state[SDL_SCANCODE_A]) {
-			csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
-			mPlayerVelX += -25.0f;
-			mWalking = true;
-		}
-		else if (state[SDL_SCANCODE_D]) {
-			csc->SetRendererFlip(SDL_FLIP_NONE);
-			mPlayerVelX += 25.0f;
-			mWalking = true;
-		}
+		mWalking = false;
+		if (!bDead) {
+			if (state[SDL_SCANCODE_A]) {
+				csc->SetRendererFlip(SDL_FLIP_HORIZONTAL);
+				mPlayerVelX += -25.0f;
+				mWalking = true;
+			}
+			else if (state[SDL_SCANCODE_D]) {
+				csc->SetRendererFlip(SDL_FLIP_NONE);
+				mPlayerVelX += 25.0f;
+				mWalking = true;
+			}
 
-		if (state[SDL_SCANCODE_D] == 0 && state[SDL_SCANCODE_A] == 0) {
-			mWalking = false;
-		}
+			if (state[SDL_SCANCODE_D] == 0 && state[SDL_SCANCODE_A] == 0) {
+				mWalking = false;
+			}
 
-		if (state[SDL_SCANCODE_SPACE]) {
-			if (bGrounded) {
-				if (!bJumping && bCanJump) {
+			if (state[SDL_SCANCODE_SPACE]) {
+				if (bGrounded) {
+					if (!bJumping && bCanJump) {
 
-					marioSound->PlaySoundEffect(mJumpSound);
-					mJumpForce = INITIAL_JUMP_FORCE;
-					bGrounded = false;
-					bJumping = true;
-					bCanJump = false;
+						marioSound->PlaySoundEffect(mJumpSound);
+						mJumpForce = INITIAL_JUMP_FORCE;
+						bGrounded = false;
+						bJumping = true;
+						bCanJump = false;
+					}
 				}
 			}
 		}
 	}
+	
 
 }
 

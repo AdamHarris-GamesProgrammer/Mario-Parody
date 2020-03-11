@@ -81,8 +81,11 @@ public:
 	BlueSky* GetEngine() const { return mEngine; }
 
 	bool IsGameOver() const { return gameOver; }
+	bool IsGamePaused() const { return bPaused; }
 private:
 	bool gameOver = false;
+	bool bPaused = true;
+
 
 	void LoadContent();
 

@@ -221,15 +221,18 @@ void Game::PlayFirstLevel()
 	mScoreTsc->SetText("Score: " + mScore);
 
 	EmptyMap();
+	mCurrentLevel = 1;
 	mHighScore = mScoreManager->GetHighscore();
-	map->LoadMap(mLevels[1]);
+	map->LoadMap(mLevels[mCurrentLevel]);
 	gameOver = false;
+	bPaused = false;
 }
 
 void Game::ReturnToMainMenu()
 {
 	mNextLevelScreen->SetActive(false);
 
+	bPaused = true;
 
 	mMainMenu->SetActive(true);
 
@@ -240,8 +243,8 @@ void Game::ReturnToMainMenu()
 
 	EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
-	map->LoadMap(mLevels[0]);
-	gameOver = false;
+	mCurrentLevel = 0;
+	map->LoadMap(mLevels[mCurrentLevel]);
 }
 
 void Game::PollInput()

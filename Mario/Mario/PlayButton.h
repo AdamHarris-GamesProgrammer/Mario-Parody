@@ -9,6 +9,5 @@ public:
 	~PlayButton();
 
 	void OnMouseButtonDown() override;
-	void OnMouseOver() override;
 };
 
