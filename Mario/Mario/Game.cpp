@@ -101,96 +101,16 @@ void Game::LoadContent()
 	mGameOverScreen = new GameOverScreen(this);
 }
 
-void Game::AddCoin(Coin* coin)
-{
-	mCoins.emplace_back(coin);
-}
-
-void Game::RemoveCoin(Coin* coin)
-{
-	auto iter = std::find(mCoins.begin(), mCoins.end(), coin);
-
-	if (iter != mCoins.end()) {
-		mCoins.erase(iter);
-	}
-}
-
 void Game::IncrementScore(int amount) {
 	mScore += amount;
 	std::string text = "Score: " + std::to_string(mScore);
 	mScoreTsc->SetText(text);
 }
 
-void Game::AddTile(Tile* tile)
-{
-	mTiles.emplace_back(tile);
-}
-
-void Game::RemoveTile(Tile* tile)
-{
-	auto iter = std::find(mTiles.begin(), mTiles.end(), tile);
-
-	if (iter != mTiles.end()) {
-		mTiles.erase(iter);
-	}
-}
 
 void Game::SetPlayerSpawnPoint(Vector2 position) {
 	mPlayer->SetPosition(position);
 	mPlayer->ChangePlayerTile(position);
-}
-
-void Game::EmptyMap() {
-	for(auto & tile : mTiles) {
-		tile->SetState(Actor::EDead);
-		
-	}
-
-	for (auto& koopa : mKoopas) {
-		koopa->SetState(Actor::EDead);
-		RemoveKoopa(koopa);
-	}
-
-	for (auto& powBlock : mPowBlocks) {
-		//powBlock->SetState(Actor::EDead);
-		RemovePowBlock(powBlock);
-	}
-
-	mPowBlocks.clear();
-	map->ClearMap();
-}
-
-void Game::AddKoopa(Koopa* koopa)
-{
-	mKoopas.emplace_back(koopa);
-}
-
-void Game::RemoveKoopa(Koopa* koopa)
-{
-	auto iter = std::find(mKoopas.begin(), mKoopas.end(), koopa);
-
-	if (iter != mKoopas.end()) {
-		mKoopas.erase(iter);
-	}
-}
-
-void Game::AddPowBlock(class PowBlock* powBlock)
-{
-	mPowBlocks.emplace_back(powBlock);
-}
-
-void Game::RemovePowBlock(class PowBlock* powBlock)
-{
-	auto iter = std::find(mPowBlocks.begin(), mPowBlocks.end(), powBlock);
-
-	if (iter != mPowBlocks.end()) {
-		mPowBlocks.erase(iter);
-	}
-}
-
-void Game::AddLevelGoal(LevelGoal* goal)
-{
-	mLevelGoal = goal;
 }
 
 void Game::NextLevel()

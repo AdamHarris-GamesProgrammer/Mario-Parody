@@ -138,6 +138,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverScreen.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="LevelGoal.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOverScreen.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="LevelGoal.h" />
     <ClInclude Include="MainMenuScreen.h" />

@@ -44,28 +44,7 @@ public:
 	class Mario* GetPlayer() { return mPlayer; }
 	void SetPlayerSpawnPoint(Vector2 position);
 
-	class TileMapComponent* GetMap() { return map; }
-
-	void AddCoin(class Coin* coin);
-	void RemoveCoin(class Coin* coin);
 	void IncrementScore(int amount = 10);
-	std::vector<class Coin*>& GetCoins() { return mCoins; }
-
-	void AddTile(class Tile* tile);
-	void RemoveTile(class Tile* tile);
-	void EmptyMap();
-	std::vector<class Tile*>& GetTiles() { return mTiles; }
-
-	void AddKoopa(class Koopa* koopa);
-	void RemoveKoopa(class Koopa* koopa);
-	std::vector<class Koopa*>& GetKoopas() { return mKoopas;	}
-
-	void AddPowBlock(class PowBlock* powBlock);
-	void RemovePowBlock(class PowBlock* powBlock);
-	std::vector<class PowBlock*>& GetPowBlocks() { return mPowBlocks; }
-
-	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
-	void AddLevelGoal(class LevelGoal* goal);
 
 	int GetCurrentLevel() const { return mCurrentLevel; }
 
@@ -100,17 +79,8 @@ private:
 
 	class Mario* mPlayer = nullptr;
 	class Actor* mapActor = nullptr;
-	class TileMapComponent* map = nullptr;
 
 	Music* mBGMusic = nullptr;
-
-	std::vector<class Coin*> mCoins;
-
-	std::vector<class Tile*> mTiles;
-	std::vector<class Koopa*> mKoopas;
-	std::vector<class PowBlock*> mPowBlocks;
-
-	class LevelGoal* mLevelGoal = nullptr;
 
 	class NextLevelScreen* mNextLevelScreen = nullptr;
 	class MainMenuScreen* mMainMenu = nullptr;
