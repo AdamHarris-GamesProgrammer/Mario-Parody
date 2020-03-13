@@ -93,7 +93,6 @@ private:
 	class TextSpriteComponent* mScoreTsc = nullptr;
 
 	int mCurrentLevel = 0;
-	std::string mLevels[4];
 
 	int mScore = 0;
 	int mHighScore = 0;
@@ -101,5 +100,14 @@ private:
 	BlueSky* mEngine = nullptr;
 
 	GameScreen* testScreen = nullptr;
+
+	GameScreen* mLevels[5];
+
+	GameScreen* mLevel1 = nullptr;
+	GameScreen* mLevel2 = nullptr;
+	GameScreen* mLevel3 = nullptr;
+	GameScreen* mLevel4 = nullptr;
+	GameScreen* mLevel5 = nullptr;
+
 };
 

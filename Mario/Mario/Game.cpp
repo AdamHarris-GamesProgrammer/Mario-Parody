@@ -82,15 +82,20 @@ void Game::LoadContent()
 	mScoreTsc->SetText("Score: 0");
 	mScoreTsc->SetTextSize(72);
 
+	mLevel1 = new GameScreen(this, "Assets/Maps/MarioMainMenu.csv");
+	mLevel2 = new GameScreen(this, "Assets/Maps/Mario01.csv");
+	mLevel3 = new GameScreen(this, "Assets/Maps/Mario02.csv");
+	mLevel4 = new GameScreen(this, "Assets/Maps/Mario02.csv");
+	mLevel5 = new GameScreen(this, "Assets/Maps/Mario02.csv");
 
-	mLevels[0] = "Assets/Maps/MarioMainMenu.csv";
-	mLevels[1] = "Assets/Maps/Mario01.csv";
-	mLevels[2] = "Assets/Maps/Mario02.csv";
-	mLevels[3] = "Assets/MarioBigTest.csv";
 
-	testScreen = new GameScreen(this, "Assets/Maps/Mario01.csv");
-	testScreen->LoadLevel();
+	mLevels[0] = mLevel1;
+	mLevels[1] = mLevel2;
+	mLevels[2] = mLevel3;
+	mLevels[3] = mLevel4;
+	mLevels[4] = mLevel5;
 
+	mLevels[mCurrentLevel]->LoadLevel();
 
 	mNextLevelScreen = new NextLevelScreen(this);
 	mMainMenu = new MainMenuScreen(this);
@@ -111,7 +116,6 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 
 void Game::NextLevel()
 {
-	//TODO: Implement retry functionality
 	mNextLevelScreen->SetActive(false);
 
 	gameOver = true;
@@ -123,15 +127,14 @@ void Game::NextLevel()
 	if (mCurrentLevel > 3) {
 		mCurrentLevel = 0;
 	}
-	//EmptyMap();
+	mLevels[mCurrentLevel]->EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
-	//map->LoadMap(mLevels[mCurrentLevel]);
+	mLevels[mCurrentLevel]->LoadLevel();
 	gameOver = false;
 }
 
 void Game::PlayFirstLevel()
 {
-	//TODO: Implement retry functionality
 	mMainMenu->SetActive(false);
 
 	gameOver = true;
@@ -139,17 +142,16 @@ void Game::PlayFirstLevel()
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	//EmptyMap();
+	mLevels[mCurrentLevel]->EmptyMap();
 	mCurrentLevel = 1;
 	mHighScore = mScoreManager->GetHighscore();
-	//map->LoadMap(mLevels[mCurrentLevel]);
+	mLevels[mCurrentLevel]->LoadLevel();
 	gameOver = false;
 	bPaused = false;
 }
 
 void Game::ReturnToMainMenu()
 {
-	//TODO: Implement retry functionality
 	mNextLevelScreen->SetActive(false);
 	mGameOverScreen->SetActive(false);
 
@@ -164,15 +166,14 @@ void Game::ReturnToMainMenu()
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	//EmptyMap();
+	mLevels[mCurrentLevel]->EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
 	mCurrentLevel = 0;
-	//map->LoadMap(mLevels[mCurrentLevel]);
+	mLevels[mCurrentLevel]->LoadLevel();
 }
 
 void Game::RetryLevel()
 {
-	//TODO: Implement retry functionality
 	mGameOverScreen->SetActive(false);
 
 	mScore = 0;
@@ -180,7 +181,7 @@ void Game::RetryLevel()
 
 	testScreen->EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
-	//testScreen->LoadMap(mLevels[mCurrentLevel]);
+	mLevels[mCurrentLevel]->LoadLevel();
 	mPlayer->SetDead(false);
 }
 
