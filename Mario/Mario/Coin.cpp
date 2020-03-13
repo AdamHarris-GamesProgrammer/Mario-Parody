@@ -1,6 +1,7 @@
 #include "Coin.h"
 #include "CircleComponent.h"
 #include "Game.h"
+#include "SpriteComponent.h"
 #include "GameScreen.h"
 
 Coin::Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 2) {
@@ -9,9 +10,9 @@ Coin::Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game,
 }
 
 Coin::~Coin() {
-	mGame->GetCurrentScreen->RemoveCoin(this);
 	delete mCircle;
 	mCircle = NULL;
+	mGame->GetCurrentScreen()->RemoveCoin(this);
 }
 
 
