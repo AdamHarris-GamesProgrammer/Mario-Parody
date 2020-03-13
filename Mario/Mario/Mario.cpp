@@ -97,12 +97,12 @@ void Mario::UpdateActor(float deltaTime)
 			int topTile = (int)newPosition.y / TILE_HEIGHT;
 			int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
-			int topLeftTile = GetGame()->GetMap()->GetValueAtTile(topTile, leftTile);
-			int topRightTile = GetGame()->GetMap()->GetValueAtTile(topTile, rightTile);
-			int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-			int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
-			int bottomLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile);
-			int bottomRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile);
+			int topLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, leftTile);
+			int topRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, rightTile);
+			int midLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+			int midRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+			int bottomLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+			int bottomRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 			//Top Collisions
 			if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
@@ -149,7 +149,7 @@ void Mario::UpdateActor(float deltaTime)
 
 
 			//constrains player to X level bounds
-			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetCurrentScreen()->GetMap()->GetCalculatedLevelWidth()) {
 				newPosition.x = GetPosition().x;
 			}
 
@@ -216,7 +216,7 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::ChangePlayerTile(Vector2 position)
 {
-	GetGame()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
+	GetGame()->GetCurrentScreen()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
 }
 
 void Mario::SetPlayerPosition(const Vector2& newValue)
@@ -230,9 +230,9 @@ void Mario::CollisionChecks()
 {
 	if (!mGame->IsGameOver()) {
 		//checks to see if a coin has been picked up
-		for (auto coin : GetGame()->GetCoins()) {
+		for (auto coin : GetGame()->GetCurrentScreen()->GetCoins()) {
 			if (Intersect(*mCircle, *(coin->GetCircle()))) {
-				GetGame()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
+				GetGame()->GetCurrentScreen()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
 				coin->SetState(EDead);
 				marioSound->PlaySoundEffect(mCoinSound);
 				mGame->IncrementScore();
@@ -240,14 +240,14 @@ void Mario::CollisionChecks()
 		}
 
 		//checks to see if the player is colliding with the level goal
-		if (GetGame()->GetLevelGoal() != nullptr) {
-			if (Intersect(*csc->GetDestRect(), *(GetGame()->GetLevelGoal()->GetDestRect()))) {
+		if (GetGame()->GetCurrentScreen()->GetLevelGoal() != nullptr) {
+			if (Intersect(*csc->GetDestRect(), *(GetGame()->GetCurrentScreen()->GetLevelGoal()->GetDestRect()))) {
 				GetGame()->LoadNextLevelMenu();
 				marioSound->PlaySoundEffect(mLevelWonSound);
 			}
 		}
 
-		for (auto enemy : GetGame()->GetKoopas()) {
+		for (auto enemy : GetGame()->GetCurrentScreen()->GetKoopas()) {
 			if (enemy != nullptr) {
 				if (Intersect(*mCircle, *(enemy->GetCircle()))) {
 					//TODO setup koopa active check
@@ -265,12 +265,12 @@ void Mario::CollisionChecks()
 			}
 		}
 
-		for (auto powBlock : GetGame()->GetPowBlocks())
+		for (auto powBlock : GetGame()->GetCurrentScreen()->GetPowBlocks())
 		{
 			if (powBlock != nullptr) {
 				if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
 					if (bJumping) {
-						for (auto enemy : mGame->GetKoopas()) {
+						for (auto enemy : mGame->GetCurrentScreen()->GetKoopas()) {
 							enemy->SetFlipped(true);
 						}
 						powBlock->TakeDamage();

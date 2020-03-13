@@ -5,11 +5,12 @@
 #include <vector>
 
 #include "Game.h"
+#include "SDL.h"
 
 class GameScreen
 {
 public:
-	GameScreen(class Game* game, std::string& filePath);
+	GameScreen(class Game* game, const std::string& filePath);
 	~GameScreen();
 
 	virtual void LoadLevel();
@@ -38,6 +39,8 @@ public:
 	class LevelGoal* GetLevelGoal() { return mLevelGoal; }
 	void AddLevelGoal(class LevelGoal* goal);
 
+	//TileMap Functions
+	class TileMapComponent* GetMap() { return mMap; }
 
 
 private:
@@ -53,6 +56,8 @@ private:
 	class Game* mGame = nullptr;
 
 	std::string mFilePath;
+
+	SDL_Texture* mTileTextures = nullptr;
 
 };
 

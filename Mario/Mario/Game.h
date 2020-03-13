@@ -22,6 +22,7 @@
 #include "PlayButton.h"
 #include "MainMenuScreen.h"
 #include "ReturnToMenuButton.h"
+#include "GameScreen.h"
 
 class Game
 {
@@ -65,6 +66,8 @@ public:
 
 	bool IsGameOver() const { return gameOver; }
 	bool IsGamePaused() const { return bPaused; }
+
+	class GameScreen* GetCurrentScreen() { return testScreen; } //TODO: Switch to multi level system
 private:
 	bool gameOver = false;
 	bool bPaused = true;
@@ -96,5 +99,7 @@ private:
 	int mHighScore = 0;
 
 	BlueSky* mEngine = nullptr;
+
+	GameScreen* testScreen = nullptr;
 };
 

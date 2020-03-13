@@ -88,12 +88,8 @@ void Game::LoadContent()
 	mLevels[2] = "Assets/Maps/Mario02.csv";
 	mLevels[3] = "Assets/MarioBigTest.csv";
 
-	mapActor = new Actor(this);
-	map = new TileMapComponent(mapActor);
-
-	SDL_Texture* tilesTexture = mEngine->GetTexture("Assets/TileMap.png");
-	map->SetTexture(tilesTexture);
-	map->LoadMap(mLevels[mCurrentLevel]);
+	testScreen = new GameScreen(this, "Assets/Maps/Mario01.csv");
+	testScreen->LoadLevel();
 
 
 	mNextLevelScreen = new NextLevelScreen(this);
@@ -115,6 +111,7 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 
 void Game::NextLevel()
 {
+	//TODO: Implement retry functionality
 	mNextLevelScreen->SetActive(false);
 
 	gameOver = true;
@@ -126,14 +123,15 @@ void Game::NextLevel()
 	if (mCurrentLevel > 3) {
 		mCurrentLevel = 0;
 	}
-	EmptyMap();
+	//EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
-	map->LoadMap(mLevels[mCurrentLevel]);
+	//map->LoadMap(mLevels[mCurrentLevel]);
 	gameOver = false;
 }
 
 void Game::PlayFirstLevel()
 {
+	//TODO: Implement retry functionality
 	mMainMenu->SetActive(false);
 
 	gameOver = true;
@@ -141,16 +139,17 @@ void Game::PlayFirstLevel()
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	EmptyMap();
+	//EmptyMap();
 	mCurrentLevel = 1;
 	mHighScore = mScoreManager->GetHighscore();
-	map->LoadMap(mLevels[mCurrentLevel]);
+	//map->LoadMap(mLevels[mCurrentLevel]);
 	gameOver = false;
 	bPaused = false;
 }
 
 void Game::ReturnToMainMenu()
 {
+	//TODO: Implement retry functionality
 	mNextLevelScreen->SetActive(false);
 	mGameOverScreen->SetActive(false);
 
@@ -165,22 +164,23 @@ void Game::ReturnToMainMenu()
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	EmptyMap();
+	//EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
 	mCurrentLevel = 0;
-	map->LoadMap(mLevels[mCurrentLevel]);
+	//map->LoadMap(mLevels[mCurrentLevel]);
 }
 
 void Game::RetryLevel()
 {
+	//TODO: Implement retry functionality
 	mGameOverScreen->SetActive(false);
 
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	EmptyMap();
+	testScreen->EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
-	map->LoadMap(mLevels[mCurrentLevel]);
+	//testScreen->LoadMap(mLevels[mCurrentLevel]);
 	mPlayer->SetDead(false);
 }
 
@@ -202,43 +202,43 @@ void Game::PollInput()
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	mPlayer->HandleEvents(state);
 
-	if (state[SDL_SCANCODE_1]) {
-		gameOver = true;
-		mScore = 0;
-		mScoreTsc->SetText("Score: " + mScore);
-		mCurrentLevel = 0;
-		EmptyMap();
-		map->LoadMap(mLevels[mCurrentLevel]);
-		gameOver = false;
-		
-	}
-	else if (state[SDL_SCANCODE_2]) {
-		gameOver = true;
-		mScore = 0;
-		mScoreTsc->SetText("Score: " + mScore);
-		EmptyMap();
-		mCurrentLevel = 1;
-		map->LoadMap(mLevels[mCurrentLevel]);
-		gameOver = false;
-	}
-	else if (state[SDL_SCANCODE_3]) {
-		gameOver = true;
-		mScore = 0;
-		mScoreTsc->SetText("Score: " + mScore);
-		EmptyMap();
-		mCurrentLevel = 2;
-		map->LoadMap(mLevels[mCurrentLevel]);
-		gameOver = false;
-	}
-	else if (state[SDL_SCANCODE_4]) {
-		gameOver = true;
-		mScore = 0;
-		mScoreTsc->SetText("Score: " + mScore);
-		EmptyMap();
-		mCurrentLevel = 3;
-		map->LoadMap(mLevels[mCurrentLevel]);
-		gameOver = false;
-	}
+	//if (state[SDL_SCANCODE_1]) {
+	//	gameOver = true;
+	//	mScore = 0;
+	//	mScoreTsc->SetText("Score: " + mScore);
+	//	mCurrentLevel = 0;
+	//	testScreen->EmptyMap();
+	//	map->LoadMap(mLevels[mCurrentLevel]);
+	//	gameOver = false;
+	//	
+	//}
+	//else if (state[SDL_SCANCODE_2]) {
+	//	gameOver = true;
+	//	mScore = 0;
+	//	mScoreTsc->SetText("Score: " + mScore);
+	//	EmptyMap();
+	//	mCurrentLevel = 1;
+	//	map->LoadMap(mLevels[mCurrentLevel]);
+	//	gameOver = false;
+	//}
+	//else if (state[SDL_SCANCODE_3]) {
+	//	gameOver = true;
+	//	mScore = 0;
+	//	mScoreTsc->SetText("Score: " + mScore);
+	//	EmptyMap();
+	//	mCurrentLevel = 2;
+	//	map->LoadMap(mLevels[mCurrentLevel]);
+	//	gameOver = false;
+	//}
+	//else if (state[SDL_SCANCODE_4]) {
+	//	gameOver = true;
+	//	mScore = 0;
+	//	mScoreTsc->SetText("Score: " + mScore);
+	//	EmptyMap();
+	//	mCurrentLevel = 3;
+	//	map->LoadMap(mLevels[mCurrentLevel]);
+	//	gameOver = false;
+	//}
 }
 
 void Game::Update()

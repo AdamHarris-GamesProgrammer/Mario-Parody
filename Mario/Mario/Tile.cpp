@@ -12,12 +12,12 @@ Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType):  Acto
 
 	SetTexture(game->GetEngine()->GetTexture("Assets/TileMap.png"));
 	SetPosition(Vector2(mDestRect->x, mDestRect->y));
-	mGame->AddTile(this);
+	mGame->GetCurrentScreen()->AddTile(this);
 }
 
 Tile::~Tile()
 {
-	mGame->RemoveTile(this);
+	mGame->GetCurrentScreen()->RemoveTile(this);
 }
 
 void Tile::Draw(SDL_Renderer* renderer)

@@ -50,8 +50,8 @@ void Koopa::UpdateActor(float deltaTime)
 			int topTile = newPosition.y / TILE_HEIGHT;
 			int bottomTile = (newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
-			int midLeftTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-			int midRightTile = GetGame()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+			int midLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+			int midRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
 
 			if (bMovingRight) {
 				newPosition.x += mMovementSpeed * deltaTime;
@@ -62,7 +62,7 @@ void Koopa::UpdateActor(float deltaTime)
 					bMovingRight = false;
 				}
 
-				if (GetGame()->GetMap()->GetValueAtTile(bottomTile, rightTile) == AIR) {
+				if (GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile) == AIR) {
 					bMovingRight = false;
 				}
 
@@ -76,14 +76,14 @@ void Koopa::UpdateActor(float deltaTime)
 					bMovingRight = true;
 				}
 
-				if (GetGame()->GetMap()->GetValueAtTile(bottomTile, leftTile) == AIR) {
+				if (GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, leftTile) == AIR) {
 					bMovingRight = true;
 				}
 				
 			}
 
 			//restrict X Position to screen bounds
-			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetMap()->GetCalculatedLevelWidth()) {
+			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetCurrentScreen()->GetMap()->GetCalculatedLevelWidth()) {
 				newPosition.x = GetPosition().x;
 				bMovingRight = !bMovingRight;
 			}
@@ -119,7 +119,7 @@ void Koopa::UpdateActor(float deltaTime)
 	}
 	else {
 		mGame->IncrementScore(100);
-		mGame->RemoveKoopa(this);
+		mGame->GetCurrentScreen()->RemoveKoopa(this);
 		delete this;
 	}
 	

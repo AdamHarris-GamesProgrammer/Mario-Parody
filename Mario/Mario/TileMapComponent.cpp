@@ -91,7 +91,7 @@ void TileMapComponent::GenerateObjects() {
 				SDL_Rect* goalSrc = new SDL_Rect{ 128,0,TILE_WIDTH,TILE_HEIGHT };
 
 				LevelGoal* goal = new LevelGoal(mOwner->GetGame(), goalSrc, destRect);
-				mOwner->GetGame()->AddLevelGoal(goal);
+				mOwner->GetGame()->GetCurrentScreen()->AddLevelGoal(goal);
 				tileRow.push_back(goal);
 			}
 			else if (type == KOOPA) {
@@ -103,7 +103,7 @@ void TileMapComponent::GenerateObjects() {
 
 				Koopa* koopa = new Koopa(mOwner->GetGame());
 				koopa->SetPosition(Vector2(destRect->x, destRect->y + 2.0f));
-				mOwner->GetGame()->AddKoopa(koopa);
+				mOwner->GetGame()->GetCurrentScreen()->AddKoopa(koopa);
 				
 				
 			}
@@ -120,14 +120,14 @@ void TileMapComponent::GenerateObjects() {
 				PowBlock* pow = new PowBlock(mOwner->GetGame(), goldBrickSrc, destRect);
 				pow->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 
-				mOwner->GetGame()->AddPowBlock(pow);
+				mOwner->GetGame()->GetCurrentScreen()->AddPowBlock(pow);
 				tileRow.push_back(pow);
 			}
 			else if (type == COIN) {
 				SDL_Rect* coinSrc = new SDL_Rect{ 0,64,TILE_WIDTH,TILE_HEIGHT };
 
 				Coin* coin = new Coin(mOwner->GetGame(), coinSrc, destRect);
-				mOwner->GetGame()->AddCoin(coin);
+				mOwner->GetGame()->GetCurrentScreen()->AddCoin(coin);
 				tileRow.push_back(coin);
 			}
 			else if (type == PIPE_HORIZONTAL) {

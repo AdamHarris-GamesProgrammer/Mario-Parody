@@ -10,9 +10,9 @@
 #include "PowBlock.h"
 #include "Game.h"
 
-GameScreen::GameScreen(Game* game,std::string& filePath) : mFilePath(filePath), mGame(game)
+GameScreen::GameScreen(Game* game,const std::string& filePath) : mFilePath(filePath), mGame(game)
 {
-
+	mTileTextures = mGame->GetEngine()->GetTexture("Assets/TileMap.png");
 }
 
 GameScreen::~GameScreen()
@@ -24,6 +24,7 @@ void GameScreen::LoadLevel()
 {
 	Actor* mapActor = new Actor(mGame);
 	mMap = new TileMapComponent(mapActor);
+	mMap->SetTexture(mTileTextures);
 	mMap->LoadMap(mFilePath);
 }
 
