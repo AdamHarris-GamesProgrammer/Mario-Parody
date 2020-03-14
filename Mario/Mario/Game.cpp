@@ -52,11 +52,11 @@ void Game::LoadContent()
 	mBGMusic = new Music();
 	mBGMusic->SetVolume(20);
 	mBGMusic->Load("Assets/Audio/BgMusic.mp3");
-
+	mBGMusic->Play();
 
 	//foreground textures
 	fgActor = new Actor(this);
-	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 32.0f));
+	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 96.0f));
 
 	BGSpriteComponent* fg = new BGSpriteComponent(fgActor);
 	fg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -85,8 +85,8 @@ void Game::LoadContent()
 	mLevels[0] = new GameScreen(this, "Assets/Maps/MarioMainMenu.csv");
 	mLevels[1] = new GameScreen(this, "Assets/Maps/Mario01.csv");
 	mLevels[2] = new GameScreen(this, "Assets/Maps/Mario02.csv");
-	mLevels[3] = new GameScreen(this, "Assets/Maps/Mario02.csv");
-	mLevels[4] = new GameScreen(this, "Assets/Maps/Mario02.csv");
+	mLevels[3] = new GameScreen(this, "Assets/Maps/Mario03.csv");
+	mLevels[4] = new GameScreen(this, "Assets/Maps/Mario04.csv");
 
 	mLevels[mCurrentLevel]->LoadLevel();
 
@@ -109,13 +109,17 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 
 void Game::NextLevel()
 {
-	//TODO: Implement level looping once the player has finished all levels
-
 	mNextLevelScreen->SetActive(false);
 
 	gameOver = true;
 	
-	LevelChange(mCurrentLevel + 1);
+	if (mCurrentLevel == 4) {
+		LevelChange(1);
+	}
+	else
+	{
+		LevelChange(mCurrentLevel + 1);
+	}
 
 	gameOver = false;
 }
@@ -198,53 +202,11 @@ void Game::PollInput()
 
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	mPlayer->HandleEvents(state);
-
-	//if (state[SDL_SCANCODE_1]) {
-	//	gameOver = true;
-	//	mScore = 0;
-	//	mScoreTsc->SetText("Score: " + mScore);
-	//	mCurrentLevel = 0;
-	//	testScreen->EmptyMap();
-	//	map->LoadMap(mLevels[mCurrentLevel]);
-	//	gameOver = false;
-	//	
-	//}
-	//else if (state[SDL_SCANCODE_2]) {
-	//	gameOver = true;
-	//	mScore = 0;
-	//	mScoreTsc->SetText("Score: " + mScore);
-	//	EmptyMap();
-	//	mCurrentLevel = 1;
-	//	map->LoadMap(mLevels[mCurrentLevel]);
-	//	gameOver = false;
-	//}
-	//else if (state[SDL_SCANCODE_3]) {
-	//	gameOver = true;
-	//	mScore = 0;
-	//	mScoreTsc->SetText("Score: " + mScore);
-	//	EmptyMap();
-	//	mCurrentLevel = 2;
-	//	map->LoadMap(mLevels[mCurrentLevel]);
-	//	gameOver = false;
-	//}
-	//else if (state[SDL_SCANCODE_4]) {
-	//	gameOver = true;
-	//	mScore = 0;
-	//	mScoreTsc->SetText("Score: " + mScore);
-	//	EmptyMap();
-	//	mCurrentLevel = 3;
-	//	map->LoadMap(mLevels[mCurrentLevel]);
-	//	gameOver = false;
-	//}
 }
 
 void Game::Update()
 {
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
-
-	if (!mBGMusic->IsPlaying()) {
-		mBGMusic->Play();
-	}
 
 	if (mCamera.x < 0)
 		mCamera.x = 0;

@@ -13,12 +13,15 @@ Koopa::Koopa(class Game* game) : Actor(game)
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa02.png"));
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa03.png"));
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa04.png"));
-	csc->SetAnimFPS(4);
 	
 	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped01.png"));
+	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped02.png"));
+	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped03.png"));
+	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped04.png"));
+
+	csc->SetAnimFPS(4);
 
 	csc->SetAnimTextures(walkingAnims);
-	csc->SetAnimFPS(1);
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(8.0f);

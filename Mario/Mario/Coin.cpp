@@ -15,4 +15,14 @@ Coin::~Coin() {
 	mGame->GetCurrentScreen()->RemoveCoin(this);
 }
 
+void Coin::Update(float deltaTime)
+{
+	Tile::Update(deltaTime);
+
+	mSrcRect->x += TILE_WIDTH;
+	if (mSrcRect->x > 319) {
+		mSrcRect->x = 0;
+	}
+	
+}
 

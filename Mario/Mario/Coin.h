@@ -9,6 +9,8 @@ public:
 	Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect);
 	~Coin();
 
+	void Update(float deltaTime) override;
+
 	class CircleComponent* GetCircle() { return mCircle; }
 private:
 	class CircleComponent* mCircle;

@@ -79,6 +79,9 @@ void TileMapComponent::GenerateObjects() {
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 				tileRow.push_back(brick);
 			}
+			else if (type == 2) {
+				mMap.at(row).at(column) = -1;
+			}
 			else if (type == DROPBRICK) {
 				SDL_Rect* brickSrc = new SDL_Rect{ 32,0,TILE_WIDTH, TILE_HEIGHT };
 
