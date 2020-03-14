@@ -20,8 +20,6 @@ void Coin::Update(float deltaTime)
 {
 	Tile::Update(deltaTime);
 
-
-
 	mSrcRect->x = currentFrame * TILE_WIDTH;
 
 	currentElapsedTime += deltaTime;

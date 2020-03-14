@@ -28,6 +28,7 @@ Mario::Mario(class Game* game) : Actor(game)
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
 
+
 	mJumpingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioJump01.png", true));
 
 	mCircle = new CircleComponent(this);
@@ -182,8 +183,8 @@ void Mario::UpdateActor(float deltaTime)
 
 void Mario::HandleEvents(const uint8_t* state)
 {
-	if (!mGame->IsGamePaused()) {
-		mPlayerVelX = 0.0f;
+	mPlayerVelX = 0.0f;
+	if (!mGame->IsGamePaused() && !mGame->IsGameOver()) {
 
 		mWalking = false;
 		if (!bDead) {
@@ -248,8 +249,11 @@ void Mario::CollisionChecks()
 		//checks to see if the player is colliding with the level goal
 		if (mGame->GetCurrentScreen()->GetLevelGoal() != nullptr) {
 			if (Intersect(*csc->GetDestRect(), *(mGame->GetCurrentScreen()->GetLevelGoal()->GetDestRect()))) {
-				mGame->LoadNextLevelMenu();
-				marioSound->PlaySoundEffect(mLevelWonSound);
+				if (!mGame->IsGameOver()) {
+					mGame->LoadNextLevelMenu();
+					marioSound->PlaySoundEffect(mLevelWonSound);
+				}
+
 			}
 		}
 

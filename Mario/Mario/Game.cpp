@@ -56,7 +56,7 @@ void Game::LoadContent()
 
 	//foreground textures
 	fgActor = new Actor(this);
-	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 96.0f));
+	fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 412.0f));
 
 	BGSpriteComponent* fg = new BGSpriteComponent(fgActor);
 	fg->SetScreenSize(Vector2(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -183,11 +183,34 @@ void Game::LevelChange(int levelIndex)
 	//Loads the new level
 	mLevels[mCurrentLevel]->LoadLevel();
 
+	//Handle background positioning for each level
+	switch (mCurrentLevel)
+	{
+	case 0:
+		fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 412.0f));
+		break;
+	case 1:
+		fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 508.0f));
+		break;
+	case 2:
+		fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 412.0f));
+		break;
+	case 3:
+		fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 412.0f));
+		break;
+	case 4:
+		fgActor->SetPosition(Vector2(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 412.0f));
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Game::OnPlayerDeath()
 {
 	mGameOverScreen->SetActive(true);
+	gameOver = true;
 }
 
 void Game::PollInput()
@@ -233,6 +256,7 @@ void Game::LoadNextLevelMenu()
 	}
 
 	mNextLevelScreen->SetActive(true);
+	gameOver = true;
 }
 
 void Game::Shutdown()
