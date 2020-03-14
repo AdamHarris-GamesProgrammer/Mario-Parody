@@ -67,7 +67,7 @@ public:
 	bool IsGameOver() const { return gameOver; }
 	bool IsGamePaused() const { return bPaused; }
 
-	class GameScreen* GetCurrentScreen() { return testScreen; } //TODO: Switch to multi level system
+	class GameScreen* GetCurrentScreen() { return mLevels[mCurrentLevel]; } 
 private:
 	bool gameOver = false;
 	bool bPaused = true;
@@ -99,15 +99,7 @@ private:
 
 	BlueSky* mEngine = nullptr;
 
-	GameScreen* testScreen = nullptr;
-
 	GameScreen* mLevels[5];
-
-	GameScreen* mLevel1 = nullptr;
-	GameScreen* mLevel2 = nullptr;
-	GameScreen* mLevel3 = nullptr;
-	GameScreen* mLevel4 = nullptr;
-	GameScreen* mLevel5 = nullptr;
 
 };
 

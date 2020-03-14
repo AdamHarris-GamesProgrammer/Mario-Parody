@@ -6,6 +6,10 @@
 
 #include "Game.h"
 #include "SDL.h"
+#include "Coin.h"
+#include "Tile.h"
+#include "Koopa.h"
+#include "PowBlock.h"
 
 class GameScreen
 {
@@ -54,6 +58,8 @@ private:
 	class TileMapComponent* mMap = nullptr;
 
 	class Game* mGame = nullptr;
+
+	class Actor* mapActor = nullptr;
 
 	std::string mFilePath;
 

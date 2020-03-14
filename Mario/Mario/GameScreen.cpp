@@ -9,6 +9,7 @@
 #include "Koopa.h"
 #include "PowBlock.h"
 #include "Game.h"
+#include "Actor.h"
 
 GameScreen::GameScreen(Game* game,const std::string& filePath) : mFilePath(filePath), mGame(game)
 {
@@ -22,7 +23,7 @@ GameScreen::~GameScreen()
 
 void GameScreen::LoadLevel()
 {
-	Actor* mapActor = new Actor(mGame);
+	mapActor = new Actor(mGame);
 	mMap = new TileMapComponent(mapActor);
 	mMap->SetTexture(mTileTextures);
 	mMap->LoadMap(mFilePath);
@@ -46,7 +47,6 @@ void GameScreen::EmptyMap()
 {
 	for (auto& tile : mTiles) {
 		tile->SetState(Actor::EDead);
-
 	}
 
 	for (auto& koopa : mKoopas) {
@@ -55,7 +55,6 @@ void GameScreen::EmptyMap()
 	}
 
 	for (auto& powBlock : mPowBlocks) {
-		//powBlock->SetState(Actor::EDead);
 		RemovePowBlock(powBlock);
 	}
 

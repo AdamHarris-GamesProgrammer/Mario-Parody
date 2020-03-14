@@ -14,6 +14,14 @@ TileMapComponent::TileMapComponent(class Actor* owner, int drawOrder /*= 10*/) :
 
 bool TileMapComponent::LoadMap(const std::string& fileName)
 {
+	if(!mMap.empty()){
+		mMap.clear();
+	}
+	if (!mTileMap.empty()) {
+		mTileMap.clear();
+	}
+
+
 	std::ifstream mapFile;
 	mapFile.open(fileName);
 	if (mapFile.good()) {
@@ -172,8 +180,8 @@ void TileMapComponent::GenerateObjects() {
 
 void TileMapComponent::ClearMap()
 {
-	mMap.clear();
-	mTileMap.clear();
+	//mMap.clear();
+	//mTileMap.clear();
 }
 
 void TileMapComponent::ChangeTileAt(int row, int column, int newValue)

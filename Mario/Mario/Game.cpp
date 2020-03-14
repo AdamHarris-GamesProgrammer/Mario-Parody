@@ -82,18 +82,11 @@ void Game::LoadContent()
 	mScoreTsc->SetText("Score: 0");
 	mScoreTsc->SetTextSize(72);
 
-	mLevel1 = new GameScreen(this, "Assets/Maps/MarioMainMenu.csv");
-	mLevel2 = new GameScreen(this, "Assets/Maps/Mario01.csv");
-	mLevel3 = new GameScreen(this, "Assets/Maps/Mario02.csv");
-	mLevel4 = new GameScreen(this, "Assets/Maps/Mario02.csv");
-	mLevel5 = new GameScreen(this, "Assets/Maps/Mario02.csv");
-
-
-	mLevels[0] = mLevel1;
-	mLevels[1] = mLevel2;
-	mLevels[2] = mLevel3;
-	mLevels[3] = mLevel4;
-	mLevels[4] = mLevel5;
+	mLevels[0] = new GameScreen(this, "Assets/Maps/MarioMainMenu.csv");
+	mLevels[1] = new GameScreen(this, "Assets/Maps/Mario01.csv");
+	mLevels[2] = new GameScreen(this, "Assets/Maps/Mario02.csv");
+	mLevels[3] = new GameScreen(this, "Assets/Maps/Mario02.csv");
+	mLevels[4] = new GameScreen(this, "Assets/Maps/Mario02.csv");
 
 	mLevels[mCurrentLevel]->LoadLevel();
 
@@ -167,22 +160,24 @@ void Game::ReturnToMainMenu()
 	mScoreTsc->SetText("Score: " + mScore);
 
 	mLevels[mCurrentLevel]->EmptyMap();
-	mHighScore = mScoreManager->GetHighscore();
 	mCurrentLevel = 0;
 	mLevels[mCurrentLevel]->LoadLevel();
+	gameOver = false;
 }
 
 void Game::RetryLevel()
 {
+	gameOver = true;
 	mGameOverScreen->SetActive(false);
 
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	testScreen->EmptyMap();
+	mLevels[mCurrentLevel]->EmptyMap();
 	mHighScore = mScoreManager->GetHighscore();
 	mLevels[mCurrentLevel]->LoadLevel();
 	mPlayer->SetDead(false);
+	gameOver = false;
 }
 
 void Game::OnPlayerDeath()
@@ -245,6 +240,8 @@ void Game::PollInput()
 void Game::Update()
 {
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
+
+	std::cout << "Current Level: " << mCurrentLevel << std::endl;
 
 	if (!mBGMusic->IsPlaying()) {
 		mBGMusic->Play();
