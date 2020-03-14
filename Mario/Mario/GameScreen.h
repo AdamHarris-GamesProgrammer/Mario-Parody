@@ -47,6 +47,8 @@ public:
 	class TileMapComponent* GetMap() { return mMap; }
 
 
+	
+
 private:
 	std::vector<class Coin*> mCoins;
 	std::vector<class Tile*> mTiles;

@@ -101,5 +101,6 @@ private:
 
 	GameScreen* mLevels[5];
 
+	void LevelChange(int levelIndex);
 };
 

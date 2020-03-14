@@ -109,20 +109,14 @@ void Game::SetPlayerSpawnPoint(Vector2 position) {
 
 void Game::NextLevel()
 {
+	//TODO: Implement level looping once the player has finished all levels
+
 	mNextLevelScreen->SetActive(false);
 
 	gameOver = true;
+	
+	LevelChange(mCurrentLevel + 1);
 
-	mScore = 0;
-	mScoreTsc->SetText("Score: " + mScore);
-	mCurrentLevel++; 
-
-	if (mCurrentLevel > 3) {
-		mCurrentLevel = 0;
-	}
-	mLevels[mCurrentLevel]->EmptyMap();
-	mHighScore = mScoreManager->GetHighscore();
-	mLevels[mCurrentLevel]->LoadLevel();
 	gameOver = false;
 }
 
@@ -132,13 +126,8 @@ void Game::PlayFirstLevel()
 
 	gameOver = true;
 
-	mScore = 0;
-	mScoreTsc->SetText("Score: " + mScore);
+	LevelChange(1);
 
-	mLevels[mCurrentLevel]->EmptyMap();
-	mCurrentLevel = 1;
-	mHighScore = mScoreManager->GetHighscore();
-	mLevels[mCurrentLevel]->LoadLevel();
 	gameOver = false;
 	bPaused = false;
 }
@@ -156,12 +145,8 @@ void Game::ReturnToMainMenu()
 	mPlayer->SetDead(false);
 	gameOver = true;
 
-	mScore = 0;
-	mScoreTsc->SetText("Score: " + mScore);
+	LevelChange(0);
 
-	mLevels[mCurrentLevel]->EmptyMap();
-	mCurrentLevel = 0;
-	mLevels[mCurrentLevel]->LoadLevel();
 	gameOver = false;
 }
 
@@ -170,14 +155,30 @@ void Game::RetryLevel()
 	gameOver = true;
 	mGameOverScreen->SetActive(false);
 
+	LevelChange(mCurrentLevel);
+
+	mPlayer->SetDead(false);
+	gameOver = false;
+}
+
+void Game::LevelChange(int levelIndex)
+{
+	//Empties the current level
+	mLevels[mCurrentLevel]->EmptyMap();
+
+	//resets the score
 	mScore = 0;
 	mScoreTsc->SetText("Score: " + mScore);
 
-	mLevels[mCurrentLevel]->EmptyMap();
+	//Sets the current level to the new level index
+	mCurrentLevel = levelIndex;
+
+	//Gets the new highscore
 	mHighScore = mScoreManager->GetHighscore();
+
+	//Loads the new level
 	mLevels[mCurrentLevel]->LoadLevel();
-	mPlayer->SetDead(false);
-	gameOver = false;
+
 }
 
 void Game::OnPlayerDeath()

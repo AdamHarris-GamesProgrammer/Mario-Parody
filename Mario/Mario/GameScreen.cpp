@@ -59,6 +59,9 @@ void GameScreen::EmptyMap()
 	}
 
 	mPowBlocks.clear();
+	mTiles.clear();
+	mCoins.clear();
+	mKoopas.clear();
 	mMap->ClearMap();
 }
 
@@ -109,3 +112,5 @@ void GameScreen::AddLevelGoal(class LevelGoal* goal)
 {
 	mLevelGoal = goal;
 }
+
+
