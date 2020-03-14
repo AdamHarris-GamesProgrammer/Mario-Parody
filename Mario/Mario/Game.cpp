@@ -242,8 +242,6 @@ void Game::Update()
 {
 	mCamera.x = mPlayer->GetPosition().x - SCREEN_WIDTH / 2;
 
-	std::cout << "Current Level: " << mCurrentLevel << std::endl;
-
 	if (!mBGMusic->IsPlaying()) {
 		mBGMusic->Play();
 	}

@@ -3,7 +3,7 @@
 
 ReturnToMenuButton::ReturnToMenuButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
-	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
+	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
 	SetButtonText("Return to Main Menu");
@@ -20,5 +20,5 @@ ReturnToMenuButton::~ReturnToMenuButton()
 
 void ReturnToMenuButton::OnMouseButtonDown()
 {
-	mOwner->GetGame()->ReturnToMainMenu();
+	mGame->ReturnToMainMenu();
 }

@@ -16,19 +16,19 @@ Mario::Mario(class Game* game) : Actor(game)
 {
 	csc = new CharacterSpriteComponent(this);
 
-	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true));
-	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true));
-	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true));
-	mIdleAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle04.png", true));
+	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true));
+	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true));
+	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true));
+	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle04.png", true));
 
 	csc->SetAnimTextures(mIdleAnims);
 	csc->SetAnimFPS(4);
 
-	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk01.png", true));
-	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
-	mWalkingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
+	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk01.png", true));
+	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
+	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
 
-	mJumpingAnims.push_back(game->GetEngine()->GetTexture("Assets/Characters/Mario/MarioJump01.png", true));
+	mJumpingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioJump01.png", true));
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
@@ -61,7 +61,7 @@ Mario::~Mario()
 
 void Mario::UpdateActor(float deltaTime)
 {
-	if (!GetGame()->IsGamePaused()) {
+	if (!mGame->IsGamePaused()) {
 		Actor::UpdateActor(deltaTime);
 
 		if (!bDead) {
@@ -92,17 +92,23 @@ void Mario::UpdateActor(float deltaTime)
 				csc->SetAnimTextures(mJumpingAnims);
 			}
 
+			if (newPosition.y > mGame->GetCurrentScreen()->GetMap()->GetCalculatedLevelHeight() + csc->GetTexHeight()) {
+				bDead = true;
+				mGame->OnPlayerDeath();
+			}
+
+
 			int leftTile = (int)newPosition.x / TILE_WIDTH;
 			int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
 			int topTile = (int)newPosition.y / TILE_HEIGHT;
 			int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
-			int topLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, leftTile);
-			int topRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, rightTile);
-			int midLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
-			int midRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
-			int bottomLeftTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, leftTile);
-			int bottomRightTile = GetGame()->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile);
+			int topLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, leftTile);
+			int topRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, rightTile);
+			int midLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
+			int midRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, rightTile);
+			int bottomLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, leftTile);
+			int bottomRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 			//Top Collisions
 			if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
@@ -149,7 +155,7 @@ void Mario::UpdateActor(float deltaTime)
 
 
 			//constrains player to X level bounds
-			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= GetGame()->GetCurrentScreen()->GetMap()->GetCalculatedLevelWidth()) {
+			if (newPosition.x < 0.0f || (newPosition.x + csc->GetTexWidth()) >= mGame->GetCurrentScreen()->GetMap()->GetCalculatedLevelWidth()) {
 				newPosition.x = GetPosition().x;
 			}
 
@@ -176,7 +182,7 @@ void Mario::UpdateActor(float deltaTime)
 
 void Mario::HandleEvents(const uint8_t* state)
 {
-	if (!GetGame()->IsGamePaused()) {
+	if (!mGame->IsGamePaused()) {
 		mPlayerVelX = 0.0f;
 
 		mWalking = false;
@@ -216,13 +222,13 @@ void Mario::HandleEvents(const uint8_t* state)
 
 void Mario::ChangePlayerTile(Vector2 position)
 {
-	GetGame()->GetCurrentScreen()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
+	mGame->GetCurrentScreen()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
 }
 
 void Mario::SetPlayerPosition(const Vector2& newValue)
 {
 	Actor::SetPosition(newValue);
-	csc->GetDestRect()->x = (int)GetPosition().x - (int)GetGame()->mCamera.x;
+	csc->GetDestRect()->x = (int)GetPosition().x - (int)mGame->mCamera.x;
 	csc->GetDestRect()->y = (int)GetPosition().y;
 }
 
@@ -230,9 +236,9 @@ void Mario::CollisionChecks()
 {
 	if (!mGame->IsGameOver()) {
 		//checks to see if a coin has been picked up
-		for (auto coin : GetGame()->GetCurrentScreen()->GetCoins()) {
+		for (auto coin : mGame->GetCurrentScreen()->GetCoins()) {
 			if (Intersect(*mCircle, *(coin->GetCircle()))) {
-				GetGame()->GetCurrentScreen()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
+				mGame->GetCurrentScreen()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
 				coin->SetState(EDead);
 				marioSound->PlaySoundEffect(mCoinSound);
 				mGame->IncrementScore();
@@ -240,17 +246,16 @@ void Mario::CollisionChecks()
 		}
 
 		//checks to see if the player is colliding with the level goal
-		if (GetGame()->GetCurrentScreen()->GetLevelGoal() != nullptr) {
-			if (Intersect(*csc->GetDestRect(), *(GetGame()->GetCurrentScreen()->GetLevelGoal()->GetDestRect()))) {
-				GetGame()->LoadNextLevelMenu();
+		if (mGame->GetCurrentScreen()->GetLevelGoal() != nullptr) {
+			if (Intersect(*csc->GetDestRect(), *(mGame->GetCurrentScreen()->GetLevelGoal()->GetDestRect()))) {
+				mGame->LoadNextLevelMenu();
 				marioSound->PlaySoundEffect(mLevelWonSound);
 			}
 		}
 
-		for (auto enemy : GetGame()->GetCurrentScreen()->GetKoopas()) {
+		for (auto enemy : mGame->GetCurrentScreen()->GetKoopas()) {
 			if (enemy != nullptr) {
 				if (Intersect(*mCircle, *(enemy->GetCircle()))) {
-					//TODO setup koopa active check
 					if (enemy->GetFlipped()) {
 						enemy->SetAlive(false);
 						marioSound->PlaySoundEffect(mEnemyKillSound);
@@ -265,7 +270,7 @@ void Mario::CollisionChecks()
 			}
 		}
 
-		for (auto powBlock : GetGame()->GetCurrentScreen()->GetPowBlocks())
+		for (auto powBlock : mGame->GetCurrentScreen()->GetPowBlocks())
 		{
 			if (powBlock != nullptr) {
 				if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {

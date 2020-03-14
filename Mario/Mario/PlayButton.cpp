@@ -3,7 +3,7 @@
 
 PlayButton::PlayButton(class Game* game, Vector2 position) : ButtonComponent(this), Actor(game)
 {
-	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
+	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
 	SetButtonText("Play Game");
@@ -20,6 +20,6 @@ PlayButton::~PlayButton()
 
 void PlayButton::OnMouseButtonDown()
 {
-	mOwner->GetGame()->PlayFirstLevel();
+	mGame->PlayFirstLevel();
 }
 

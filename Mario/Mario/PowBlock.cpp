@@ -22,8 +22,8 @@ void PowBlock::TakeDamage()
 		{
 			bActive = false;
 			mGame->IncrementScore(100);
-			GetGame()->GetCurrentScreen()->RemovePowBlock(this);
-			GetGame()->GetCurrentScreen()->GetMap()->ChangeTileAt((GetPosition().y / TILE_HEIGHT), (GetPosition().x / TILE_WIDTH), -1);
+			mGame->GetCurrentScreen()->RemovePowBlock(this);
+			mGame->GetCurrentScreen()->GetMap()->ChangeTileAt((GetPosition().y / TILE_HEIGHT), (GetPosition().x / TILE_WIDTH), -1);
 			SetState(Actor::EDead);
 		}
 	}

@@ -3,7 +3,7 @@
 
 RetryButton::RetryButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
-	SetTexture(mOwner->GetGame()->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
+	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
 	SetButtonText("Retry Level");
