@@ -14,5 +14,8 @@ public:
 	class CircleComponent* GetCircle() { return mCircle; }
 private:
 	class CircleComponent* mCircle;
+
+	int currentFrame = 0;
+	float currentElapsedTime = 0;
 };
 
