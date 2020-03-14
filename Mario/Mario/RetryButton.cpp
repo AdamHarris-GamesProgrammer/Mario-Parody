@@ -13,11 +13,6 @@ RetryButton::RetryButton(class Game* game, Vector2 position) : Actor(game), Butt
 	SetButtonTextPosition(Vector2(position.x + (GetButtonWidth() / 2), position.y + (GetButtonHeight() / 2)));
 }
 
-RetryButton::~RetryButton()
-{
-
-}
-
 void RetryButton::OnMouseButtonDown()
 {
 	mGame->RetryLevel();

@@ -18,11 +18,6 @@ NextLevelButton::NextLevelButton(class Game* game, Vector2 position) : Actor(gam
 	SetButtonTextPosition(Vector2(position.x + (GetButtonWidth() / 2), position.y + (GetButtonHeight()/2)));
 }
 
-NextLevelButton::~NextLevelButton()
-{
-
-}
-
 void NextLevelButton::OnMouseButtonDown()
 {
 	mGame->NextLevel();

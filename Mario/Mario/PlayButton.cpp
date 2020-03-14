@@ -13,11 +13,6 @@ PlayButton::PlayButton(class Game* game, Vector2 position) : ButtonComponent(thi
 	SetButtonTextPosition(Vector2(position.x + (GetButtonWidth() / 2), position.y + (GetButtonHeight() / 2)));
 }
 
-PlayButton::~PlayButton()
-{
-
-}
-
 void PlayButton::OnMouseButtonDown()
 {
 	mGame->PlayFirstLevel();

@@ -13,11 +13,6 @@ ReturnToMenuButton::ReturnToMenuButton(class Game* game, Vector2 position) : Act
 	SetButtonTextPosition(Vector2(position.x + (GetButtonWidth() / 2), position.y + (GetButtonHeight() / 2)));
 }
 
-ReturnToMenuButton::~ReturnToMenuButton()
-{
-
-}
-
 void ReturnToMenuButton::OnMouseButtonDown()
 {
 	mGame->ReturnToMainMenu();

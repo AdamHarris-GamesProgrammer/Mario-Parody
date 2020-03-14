@@ -5,7 +5,6 @@ class RetryButton : public Actor, public ButtonComponent
 {
 public:
 	RetryButton(class Game* game, Vector2 position);
-	~RetryButton();
 
 	void OnMouseButtonDown() override;
 

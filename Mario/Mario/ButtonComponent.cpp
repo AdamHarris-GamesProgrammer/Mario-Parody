@@ -21,6 +21,8 @@ ButtonComponent::~ButtonComponent()
 {
 	delete mButtonTextComponent;
 	mButtonTextComponent = NULL;
+	delete mButtonTextActor;
+	mButtonTextActor = NULL;
 }
 
 void ButtonComponent::SetPosition(Vector2 position)

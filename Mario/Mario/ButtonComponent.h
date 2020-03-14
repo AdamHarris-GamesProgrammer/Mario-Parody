@@ -16,7 +16,7 @@ public:
 	void HandleEvent(SDL_Event* e);
 
 	void Draw(SDL_Renderer* renderer) override;
-
+	 
 	enum ButtonSprite
 	{
 		BUTTON_SPRITE_MOUSE_OUT = 0,

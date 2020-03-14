@@ -15,7 +15,14 @@ MainMenuScreen::MainMenuScreen(class Game* game) : mGame(game)
 
 MainMenuScreen::~MainMenuScreen()
 {
+	delete marioLogoActor;
+	marioLogoActor = NULL;
 
+	delete marioLogo;
+	marioLogo = NULL;
+
+	delete playButton;
+	playButton = NULL;
 }
 
 void MainMenuScreen::Update(float deltaTime, SDL_Event& e)
