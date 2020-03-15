@@ -46,9 +46,6 @@ public:
 	//TileMap Functions
 	class TileMapComponent* GetMap() { return mMap; }
 
-
-	
-
 private:
 	std::vector<class Coin*> mCoins;
 	std::vector<class Tile*> mTiles;
@@ -66,6 +63,5 @@ private:
 	std::string mFilePath;
 
 	SDL_Texture* mTileTextures = nullptr;
-
 };
 

@@ -61,7 +61,5 @@ private:
 
 	SDL_Renderer* mRenderer;
 	SDL_Window* mWindow;
-
-protected:
 };
 

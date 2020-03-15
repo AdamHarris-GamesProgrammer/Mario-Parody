@@ -7,6 +7,5 @@ public:
 	RetryButton(class Game* game, Vector2 position);
 
 	void OnMouseButtonDown() override;
-
 };
 

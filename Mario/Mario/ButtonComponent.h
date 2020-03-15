@@ -53,8 +53,5 @@ private:
 	const int totalNumberOfButtons = 4;
 
 	Vector2 mPosition;
-
-
-
 };
 

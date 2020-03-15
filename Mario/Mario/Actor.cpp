@@ -4,17 +4,20 @@
 
 #include <algorithm>
 
+//Constructor sets the default values for each member variable 
 Actor::Actor(class Game* game) : mState(EActive), mPosition(Vector2::Zero), mScale(1.0f), mRotation(0.0f), mGame(game)
 {
+	//Calls the AddActor method in the BlueSky class 
 	mGame->GetEngine()->AddActor(this);
 }
 
 Actor::~Actor()
 {
+	//Calls the RemoveActor method in the BlueSky class
 	mGame->GetEngine()->RemoveActor(this);
 
-	//need to delete components
-	while (!mComponents.empty()) {
+	//Deletes all of the components in the mComponents array
+	while (!mComponents.empty()) { //Repeats while the loop is not empty
 		delete mComponents.back();
 	}
 }

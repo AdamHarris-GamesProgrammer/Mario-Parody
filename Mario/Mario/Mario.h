@@ -58,9 +58,5 @@ private:
 	void Jump(Vector2& newPos, float deltaTime);
 
 	bool mWalking = false;
-	
-
-
-
 };
 

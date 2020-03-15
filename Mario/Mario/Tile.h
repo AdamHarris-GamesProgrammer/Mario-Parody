@@ -18,8 +18,6 @@ public:
 private:
 	int mTileType;
 
-
 	Vector2 position;
-
 };
 
