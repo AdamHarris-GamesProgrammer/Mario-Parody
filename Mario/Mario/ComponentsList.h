@@ -1,5 +1,7 @@
 #pragma once
 
+//This just holds all the components used as a way of neatening the game class includes
+
 //Sprite Based Components
 #include "SpriteComponent.h"
 #include "BGSpriteComponent.h"

@@ -24,6 +24,7 @@ Actor::~Actor()
 
 void Actor::Update(float deltaTime)
 {
+	//If the actor is active then update the components and actor itself
 	if (mState == EActive) {
 		UpdateComponents(deltaTime);
 		UpdateActor(deltaTime);
@@ -32,6 +33,7 @@ void Actor::Update(float deltaTime)
 
 void Actor::UpdateComponents(float deltaTime)
 {
+	//cycles through each of the components and calls the update method in each
 	for (auto comp : mComponents) {
 		comp->Update(deltaTime);
 	}
@@ -40,13 +42,18 @@ void Actor::UpdateComponents(float deltaTime)
 //virtual function
 void Actor::UpdateActor(float deltaTime)
 {
+	//This will be unique for each actor e.g. This is where Mario's movement code is
 }
 
 void Actor::AddComponent(class Component* component)
 {
+	//Gets the update order of the component that is being added
 	int myOrder = component->GetUpdateOrder();
+
+	//Iterator to go through each of the objects in the components vector
 	auto iter = mComponents.begin();
 	for (; iter != mComponents.end(); ++iter) {
+		//The lower the update order the higher priority a component is 
 		if (myOrder < (*iter)->GetUpdateOrder()) {
 			break;
 		}
