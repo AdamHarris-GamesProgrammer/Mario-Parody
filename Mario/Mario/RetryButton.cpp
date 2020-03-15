@@ -3,9 +3,11 @@
 
 RetryButton::RetryButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
+	//Sets the button texture
 	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
+	//Sets the button text details
 	SetButtonText("Retry Level");
 	SDL_Color color = SDL_Color();
 	color = { 0,0,0,255 };
@@ -15,5 +17,6 @@ RetryButton::RetryButton(class Game* game, Vector2 position) : Actor(game), Butt
 
 void RetryButton::OnMouseButtonDown()
 {
+	//Calls the retry level method in the game class
 	mGame->RetryLevel();
 }

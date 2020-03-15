@@ -3,9 +3,11 @@
 
 PlayButton::PlayButton(class Game* game, Vector2 position) : ButtonComponent(this), Actor(game)
 {
+	//Sets the button texture
 	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
+	//Sets up the button text details
 	SetButtonText("Play Game");
 	SDL_Color color = SDL_Color();
 	color = { 0,0,0,255 };
@@ -15,6 +17,7 @@ PlayButton::PlayButton(class Game* game, Vector2 position) : ButtonComponent(thi
 
 void PlayButton::OnMouseButtonDown()
 {
+	//Calls the PlayFirstLevel button in the game class
 	mGame->PlayFirstLevel();
 }
 

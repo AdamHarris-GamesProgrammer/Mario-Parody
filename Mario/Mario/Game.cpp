@@ -176,6 +176,7 @@ void Game::RetryLevel()
 {
 	gameOver = true;
 	mGameOverScreen->SetActive(false);
+	mNextLevelScreen->SetActive(false);
 
 	LevelChange(mCurrentLevel); //reloads the current level
 

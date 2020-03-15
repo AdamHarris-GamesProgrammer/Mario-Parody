@@ -16,28 +16,27 @@ public:
 
 	void Update(float deltaTime, SDL_Event& e);
 
-
+	//Getter/Setter for isActive
 	bool GetActive() const { return isActive; }
 	void SetActive(bool newValue);
 
 	
 
 private:
+	//Actors for text
 	Actor* successText;
 	Actor* scoreText;
 	Actor* highscoreText;
 
+	//Text components
 	TextSpriteComponent* successTextTsc;
 	TextSpriteComponent* scoreTextTsc;
 	TextSpriteComponent* highscoreTextTsc;
 
+	//Buttons
 	NextLevelButton* nextLevelButton;
 	RetryButton* tryAgainButton;
 	ReturnToMenuButton* exitToMainMenuButton;
-
-	Actor* mMenuActor = nullptr;
-	SpriteComponent* mMenuBackground = nullptr;
-
 
 	bool isActive = false;
 

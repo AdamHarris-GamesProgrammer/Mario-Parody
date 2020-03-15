@@ -4,7 +4,7 @@
 
 LevelGoal::LevelGoal(Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) :Tile(game,srcRect,destRect, 3)
 {
-	mGame->GetCurrentScreen()->AddLevelGoal(this);
+	mGame->GetCurrentScreen()->AddLevelGoal(this); //Adds the level goal to the current gameScreen
 }
 
 LevelGoal::~LevelGoal()

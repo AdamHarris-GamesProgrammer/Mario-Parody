@@ -8,9 +8,11 @@
 
 NextLevelButton::NextLevelButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
+	//Sets the button texutre
 	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 	
+	//Sets the text, text colour, and positon
 	SetButtonText("Next Level");
 	SDL_Color color = SDL_Color();
 	color = { 0,0,0,255 };
@@ -20,5 +22,6 @@ NextLevelButton::NextLevelButton(class Game* game, Vector2 position) : Actor(gam
 
 void NextLevelButton::OnMouseButtonDown()
 {
+	//Calls the next level method in the game class
 	mGame->NextLevel();
 }

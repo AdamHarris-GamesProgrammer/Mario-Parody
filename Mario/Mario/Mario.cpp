@@ -16,6 +16,7 @@ Mario::Mario(class Game* game) : Actor(game)
 {
 	csc = new CharacterSpriteComponent(this);
 
+	//Idle animations
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true));
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true));
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true));
@@ -24,27 +25,32 @@ Mario::Mario(class Game* game) : Actor(game)
 	csc->SetAnimTextures(mIdleAnims);
 	csc->SetAnimFPS(4);
 
+	//Walking animations
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk01.png", true));
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
 
-
+	//Jumping animation
 	mJumpingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioJump01.png", true));
 
+	//Circle collision system
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(20.0f);
 
-	marioSound = new Sound();
-	mJumpSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Jump.wav");
-	mCoinSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Coin.wav");
-	mDeathSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Die.wav");
-	mHeadHitSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Thwomp.wav");
-	mLevelWonSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Flagpole.wav");
-	mGameOverSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Game Over.wav");
-	mEnemyKillSound = marioSound->LoadSoundEffect("Assets/Audio/Mario/Kick.wav");
+	//Loads all sound effects and creates a instance of the sound class
+	mSoundManager = new Sound();
+	mJumpSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Jump.wav");
+	mCoinSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Coin.wav");
+	mDeathSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Die.wav");
+	mHeadHitSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Thwomp.wav");
+	mLevelWonSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Flagpole.wav");
+	mGameOverSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Game Over.wav");
+	mEnemyKillSound = mSoundManager->LoadSoundEffect("Assets/Audio/Mario/Kick.wav");
 
+	//Sets velocity to 0
 	mPlayerVelX = 0.0f;
 
+	//allows player to jump by default
 	bCanJump = true;
 }
 
@@ -98,12 +104,13 @@ void Mario::UpdateActor(float deltaTime)
 				mGame->OnPlayerDeath();
 			}
 
-
+			//tiles in all four directions
 			int leftTile = (int)newPosition.x / TILE_WIDTH;
 			int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
 			int topTile = (int)newPosition.y / TILE_HEIGHT;
 			int bottomTile = (int)(newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
+			//gets the six surrounding tiles
 			int topLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, leftTile);
 			int topRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(topTile, rightTile);
 			int midLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile - 1, leftTile);
@@ -116,7 +123,7 @@ void Mario::UpdateActor(float deltaTime)
 				|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
 				newPosition.y = GetPosition().y;
 				mJumpForce = 0.0f;
-				marioSound->PlaySoundEffect(mHeadHitSound);
+				mSoundManager->PlaySoundEffect(mHeadHitSound);
 			}
 
 			//Mid Collisions
@@ -165,7 +172,7 @@ void Mario::UpdateActor(float deltaTime)
 			//checks for collision with coins, enemies and level goals
 			CollisionChecks();
 		}
-		else
+		else //if player is dead
 		{
 			//player falls off screen
 			Vector2 newPosition = GetPosition();
@@ -207,7 +214,7 @@ void Mario::HandleEvents(const uint8_t* state)
 				if (bGrounded) {
 					if (!bJumping && bCanJump) {
 
-						marioSound->PlaySoundEffect(mJumpSound);
+						mSoundManager->PlaySoundEffect(mJumpSound);
 						mJumpForce = INITIAL_JUMP_FORCE;
 						bGrounded = false;
 						bJumping = true;
@@ -241,7 +248,7 @@ void Mario::CollisionChecks()
 			if (Intersect(*mCircle, *(coin->GetCircle()))) {
 				mGame->GetCurrentScreen()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
 				coin->SetState(EDead);
-				marioSound->PlaySoundEffect(mCoinSound);
+				mSoundManager->PlaySoundEffect(mCoinSound);
 				mGame->IncrementScore();
 			}
 		}
@@ -251,7 +258,7 @@ void Mario::CollisionChecks()
 			if (Intersect(*csc->GetDestRect(), *(mGame->GetCurrentScreen()->GetLevelGoal()->GetDestRect()))) {
 				if (!mGame->IsGameOver()) {
 					mGame->LoadNextLevelMenu();
-					marioSound->PlaySoundEffect(mLevelWonSound);
+					mSoundManager->PlaySoundEffect(mLevelWonSound);
 				}
 
 			}
@@ -262,11 +269,11 @@ void Mario::CollisionChecks()
 				if (Intersect(*mCircle, *(enemy->GetCircle()))) {
 					if (enemy->GetFlipped()) {
 						enemy->SetAlive(false);
-						marioSound->PlaySoundEffect(mEnemyKillSound);
+						mSoundManager->PlaySoundEffect(mEnemyKillSound);
 					}
 					else
 					{
-						marioSound->PlaySoundEffect(mDeathSound);
+						mSoundManager->PlaySoundEffect(mDeathSound);
 						mGame->OnPlayerDeath();
 						bDead = true;
 					}

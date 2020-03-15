@@ -3,9 +3,11 @@
 
 ReturnToMenuButton::ReturnToMenuButton(class Game* game, Vector2 position) : Actor(game), ButtonComponent(this)
 {
+	//Sets the button texture
 	SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Buttons (300x75).png"));
 	ButtonComponent::SetPosition(position);
 
+	//Sets the button text details
 	SetButtonText("Return to Main Menu");
 	SDL_Color color = SDL_Color();
 	color = { 0,0,0,255 };
@@ -15,5 +17,6 @@ ReturnToMenuButton::ReturnToMenuButton(class Game* game, Vector2 position) : Act
 
 void ReturnToMenuButton::OnMouseButtonDown()
 {
+	//Calls the ReturnToMainMenu method in the game class
 	mGame->ReturnToMainMenu();
 }

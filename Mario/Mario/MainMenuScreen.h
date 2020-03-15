@@ -14,14 +14,12 @@ public:
 
 	void Update(float deltaTime, SDL_Event& e);
 
+	//Getter/Setter for the isActive variable
 	bool GetActive() const { return isActive; }
 	void SetActive(bool newValue);
 
 private:
-	Actor* marioLogoActor;
-	SpriteComponent* marioLogo;
-
-
+	//holds the play button
 	PlayButton* playButton;
 
 	bool isActive = true;

@@ -47,21 +47,26 @@ public:
 	class TileMapComponent* GetMap() { return mMap; }
 
 private:
+	//Vectors for each game object
 	std::vector<class Coin*> mCoins;
 	std::vector<class Tile*> mTiles;
 	std::vector<class Koopa*> mKoopas;
 	std::vector<class PowBlock*> mPowBlocks;
 
+	//Holds the level goal
 	class LevelGoal* mLevelGoal = nullptr;
 
+	//holds the TileMap for the level
 	class TileMapComponent* mMap = nullptr;
-
-	class Game* mGame = nullptr;
-
 	class Actor* mapActor = nullptr;
 
+	//reference to the game class
+	class Game* mGame = nullptr;
+
+	//filepath for the level
 	std::string mFilePath;
 
+	//Holds the textures for the tiles
 	SDL_Texture* mTileTextures = nullptr;
 };
 

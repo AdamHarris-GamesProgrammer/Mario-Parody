@@ -2,25 +2,15 @@
 
 MainMenuScreen::MainMenuScreen(class Game* game) : mGame(game)
 {
+	//black text for the Play Game text
 	SDL_Color black = SDL_Color();
 	black = { 0,0,0,255 };
-
-	marioLogoActor = new Actor(game);
-	marioLogoActor->SetPosition(Vector2(200, 200));
-	marioLogo = new SpriteComponent(marioLogoActor, 300);
-	marioLogo->SetTexture(mGame->GetEngine()->GetTexture("Assets/Menus/Logo.png"));
 
 	playButton = new PlayButton(mGame, Vector2(250, 250));
 }
 
 MainMenuScreen::~MainMenuScreen()
 {
-	delete marioLogoActor;
-	marioLogoActor = NULL;
-
-	delete marioLogo;
-	marioLogo = NULL;
-
 	delete playButton;
 	playButton = NULL;
 }
@@ -46,7 +36,7 @@ void MainMenuScreen::SetActive(bool newValue)
 
 void MainMenuScreen::Activate()
 {
-	marioLogoActor->SetState(Actor::EActive);
+	//Activates all objects
 	playButton->SetState(Actor::EActive);
 	playButton->mButtonTextActor->SetState(Actor::EActive);
 
@@ -54,7 +44,7 @@ void MainMenuScreen::Activate()
 
 void MainMenuScreen::Deactivate()
 {
-	marioLogoActor->SetState(Actor::EPaused);
+	//Deactivates all objects
 	playButton->SetState(Actor::EPaused);
 	playButton->mButtonTextActor->SetState(Actor::EPaused);
 

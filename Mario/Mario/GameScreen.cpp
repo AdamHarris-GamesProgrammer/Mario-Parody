@@ -13,6 +13,7 @@
 
 GameScreen::GameScreen(Game* game,const std::string& filePath) : mFilePath(filePath), mGame(game)
 {
+	//Loads the tile textures
 	mTileTextures = mGame->GetEngine()->GetTexture("Assets/TileMap.png");
 }
 
@@ -23,8 +24,11 @@ GameScreen::~GameScreen()
 
 void GameScreen::LoadLevel()
 {
+	//Sets up the map actor
 	mapActor = new Actor(mGame);
 	mMap = new TileMapComponent(mapActor);
+
+	//sets the tile textures and loads the map
 	mMap->SetTexture(mTileTextures);
 	mMap->LoadMap(mFilePath);
 }
@@ -45,19 +49,23 @@ void GameScreen::RemoveTile(class Tile* tile)
 
 void GameScreen::EmptyMap()
 {
+	//cycles through all tiles and sets them to be removed
 	for (auto& tile : mTiles) {
 		tile->SetState(Actor::EDead);
 	}
 
+	//cycles through all koopas and sets them to be removed
 	for (auto& koopa : mKoopas) {
 		koopa->SetState(Actor::EDead);
 		RemoveKoopa(koopa);
 	}
 
+	//cycles through all powblocks and removes them
 	for (auto& powBlock : mPowBlocks) {
 		RemovePowBlock(powBlock);
 	}
 
+	//clears all game object vectors
 	mPowBlocks.clear();
 	mTiles.clear();
 	mCoins.clear();
