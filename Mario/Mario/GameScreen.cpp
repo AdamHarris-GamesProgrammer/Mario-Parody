@@ -62,7 +62,6 @@ void GameScreen::EmptyMap()
 	mTiles.clear();
 	mCoins.clear();
 	mKoopas.clear();
-	mMap->ClearMap();
 }
 
 void GameScreen::AddCoin(class Coin* coin)

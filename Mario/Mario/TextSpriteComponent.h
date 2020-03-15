@@ -9,18 +9,22 @@ public:
 	TextSpriteComponent(class Actor* owner, int updateOrder = 100);
 	~TextSpriteComponent();
 
+	//Getters for the member variables
 	TTF_Font* GetFont() const { return mFont; }
 	SDL_Color GetTextColor() const { return mTextColor; }
 	int GetTextSize() const { return mPointSize; }
 	std::string GetText() const { return mText; }
 	
-	void Draw(SDL_Renderer* renderer) override;
 
+	//Setters for the member variables
 	void SetFont(TTF_Font* newFont) { mFont = newFont; }
 	void SetTextColor(SDL_Color newColor);
 	void SetTextSize(int newSize);
 	void SetText(std::string newText);
 	void SetFontFilePath(std::string newPath) { mFilePath = newPath; }
+
+	//Draws the text, overrides the SpriteComponent draw method
+	void Draw(SDL_Renderer* renderer) override;
 
 private:
 	TTF_Font* mFont;

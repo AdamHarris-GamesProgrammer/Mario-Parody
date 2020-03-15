@@ -11,10 +11,12 @@ public:
 
 	void Update(float deltaTime) override;
 
+	//Circle used for collision with the player
 	class CircleComponent* GetCircle() { return mCircle; }
 private:
 	class CircleComponent* mCircle;
 
+	//used for animating the button
 	int currentFrame = 0;
 	float currentElapsedTime = 0;
 };

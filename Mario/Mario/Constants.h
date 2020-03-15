@@ -13,11 +13,3 @@
 #define INITIAL_JUMP_FORCE_SMALL 100.0f
 
 #define GRAVITY 192.0f
-
-
-/*TODO
-camera component class
-how to play
-leader board system (fileIO)
-FIX JUMPING AND COLLISION
-*/

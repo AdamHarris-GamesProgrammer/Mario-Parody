@@ -144,7 +144,6 @@
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Math.cpp" />
-    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="NextLevelButton.cpp" />
     <ClCompile Include="NextLevelScreen.cpp" />
@@ -181,7 +180,6 @@
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Math.h" />
-    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="NextLevelButton.h" />
     <ClInclude Include="NextLevelScreen.h" />

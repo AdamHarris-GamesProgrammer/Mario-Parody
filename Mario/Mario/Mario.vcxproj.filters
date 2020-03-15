@@ -54,9 +54,6 @@
     <ClCompile Include="CircleComponent.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="TextSpriteComponent.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -153,9 +150,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CircleComponent.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementComponent.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="TextSpriteComponent.h">

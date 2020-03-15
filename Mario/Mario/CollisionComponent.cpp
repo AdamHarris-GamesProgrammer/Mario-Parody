@@ -1,5 +1,6 @@
 #include "CollisionComponent.h"
 
+//intersect based on two references
 bool Intersect(const SDL_Rect& a, const SDL_Rect& b)
 {
 	int bottom1 = a.y + a.h; //the bottom of the first game object
@@ -21,7 +22,7 @@ bool Intersect(const SDL_Rect& a, const SDL_Rect& b)
 		return false;
 	}
 }
-
+//Intersect based on two SDL_Rect pointers
 bool Intersect(const SDL_Rect* a, const SDL_Rect* b)
 {
 	int bottom1 = a->y + a->h; //the bottom of the first game object
