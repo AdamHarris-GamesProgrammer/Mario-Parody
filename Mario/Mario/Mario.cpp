@@ -10,7 +10,12 @@
 #include "Koopa.h"
 #include "PowBlock.h"
 
+/*TODO
+Music is delayed
+pow block can sometimes be collided from the top
+Take another crack at collision system
 
+*/
 
 Mario::Mario(class Game* game) : Actor(game)
 {
