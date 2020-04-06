@@ -101,6 +101,13 @@ void GameScreen::RemoveKoopa(class Koopa* koopa)
 	}
 }
 
+void GameScreen::FlipKoopas()
+{
+	for (auto& enemy : mKoopas) {
+		enemy->SetFlipped(true);
+	}
+}
+
 void GameScreen::AddPowBlock(class PowBlock* powBlock)
 {
 	mPowBlocks.emplace_back(powBlock);

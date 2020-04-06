@@ -130,7 +130,8 @@ void Game::NextLevel()
 	
 	//allows for level looping when the player passes level 4
 	if (mCurrentLevel == 4) {
-		LevelChange(1); //loads first gameplay level
+		mLevels[mCurrentLevel]->EmptyMap();
+		ReturnToMainMenu();
 	}
 	else
 	{
@@ -235,6 +236,11 @@ void Game::PollInput()
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	//calls player handle events method
 	mPlayer->HandleEvents(state);
+
+
+	if (state[SDL_SCANCODE_L]) {
+		NextLevel();
+	}
 }
 
 void Game::Update()

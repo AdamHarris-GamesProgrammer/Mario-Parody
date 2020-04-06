@@ -1,6 +1,8 @@
 #pragma once
 #include "Actor.h"
 #include "SDL.h"
+
+
 class Koopa : public Actor
 {
 public:
@@ -11,7 +13,10 @@ public:
 	void UpdateActor(float deltaTime) override;
 
 	//Getters/Setters for active and flipped variables
-	void SetFlipped(bool newValue) { bFlipped = newValue; }
+	void SetFlipped(bool newValue) {
+		bFlipped = newValue;
+		if (bFlipped) flippedTimer = flippedDuration;
+	}
 	void SetAlive(bool newValue) { bAlive = newValue; }
 	bool GetFlipped() const { return bFlipped; }
 	bool GetAlive() const { return bAlive; }

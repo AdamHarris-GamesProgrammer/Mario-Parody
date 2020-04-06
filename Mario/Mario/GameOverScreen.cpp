@@ -17,10 +17,10 @@ GameOverScreen::GameOverScreen(class Game* game) : mGame(game)
 GameOverScreen::~GameOverScreen()
 {
 	delete menuButton;
-	menuButton = NULL;
+	menuButton = nullptr;
 
 	delete retryButton;
-	retryButton = NULL;
+	retryButton = nullptr;
 }
 
 void GameOverScreen::Update(float deltaTime, SDL_Event& e)

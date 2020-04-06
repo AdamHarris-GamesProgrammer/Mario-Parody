@@ -3,30 +3,24 @@
 
 NextLevelScreen::NextLevelScreen(class Game* game) : mGame(game)
 {
-	SDL_Color black = SDL_Color();
-	black = { 0,0,0,255 };
-
 	//Sets up the success text
 	successText = new Actor(mGame);
 	successText->SetPosition(Vector2(400, 60));
 	successTextTsc = new TextSpriteComponent(successText);
 	successTextTsc->SetText("Level Complete!");
 	successTextTsc->SetTextSize(40);
-	successTextTsc->SetTextColor(black);
 
 	//Sets up the score text
 	scoreText = new Actor(mGame);
 	scoreText->SetPosition(Vector2(400, 100));
 	scoreTextTsc = new TextSpriteComponent(scoreText);
 	scoreTextTsc->SetTextSize(32);
-	scoreTextTsc->SetTextColor(black);
 	
 	//Sets up the highscore text
 	highscoreText = new Actor(mGame);
 	highscoreText->SetPosition(Vector2(400, 140));
 	highscoreTextTsc = new TextSpriteComponent(highscoreText);
 	highscoreTextTsc->SetTextSize(32);
-	highscoreTextTsc->SetTextColor(black);
 
 	//Sets up the buttons
 	nextLevelButton = new NextLevelButton(mGame, Vector2(250, 180));

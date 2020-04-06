@@ -11,12 +11,14 @@ Koopa::Koopa(class Game* game) : Actor(game)
 	csc = new CharacterSpriteComponent(this, 110, 32, 30);
 	
 	//Walking animations
+	walkingAnims.reserve(4);
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa01.png"));
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa02.png"));
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa03.png"));
 	walkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/Koopa04.png"));
 	
 	//Flipped over animations
+	flippedAnims.reserve(4);
 	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped01.png"));
 	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped02.png"));
 	flippedAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Koopa/KoopaFlipped03.png"));
@@ -56,7 +58,6 @@ void Koopa::UpdateActor(float deltaTime)
 			//gets the tiles in all four directions
 			int leftTile = newPosition.x / TILE_WIDTH;
 			int rightTile = (newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
-			int topTile = newPosition.y / TILE_HEIGHT;
 			int bottomTile = (newPosition.y + csc->GetTexHeight()) / TILE_HEIGHT;
 
 			//gets the values at the tiles to the mid left and mid right
@@ -67,7 +68,7 @@ void Koopa::UpdateActor(float deltaTime)
 				newPosition.x += mMovementSpeed * deltaTime; //add to the newPosition variable
 
 				//checks right tile collision
-				if (midRightTile == BRICK || midRightTile == KOOPATURN || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP) { //if midright tile is anything they cant walk through
+				if (midRightTile == BRICK || midRightTile == KOOPATURN || midRightTile >= PIPE_HORIZONTAL) { //if midright tile is anything they cant walk through
 					newPosition.x = GetPosition().x; //reset position for this frame
 					bMovingRight = false; //makes them move left
 				}
@@ -76,7 +77,7 @@ void Koopa::UpdateActor(float deltaTime)
 			{
 				newPosition.x -= mMovementSpeed * deltaTime; //subtract from the newPosition variable
 
-				if (midLeftTile == BRICK || midLeftTile == KOOPATURN || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP) { //if midleft tile is anything they cant walk through
+				if (midLeftTile == BRICK || midLeftTile == KOOPATURN || midLeftTile >= PIPE_HORIZONTAL) { //if midleft tile is anything they cant walk through
 					newPosition.x = GetPosition().x; //resets position for this frame
 					bMovingRight = true; //makes them move right
 				}
@@ -106,7 +107,6 @@ void Koopa::UpdateActor(float deltaTime)
 			csc->SetAnimTextures(flippedAnims);
 			//decrease the timer
 			flippedTimer -= deltaTime;
-
 			if (flippedTimer <= 0) {
 				//reset values 
 				bFlipped = false;

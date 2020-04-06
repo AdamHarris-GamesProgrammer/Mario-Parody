@@ -36,6 +36,10 @@ public:
 		}
 	}
 
+	Tile* GetTileAt(int row, int column) {
+		return mTileMap.at(row).at(column);
+	}
+
 	//This method changes the value of a tile at a certain position used for dealing with destroying Pow blocks and coins
 	void ChangeTileAt(int row, int column, int newValue);
 

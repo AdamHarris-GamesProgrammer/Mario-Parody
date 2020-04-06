@@ -3,7 +3,7 @@
 #include "TileMapComponent.h"
 PowBlock::PowBlock(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 32){}
 
-PowBlock::~PowBlock(){}
+PowBlock::~PowBlock() {}
 
 void PowBlock::TakeDamage()
 {

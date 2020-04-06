@@ -32,6 +32,7 @@ public:
 	//Koopa Functions
 	void AddKoopa(class Koopa* koopa);
 	void RemoveKoopa(class Koopa* koopa);
+	void FlipKoopas();
 	std::vector<class Koopa*>& GetKoopas() { return mKoopas; }
 
 	//Pow Block Functions

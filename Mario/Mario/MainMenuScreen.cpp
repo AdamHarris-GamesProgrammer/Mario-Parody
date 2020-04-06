@@ -2,10 +2,6 @@
 
 MainMenuScreen::MainMenuScreen(class Game* game) : mGame(game)
 {
-	//black text for the Play Game text
-	SDL_Color black = SDL_Color();
-	black = { 0,0,0,255 };
-
 	playButton = new PlayButton(mGame, Vector2(250, 250));
 }
 

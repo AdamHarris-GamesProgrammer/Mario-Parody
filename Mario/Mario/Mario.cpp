@@ -12,9 +12,7 @@
 
 /*TODO
 Music is delayed
-pow block can sometimes be collided from the top
 Take another crack at collision system
-Some koopa s remain after level 5 to level 1 
 */
 
 Mario::Mario(class Game* game) : Actor(game)
@@ -22,6 +20,7 @@ Mario::Mario(class Game* game) : Actor(game)
 	csc = new CharacterSpriteComponent(this);
 
 	//Idle animations
+	mIdleAnims.reserve(4);
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle01.png", true));
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle02.png", true));
 	mIdleAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioIdle03.png", true));
@@ -31,6 +30,7 @@ Mario::Mario(class Game* game) : Actor(game)
 	csc->SetAnimFPS(4);
 
 	//Walking animations
+	mWalkingAnims.reserve(3);
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk01.png", true));
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk02.png", true));
 	mWalkingAnims.push_back(mGame->GetEngine()->GetTexture("Assets/Characters/Mario/MarioWalk03.png", true));
@@ -67,8 +67,8 @@ Mario::~Mario()
 	delete csc;
 	delete mCircle;
 
-	csc = NULL;
-	mCircle = NULL;
+	csc = nullptr;
+	mCircle = nullptr;
 }
 
 void Mario::UpdateActor(float deltaTime)
@@ -90,8 +90,6 @@ void Mario::UpdateActor(float deltaTime)
 					csc->SetAnimTextures(mWalkingAnims);
 				}
 			}
-
-
 
 			Vector2 newPosition = GetPosition();
 
@@ -124,39 +122,43 @@ void Mario::UpdateActor(float deltaTime)
 			int bottomRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
 			//Top Collisions
-			if ((topLeftTile != AIR && topLeftTile != COIN && topLeftTile != KOOPATURN && topLeftTile != GOLDBRICK && topLeftTile != PIPE_HORIZONTAL && topLeftTile != PIPE_LEFTEND && topLeftTile != PIPE_RIGHTEND && topLeftTile != PIPE_VERTICAL && topLeftTile != PIPE_VERTICAL_TOP)
-				|| (topRightTile != AIR && topRightTile != COIN && topRightTile != KOOPATURN && topRightTile != GOLDBRICK && topRightTile != PIPE_HORIZONTAL && topRightTile != PIPE_LEFTEND && topRightTile != PIPE_RIGHTEND && topRightTile != PIPE_VERTICAL && topRightTile != PIPE_VERTICAL_TOP)) {
+			if ((topLeftTile == BRICK)
+			|| (topRightTile == BRICK)) { 
 				newPosition.y = GetPosition().y;
 				mJumpForce = 0.0f;
 				mSoundManager->PlaySoundEffect(mHeadHitSound);
 			}
 
+			if (topLeftTile == GOLDBRICK) {
+				PowBlock* collidedBlock = (PowBlock*)mGame->GetCurrentScreen()->GetMap()->GetTileAt(topTile, leftTile);
+				collidedBlock->TakeDamage();
+				mGame->GetCurrentScreen()->FlipKoopas();
+				mSoundManager->PlaySoundEffect(mCoinSound);
+				newPosition.y = GetPosition().y;
+				mJumpForce = 0.0f;
+			}
+			else if (topRightTile == GOLDBRICK) {
+				PowBlock* collidedBlock = (PowBlock*)mGame->GetCurrentScreen()->GetMap()->GetTileAt(topTile, rightTile);
+				collidedBlock->TakeDamage();
+				mGame->GetCurrentScreen()->FlipKoopas();
+				mSoundManager->PlaySoundEffect(mCoinSound);
+				newPosition.y = GetPosition().y;
+				mJumpForce = 0.0f;
+			}
+
 			//Mid Collisions
-			if ((midLeftTile == BRICK || midLeftTile == PIPE_HORIZONTAL || midLeftTile == PIPE_LEFTEND || midLeftTile == PIPE_RIGHTEND || midLeftTile == PIPE_VERTICAL || midLeftTile == PIPE_VERTICAL_TOP)
-				|| (midRightTile == BRICK || midRightTile == PIPE_HORIZONTAL || midRightTile == PIPE_LEFTEND || midRightTile == PIPE_RIGHTEND || midRightTile == PIPE_VERTICAL || midRightTile == PIPE_VERTICAL_TOP)) {
+			if ((midLeftTile == BRICK || midLeftTile >= PIPE_HORIZONTAL) || (midRightTile == BRICK || midRightTile >= PIPE_HORIZONTAL)) { //All pipes have values above 96
 				newPosition.x = GetPosition().x;
 			}
 
-			//jumping mid air collisions
-			if (bJumping) {
-				if (bottomLeftTile == BRICK || bottomRightTile == BRICK) {
-					newPosition.x = GetPosition().x;
-				}
-				if (midLeftTile == BRICK || midRightTile == BRICK) {
-					newPosition.x = GetPosition().x;
-				}
-				if (topLeftTile == BRICK || topRightTile == BRICK) {
-					newPosition.x = GetPosition().x;
-				}
-			}
-
 			//Bottom collisions
-			if ((bottomRightTile == AIR && bottomLeftTile == AIR)
-				|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
-				|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN)
-				|| (bottomRightTile == COIN || bottomLeftTile == COIN)
-				|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
-				|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)) {
+			if ((bottomRightTile== AIR			&& bottomLeftTile == AIR)
+			|| (bottomRightTile == DROPBRICK	&& bottomLeftTile == DROPBRICK)
+			|| (bottomRightTile == KOOPATURN	|| bottomLeftTile == KOOPATURN)
+			|| (bottomRightTile == COIN			|| bottomLeftTile == COIN)
+			|| (bottomRightTile == KOOPA		|| bottomLeftTile == KOOPA)
+			|| (bottomRightTile == LEVELGOAL	|| bottomLeftTile == LEVELGOAL)
+			|| (bottomRightTile == PLAYERSPAWN	|| bottomLeftTile == PLAYERSPAWN)) {
 				bGrounded = false;
 				newPosition.y += GRAVITY * deltaTime;
 			}
@@ -189,8 +191,6 @@ void Mario::UpdateActor(float deltaTime)
 	{
 		SetPlayerPosition(GetPosition());
 	}
-
-
 }
 
 void Mario::HandleEvents(const uint8_t* state)
@@ -265,7 +265,6 @@ void Mario::CollisionChecks()
 					mGame->LoadNextLevelMenu();
 					mSoundManager->PlaySoundEffect(mLevelWonSound);
 				}
-
 			}
 		}
 
@@ -283,22 +282,6 @@ void Mario::CollisionChecks()
 						bDead = true;
 					}
 				}
-			}
-		}
-
-		for (auto powBlock : mGame->GetCurrentScreen()->GetPowBlocks())
-		{
-			if (powBlock != nullptr) {
-				if (bJumping && !bGrounded) {
-					if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
-						for (auto enemy : mGame->GetCurrentScreen()->GetKoopas()) {
-							enemy->SetFlipped(true);
-						}
-						powBlock->TakeDamage();
-						mJumpForce = 0.0f;
-					}
-				}
-
 			}
 		}
 	}

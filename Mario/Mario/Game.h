@@ -83,6 +83,10 @@ public:
 	bool IsGameOver() const { return gameOver; }
 	bool IsGamePaused() const { return bPaused; }
 
+	//Loops through all enemies and flips them
+	void FlipEnemies();
+
+
 	//returns a pointer to the current game screen class
 	class GameScreen* GetCurrentScreen() { return mLevels[mCurrentLevel]; } 
 private:
