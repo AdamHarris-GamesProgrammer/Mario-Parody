@@ -14,7 +14,7 @@
 Music is delayed
 pow block can sometimes be collided from the top
 Take another crack at collision system
-
+Some koopa s remain after level 5 to level 1 
 */
 
 Mario::Mario(class Game* game) : Actor(game)
@@ -189,7 +189,7 @@ void Mario::UpdateActor(float deltaTime)
 	{
 		SetPlayerPosition(GetPosition());
 	}
-	
+
 
 }
 
@@ -229,7 +229,7 @@ void Mario::HandleEvents(const uint8_t* state)
 			}
 		}
 	}
-	
+
 
 }
 
@@ -289,8 +289,8 @@ void Mario::CollisionChecks()
 		for (auto powBlock : mGame->GetCurrentScreen()->GetPowBlocks())
 		{
 			if (powBlock != nullptr) {
-				if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
-					if (bJumping) {
+				if (bJumping && !bGrounded) {
+					if (Intersect(csc->GetDestRect(), powBlock->GetDestRect())) {
 						for (auto enemy : mGame->GetCurrentScreen()->GetKoopas()) {
 							enemy->SetFlipped(true);
 						}
@@ -298,6 +298,7 @@ void Mario::CollisionChecks()
 						mJumpForce = 0.0f;
 					}
 				}
+
 			}
 		}
 	}
