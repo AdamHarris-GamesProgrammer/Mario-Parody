@@ -19,9 +19,6 @@ public:
 	//Handles all the events 
 	void HandleEvents(const uint8_t* state);
 
-	//Changes the player tile
-	void ChangePlayerTile(Vector2 position);
-
 	//Getter/Setter for bDead variables
 	bool GetDead() const { return bDead; }
 	void SetDead(bool newValue) { bDead = newValue; }
@@ -77,5 +74,9 @@ private:
 	void Jump(Vector2& newPos, float deltaTime);
 
 	bool mWalking = false;
+
+	void TileTopCollisions(int topLeftTile, int topRightTile, Vector2& position);
+	void TileMidCollisions(int midLeftTile, int midRightTile, Vector2& position);
+	void TileBottomCollisions(int bottomLeftTile, int bottomRightTile, Vector2& position);
 };
 

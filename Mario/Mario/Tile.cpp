@@ -2,11 +2,13 @@
 #include "SpriteComponent.h"
 #include "Game.h"
 
-Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, int tileType):  Actor(game), SpriteComponent(this) //sets up the base classes
+Tile::Tile(class Game* game, SDL_Rect* src, SDL_Rect* dest, bool collidable):  Actor(game), SpriteComponent(this) //sets up the base classes
 {	
 	//Sets the dest and src rect equal to the ones passed in
 	mSrcRect = src;
 	mDestRect = dest;
+
+	bCollidable = collidable;
 
 	//sets the tile position to the dest rect position
 	position.x = dest->x;

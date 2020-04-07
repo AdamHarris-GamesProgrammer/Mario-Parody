@@ -12,7 +12,7 @@
 
 /*TODO
 Music is delayed
-Take another crack at collision system
+Take another crack at collision system - fix Mario jumping through tiles
 */
 
 Mario::Mario(class Game* game) : Actor(game)
@@ -107,6 +107,8 @@ void Mario::UpdateActor(float deltaTime)
 				mGame->OnPlayerDeath();
 			}
 
+
+
 			//tiles in all four directions
 			int leftTile = (int)newPosition.x / TILE_WIDTH;
 			int rightTile = (int)(newPosition.x + csc->GetTexWidth()) / TILE_WIDTH;
@@ -121,14 +123,11 @@ void Mario::UpdateActor(float deltaTime)
 			int bottomLeftTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, leftTile);
 			int bottomRightTile = mGame->GetCurrentScreen()->GetMap()->GetValueAtTile(bottomTile, rightTile);
 
-			//Top Collisions
-			if ((topLeftTile == BRICK)
-			|| (topRightTile == BRICK)) { 
-				newPosition.y = GetPosition().y;
-				mJumpForce = 0.0f;
-				mSoundManager->PlaySoundEffect(mHeadHitSound);
+			if (!bGrounded) {
+				newPosition.y += GRAVITY * deltaTime;
 			}
 
+			//Top Collisions
 			if (topLeftTile == GOLDBRICK) {
 				PowBlock* collidedBlock = (PowBlock*)mGame->GetCurrentScreen()->GetMap()->GetTileAt(topTile, leftTile);
 				collidedBlock->TakeDamage();
@@ -146,27 +145,65 @@ void Mario::UpdateActor(float deltaTime)
 				mJumpForce = 0.0f;
 			}
 
-			//Mid Collisions
-			if ((midLeftTile == BRICK || midLeftTile >= PIPE_HORIZONTAL) || (midRightTile == BRICK || midRightTile >= PIPE_HORIZONTAL)) { //All pipes have values above 96
-				newPosition.x = GetPosition().x;
+			TileTopCollisions(topLeftTile, topRightTile, newPosition);
+			TileMidCollisions(midLeftTile, midRightTile, newPosition);
+			TileBottomCollisions(bottomLeftTile, bottomRightTile, newPosition);
+
+			if (bJumping || !bGrounded) {
+				if (mPlayerVelX < 0.0f) {
+					Tile* leftBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(topTile, leftTile);
+					if (leftBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), leftBlock->GetDestRect())) {
+							std::cout << "Collision with left top block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+
+					leftBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(bottomTile - 1, leftTile);
+					if (leftBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), leftBlock->GetDestRect())) {
+							std::cout << "Collision with left middle block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+
+					leftBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(bottomTile, leftTile);
+					if (leftBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), leftBlock->GetDestRect())) {
+							std::cout << "Collision with left bottom block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+				}
+				else
+				{
+					Tile* rightBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(topTile, leftTile);
+					if (rightBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), rightBlock->GetDestRect())) {
+							std::cout << "Collision with right top block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+
+					rightBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(bottomTile -1, leftTile);
+					if (rightBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), rightBlock->GetDestRect())) {
+							std::cout << "Collision with right bottom block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+
+
+					rightBlock = mGame->GetCurrentScreen()->GetMap()->GetTileAt(bottomTile, leftTile);
+					if (rightBlock->GetCollidable()) {
+						if (Intersect(csc->GetDestRect(), rightBlock->GetDestRect())) {
+							std::cout << "Collision with right bottom block" << std::endl;
+							newPosition.x = GetPosition().x;
+						}
+					}
+				}
 			}
 
-			//Bottom collisions
-			if ((bottomRightTile== AIR			&& bottomLeftTile == AIR)
-			|| (bottomRightTile == DROPBRICK	&& bottomLeftTile == DROPBRICK)
-			|| (bottomRightTile == KOOPATURN	|| bottomLeftTile == KOOPATURN)
-			|| (bottomRightTile == COIN			|| bottomLeftTile == COIN)
-			|| (bottomRightTile == KOOPA		|| bottomLeftTile == KOOPA)
-			|| (bottomRightTile == LEVELGOAL	|| bottomLeftTile == LEVELGOAL)
-			|| (bottomRightTile == PLAYERSPAWN	|| bottomLeftTile == PLAYERSPAWN)) {
-				bGrounded = false;
-				newPosition.y += GRAVITY * deltaTime;
-			}
-			else
-			{
-				bCanJump = true;
-				bGrounded = true;
-			}
 
 
 			//constrains player to X level bounds
@@ -233,11 +270,6 @@ void Mario::HandleEvents(const uint8_t* state)
 
 }
 
-void Mario::ChangePlayerTile(Vector2 position)
-{
-	mGame->GetCurrentScreen()->GetMap()->ChangeTileAt((int)position.y / TILE_HEIGHT, (int)position.x / TILE_WIDTH, -1);
-}
-
 void Mario::SetPlayerPosition(const Vector2& newValue)
 {
 	Actor::SetPosition(newValue);
@@ -252,6 +284,7 @@ void Mario::CollisionChecks()
 		for (auto coin : mGame->GetCurrentScreen()->GetCoins()) {
 			if (Intersect(*mCircle, *(coin->GetCircle()))) {
 				mGame->GetCurrentScreen()->GetMap()->ChangeTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH), -1);
+				mGame->GetCurrentScreen()->GetMap()->GetTileAt(((int)coin->GetPosition().y / TILE_HEIGHT), ((int)coin->GetPosition().x / TILE_WIDTH))->SetCollidable(false);
 				coin->SetState(EDead);
 				mSoundManager->PlaySoundEffect(mCoinSound);
 				mGame->IncrementScore();
@@ -296,6 +329,43 @@ void Mario::Jump(Vector2& newPos, float deltaTime)
 	if (mJumpForce <= 0.0f) {
 		bJumping = false;
 		mJumpForce = 0.0f;
+	}
+}
+
+
+void Mario::TileTopCollisions(int topLeftTile, int topRightTile, Vector2& position)
+{
+	if ((topLeftTile == BRICK)
+		|| (topRightTile == BRICK)) {
+		position.y = GetPosition().y;
+		mJumpForce = 0.0f;
+		mSoundManager->PlaySoundEffect(mHeadHitSound);
+	}
+}
+
+void Mario::TileMidCollisions(int midLeftTile, int midRightTile, Vector2& position)
+{
+	if ((midLeftTile == BRICK || midLeftTile >= PIPE_HORIZONTAL) 
+	|| (midRightTile == BRICK || midRightTile >= PIPE_HORIZONTAL)) { //All pipes have values above 96
+		position.x = GetPosition().x;
+	}
+}
+
+void Mario::TileBottomCollisions(int bottomLeftTile, int bottomRightTile, Vector2& position)
+{
+	if ((bottomRightTile == AIR && bottomLeftTile == AIR)
+		|| (bottomRightTile == DROPBRICK && bottomLeftTile == DROPBRICK)
+		|| (bottomRightTile == KOOPATURN || bottomLeftTile == KOOPATURN)
+		|| (bottomRightTile == COIN || bottomLeftTile == COIN)
+		|| (bottomRightTile == KOOPA || bottomLeftTile == KOOPA)
+		|| (bottomRightTile == LEVELGOAL || bottomLeftTile == LEVELGOAL)
+		|| (bottomRightTile == PLAYERSPAWN || bottomLeftTile == PLAYERSPAWN)) {
+		bGrounded = false;
+	}
+	else
+	{
+		bCanJump = true;
+		bGrounded = true;
 	}
 }
 

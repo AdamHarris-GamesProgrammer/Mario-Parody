@@ -3,14 +3,17 @@
 #include "Game.h"
 #include "SpriteComponent.h"
 #include "GameScreen.h"
+#include "TileMapComponent.h"
+#include "GameScreen.h"
 
-Coin::Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 2) { //sets up base values
+Coin::Coin(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, false) { //sets up base values
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(18.0f);
 
 }
 
 Coin::~Coin() {
+
 	//cleans up memory
 	delete mCircle;
 	mCircle = NULL;

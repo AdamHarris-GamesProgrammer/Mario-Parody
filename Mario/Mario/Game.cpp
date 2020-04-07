@@ -118,7 +118,7 @@ void Game::IncrementScore(int amount) {
 void Game::SetPlayerSpawnPoint(Vector2 position) {
 	//moves the player to spawn position and changes the player tile to new position
 	mPlayer->SetPosition(position);
-	mPlayer->ChangePlayerTile(position);
+	//mPlayer->ChangePlayerTile(position);
 }
 
 void Game::NextLevel()

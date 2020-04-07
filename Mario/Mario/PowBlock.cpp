@@ -1,7 +1,7 @@
 #include "PowBlock.h"
 #include "Game.h"
 #include "TileMapComponent.h"
-PowBlock::PowBlock(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, 32){}
+PowBlock::PowBlock(class Game* game, SDL_Rect* srcRect, SDL_Rect* destRect) : Tile(game, srcRect, destRect, true){}
 
 PowBlock::~PowBlock() {}
 
@@ -13,7 +13,7 @@ void PowBlock::TakeDamage()
 		healthLeft--;
 
 		//determines the src rect
-		SDL_Rect* rect = new SDL_Rect{ (4 - healthLeft) * TILE_WIDTH, 32, TILE_WIDTH, TILE_HEIGHT };
+		SDL_Rect* rect = new SDL_Rect{ (mNumberOfSprites - healthLeft) * TILE_WIDTH, 32, TILE_WIDTH, TILE_HEIGHT };
 		SetSrcRect(rect);
 
 		//increments the score

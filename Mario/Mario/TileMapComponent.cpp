@@ -95,7 +95,7 @@ void TileMapComponent::GenerateObjects() {
 				//Uses a blank tile on the tile map
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 				//Adds the tile to the game
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, false);
 
 				//Adds the tile to the tileRow vector
 				tileRow.push_back(blankTile);
@@ -107,7 +107,7 @@ void TileMapComponent::GenerateObjects() {
 				SDL_Rect* brickSrc = new SDL_Rect { 0,0,TILE_WIDTH,TILE_HEIGHT };
 
 				//Creates a new tile object with the brick src passed through
-				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, 0);
+				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, true);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 				tileRow.push_back(brick);
 			}
@@ -123,7 +123,7 @@ void TileMapComponent::GenerateObjects() {
 				SDL_Rect* brickSrc = new SDL_Rect{ 32,0,TILE_WIDTH, TILE_HEIGHT };
 
 				//creates tile
-				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, -1);
+				Tile* brick = new Tile(mOwner->GetGame(), brickSrc, destRect, false);
 				brick->SetPosition(Vector2(destRect->x + 16.0f, destRect->y + 16.0f));
 
 				//pushes back tile
@@ -132,7 +132,7 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == PLAYERSPAWN) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, false);
 
 				tileRow.push_back(blankTile);
 
@@ -151,7 +151,7 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == KOOPA) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, false);
 
 				tileRow.push_back(blankTile);
 
@@ -165,7 +165,7 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == KOOPATURN) {
 				SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
 
-				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, -1);
+				Tile* blankTile = new Tile(mOwner->GetGame(), blankSrc, destRect, false);
 
 				tileRow.push_back(blankTile);
 			}
@@ -194,32 +194,32 @@ void TileMapComponent::GenerateObjects() {
 			else if (type == PIPE_HORIZONTAL) {
 				SDL_Rect* pipeSrc = new SDL_Rect{ 0, 96, TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, true);
 				tileRow.push_back(tile);
 			}
 			else if(type == PIPE_LEFTEND)
 			{
 				SDL_Rect* pipeSrc = new SDL_Rect{ 64, 96, TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, true);
 				tileRow.push_back(tile);
 			}
 			else if (type == PIPE_RIGHTEND) {
 				SDL_Rect* pipeSrc = new SDL_Rect{ 32, 96, TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, true);
 				tileRow.push_back(tile);
 			}
 			else if (type == PIPE_VERTICAL) {
 				SDL_Rect* pipeSrc = new SDL_Rect{ 96, 96, TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, true);
 				tileRow.push_back(tile);
 			}
 			else if (type == PIPE_VERTICAL_TOP) {
 				SDL_Rect* pipeSrc = new SDL_Rect{ 128, 96, TILE_WIDTH, TILE_HEIGHT };
 
-				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, 0);
+				Tile* tile = new Tile(mOwner->GetGame(), pipeSrc, destRect, true);
 				tileRow.push_back(tile);
 			}
 		}
@@ -235,4 +235,9 @@ void TileMapComponent::ChangeTileAt(int row, int column, int newValue)
 {
 	//sets the value at the desired position to the new value
 	mMap.at(row).at(column) = newValue;
+
+	SDL_Rect* destRect = new SDL_Rect{ column * TILE_WIDTH, row * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT };
+	SDL_Rect* blankSrc = new SDL_Rect{ 64,0,TILE_WIDTH,TILE_HEIGHT };
+
+	mTileMap.at(row).at(column) = new Tile(mOwner->GetGame(), blankSrc, destRect, false);
 }

@@ -45,8 +45,8 @@ Koopa::~Koopa()
 	delete csc;
 	delete mCircle;
 
-	csc = NULL;
-	mCircle = NULL;
+	csc = nullptr;
+	mCircle = nullptr;
 }
 
 void Koopa::UpdateActor(float deltaTime)

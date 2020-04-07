@@ -13,6 +13,8 @@ public:
 	//Takes damage from the pow block (Determines. the src rect and if the object has been destroyed)
 	void TakeDamage();
 private:
+	const int mNumberOfSprites = 4;
+
 	bool bActive = true;
 	int healthLeft = 3;
 };
